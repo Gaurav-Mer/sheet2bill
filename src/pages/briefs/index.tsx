@@ -70,6 +70,7 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
         }
     }
 
+    const totalPages = Math.ceil(count / ITEMS_PER_PAGE)
     return (
         <div className="container mx-auto  max-w-7xl">
             {/* ... Header and Search sections are the same ... */}
@@ -132,8 +133,20 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
                 </table>
             </div>
 
-            <Pagination currentPage={page} totalPages={Math.ceil(count / ITEMS_PER_PAGE)} totalCount={count} searchQuery={searchQuery} />
-
+            {/* <Pagination currentPage={page} totalPages={Math.ceil(count / ITEMS_PER_PAGE)} totalCount={count} searchQuery={searchQuery} /> */}
+            <div className="flex items-center justify-between mt-6">
+                <div className="text-sm text-muted-foreground">
+                    Showing page {page} of {totalPages} ({count} total clients)
+                </div>
+                <div className="space-x-2">
+                    <Link href={`/briefs?q=${searchQuery}&page=${page - 1}`} passHref>
+                        <Button variant="outline" disabled={page <= 1}>Previous</Button>
+                    </Link>
+                    <Link href={`/briefs?q=${searchQuery}&page=${page + 1}`} passHref>
+                        <Button variant="outline" disabled={page >= totalPages}>Next</Button>
+                    </Link>
+                </div>
+            </div>
             {/* Delete Confirmation Dialog */}
             <Dialog open={isDeleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
                 <DialogContent>

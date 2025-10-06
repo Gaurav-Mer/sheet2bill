@@ -5,7 +5,6 @@ import { SessionContextProvider, Session } from '@supabase/auth-helpers-react'
 import { AppProps } from 'next/app'
 import { ReactElement, ReactNode, useState } from 'react'
 import '../styles/globals.css' // Assuming your global styles are here
-import Navbar from '@/components/Navbar'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { Layout } from '@/components/Layout'
@@ -42,7 +41,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}
       >
-        {/* <Navbar /> */}
         {getLayout(<Component {...pageProps} />)}
         <Toaster // This component will render the toast notifications
           position="bottom-right"

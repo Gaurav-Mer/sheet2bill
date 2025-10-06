@@ -7,6 +7,7 @@ const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/clients', label: 'Clients', icon: Users },
     { href: '/briefs', label: 'Briefs', icon: FileText },
+    { href: '/invoices', label: 'Invoices', icon: FileText },
     // We can add a '/settings' link later
 ];
 
