@@ -1,4 +1,4 @@
-# Project Specification: QuickBill Flow
+# Project Specification: Sheet2bill
 
 **Version:** 1.0
 **Date:** 2024-10-27
@@ -9,7 +9,7 @@
 ## 1. Introduction & Vision
 
 ### 1.1. Project Overview
-QuickBill Flow is a global SaaS application designed to streamline and automate the entire client billing workflow for freelancers, consultants, and small businesses. It bridges the gap between overly complex accounting suites and simplistic invoice generators by providing an efficient, workflow-centric platform that enhances professionalism and reduces administrative overhead.
+Sheet2bill is a global SaaS application designed to streamline and automate the entire client billing workflow for freelancers, consultants, and small businesses. It bridges the gap between overly complex accounting suites and simplistic invoice generators by providing an efficient, workflow-centric platform that enhances professionalism and reduces administrative overhead.
 
 ### 1.2. Vision Statement
 To become the definitive tool for service-based professionals globally, empowering them to manage their billing with speed, confidence, and brand consistency. We envision a future where the friction of client billing is eliminated, allowing our users to focus on their craft and grow their business.
@@ -27,7 +27,7 @@ The manual creation, tracking, and management of client briefs and invoices is a
 *   **Basic Invoice Generators (e.g., Invoice-Generator.com):** Too simplistic, lacking workflow automation, client management, and professional customization. They often fail to store client history effectively.
 
 ### 2.3. Market Opportunity
-QuickBill Flow targets a significant and underserved segment of the market that desires a "just right" solution. By focusing on a highly efficient workflow—from job creation to client approval to final invoicing—we can capture users who feel overwhelmed by complexity or limited by simplicity. The emphasis on professional presentation (templates) and security (access control) will be key differentiators.
+Sheet2bill targets a significant and underserved segment of the market that desires a "just right" solution. By focusing on a highly efficient workflow—from job creation to client approval to final invoicing—we can capture users who feel overwhelmed by complexity or limited by simplicity. The emphasis on professional presentation (templates) and security (access control) will be key differentiators.
 
 ## 3. System Architecture & Technology Stack (Proposed)
 
@@ -206,4 +206,4 @@ A modern, decoupled web application architecture will be employed, consisting of
 *   **Advanced Reporting:** Financial reports on revenue, outstanding invoices, and client value.
 *   **Mobile Application:** Native or PWA mobile apps for on-the-go invoice management.
 *   **Multi-language Support:** Full localization of the platform UI.
-*   **API for Developers:** Allow third-party integrations with QuickBill Flow.
+*   **API for Developers:** Allow third-party integrations with Sheet2bill.

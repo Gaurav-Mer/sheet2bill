@@ -1,133 +1,176 @@
-import React, { useState } from 'react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
-import Modal from '../../components/Modal';
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+// UI Components
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+// Our New Reusable Components
+import { ClientTable } from '@/components/clients/ClientTable';
+import { Pagination } from '@/components/clients/Pagination';
+// CORRECTED: 'Clientform' to 'ClientForm'
+import { ClientForm } from '@/components/clients/Clientform';
 
-interface Client {
+export type Client = {
+  id: number;
   name: string;
-  email: string;
-  address: string;
-}
+  email: string | null;
+  phone_number: string | null;
+  contact_person: string | null;
+  country: string | null;
+  city: string | null;
+  tax_id: string | null;
+  notes: string | null;
+};
 
-const ClientsPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [clients, setClients] = useState<Client[]>([]);
+// CORRECTED: Added the 'user' prop to the PageProps type
+type PageProps = {
+  clients: Client[];
+  user: any;
+  count: number;
+  page: number;
+  searchQuery: string;
+};
 
-  const handleAddClient = (clientData: Client) => {
-    setClients(prevClients => [...prevClients, clientData]);
-    setIsModalOpen(false);
+const ITEMS_PER_PAGE = 10;
+
+export default function ClientsPage({ clients, count, page, searchQuery }: PageProps) {
+  const router = useRouter();
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+
+  const refreshData = () => router.replace(router.asPath);
+
+  const handleOpenEdit = (client: Client) => {
+    setSelectedClient(client);
+    setEditModalOpen(true);
   };
 
+  const handleOpenDelete = (client: Client) => {
+    setSelectedClient(client);
+    setDeleteAlertOpen(true);
+  };
+
+  async function handleAddClient(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    await fetch('/api/clients', {
+      method: 'POST',
+      body: JSON.stringify(Object.fromEntries(formData)),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    setAddModalOpen(false);
+    refreshData();
+  }
+
+  async function handleEditClient(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedClient) return;
+    const formData = new FormData(event.currentTarget);
+    await fetch(`/api/clients/${selectedClient.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(Object.fromEntries(formData)),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    setEditModalOpen(false);
+    refreshData();
+  }
+
+  async function handleDeleteClient() {
+    if (!selectedClient) return;
+    await fetch(`/api/clients/${selectedClient.id}`, { method: 'DELETE' });
+    setDeleteAlertOpen(false);
+    refreshData();
+  }
+
   return (
-    <div>
-      <div className="flex justify-between items-center mb-10">
+    <div className="container mx-auto mt-10 max-w-6xl">
+      <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-4xl font-bold text-gray-800">Clients</h1>
-          <p className="text-gray-500 mt-1">Manage your clients and their billing history.</p>
+          <h1 className="text-3xl font-bold">Client Hub</h1>
+          <p className="text-muted-foreground mt-2">Manage all your clients in one place.</p>
         </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Add Client
-        </button>
+        <Button onClick={() => setAddModalOpen(true)}>+ Add New Client</Button>
       </div>
 
-      <AddClientModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAddClient={handleAddClient}
+      <div className="flex justify-between items-center mb-8">
+        <form className="w-full max-w-sm">
+          <Input type="search" name="q" placeholder="Search by name or email..." defaultValue={searchQuery} />
+        </form>
+      </div>
+
+      <ClientTable clients={clients} onEdit={handleOpenEdit} onDelete={handleOpenDelete} searchQuery={searchQuery} />
+
+      <Pagination
+        currentPage={page}
+        totalPages={Math.ceil(count / ITEMS_PER_PAGE)}
+        totalCount={count}
+        searchQuery={searchQuery}
       />
 
-      <div className="bg-white p-6 rounded-xl border border-gray-200">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">Client List</h2>
-        {clients.length === 0 ? (
-          <div className="text-center text-gray-400 py-12">
-            <p>You haven&apos;t added any clients yet.</p>
-            <p>Click &quot;Add Client&quot; to get started.</p>
-          </div>
-        ) : (
-          <ClientTable clients={clients} />
-        )}
-      </div>
+      {/* Modals & Dialogs */}
+      <Dialog open={isAddModalOpen} onOpenChange={setAddModalOpen}>
+        <DialogContent className="sm:max-w-2xl"><DialogHeader><DialogTitle>Add New Client</DialogTitle></DialogHeader><ClientForm onSubmit={handleAddClient} submitButtonText="Save Client" /></DialogContent>
+      </Dialog>
+      <Dialog open={isEditModalOpen} onOpenChange={setEditModalOpen}>
+        <DialogContent className="sm:max-w-2xl"><DialogHeader><DialogTitle>Edit Client: {selectedClient?.name}</DialogTitle></DialogHeader><ClientForm client={selectedClient} onSubmit={handleEditClient} submitButtonText="Save Changes" /></DialogContent>
+      </Dialog>
+      <Dialog open={isDeleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Are you sure?</DialogTitle></DialogHeader>
+          <DialogDescription>This action will permanently delete the client "{selectedClient?.name}".</DialogDescription>
+          <DialogFooter><Button variant="outline" onClick={() => setDeleteAlertOpen(false)}>Cancel</Button><Button variant="destructive" onClick={handleDeleteClient}>Yes, Delete</Button></DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
-};
+}
 
-const AddClientModal = ({ isOpen, onClose, onAddClient }: { isOpen: boolean; onClose: () => void; onAddClient: (data: Client) => void; }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
+// CORRECTED: getServerSideProps now has the full search and pagination logic
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const supabase = createPagesServerClient(ctx);
+  const { data: { session } } = await supabase.auth.getSession();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onAddClient({ name, email, address });
-    // Clear form
-    setName('');
-    setEmail('');
-    setAddress('');
+  if (!session) {
+    return { redirect: { destination: '/login', permanent: false } };
+  }
+
+  const searchQuery = ctx.query.q as string || '';
+  const page = parseInt(ctx.query.page as string, 10) || 1;
+  const startIndex = (page - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE - 1;
+
+  let query = supabase
+    .from('clients')
+    .select('*', { count: 'exact' })
+    .eq('user_id', session.user.id);
+
+  if (searchQuery) {
+    query = query.or(`name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
+  }
+
+  query = query
+    .order('name')
+    .range(startIndex, endIndex);
+
+  const { data: clients, error, count } = await query;
+
+  if (error) {
+    console.error("Error fetching clients:", error);
+  }
+
+  return {
+    props: {
+      user: session.user,
+      clients: clients || [],
+      count: count || 0,
+      page: page,
+      searchQuery: searchQuery
+    },
   };
-
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add New Client">
-      <form onSubmit={handleSubmit}>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-            <input type="text" id="name" value={name} onChange={e => setName(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required />
-          </div>
-          <div>
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-            <textarea id="address" value={address} onChange={e => setAddress(e.target.value)} rows={3} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
-          </div>
-        </div>
-        <div className="flex justify-end space-x-4 mt-6">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
-          <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">Add Client</button>
-        </div>
-      </form>
-    </Modal>
-  );
 };
-
-const ClientTable = ({ clients }: { clients: Client[] }) => {
-  return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-            <th scope="col" className="relative px-6 py-3">
-              <span className="sr-only">Actions</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {clients.map((client, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{client.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{client.email}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <div className="flex justify-end space-x-2">
-                  <button className="p-2 rounded-full hover:bg-gray-200">
-                    <Edit className="w-5 h-5 text-gray-500" />
-                  </button>
-                  <button className="p-2 rounded-full hover:bg-gray-200">
-                    <Trash2 className="w-5 h-5 text-red-500" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-export default ClientsPage;

@@ -1,60 +1,42 @@
-import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { LayoutDashboard, Users, ClipboardList, Settings } from 'lucide-react';
+// components/Layout.tsx
+import { ReactNode, useState } from 'react';
+import { Sidebar } from './Sidebar';
+import { Navbar } from './Navbar';
 
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  const router = useRouter();
-  const isActive = router.pathname === href;
+export function Layout({ children }: { children: ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <Link href={href}>
-      <div
-        className={`flex items-center p-3 rounded-lg cursor-pointer transition-colors ${
-          isActive
-            ? 'bg-blue-500 text-white'
-            : 'text-gray-600 hover:bg-gray-200'
-        }`}
-      >
-        {children}
+    <div className="relative min-h-screen bg-background">
+      {/* --- DESKTOP SIDEBAR --- */}
+      {/* This is now fixed to the left side of the screen */}
+      <div className="hidden md:block fixed inset-y-0 left-0 z-40 w-64">
+        <Sidebar />
       </div>
-    </Link>
-  );
-};
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="flex h-screen bg-gray-50 font-sans">
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800">QuickBill</h1>
+      {/* --- MOBILE SIDEBAR (Slide-out) --- */}
+      {sidebarOpen && (
+        <div className="md:hidden fixed inset-0 z-50">
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)}></div>
+          {/* Sidebar itself */}
+          <div className="relative z-50 w-64">
+            <Sidebar />
+          </div>
         </div>
-        <nav className="flex-1 px-4 space-y-2">
-          <NavLink href="/dashboard">
-            <LayoutDashboard className="w-5 h-5 mr-3" />
-            Dashboard
-          </NavLink>
-          <NavLink href="/clients">
-            <Users className="w-5 h-5 mr-3" />
-            Clients
-          </NavLink>
-          <NavLink href="/templates">
-            <ClipboardList className="w-5 h-5 mr-3" />
-            Templates
-          </NavLink>
-        </nav>
-        <div className="p-4 border-t border-gray-200">
-            <NavLink href="/settings">
-                <Settings className="w-5 h-5 mr-3" />
-                Settings
-            </NavLink>
-        </div>
-      </aside>
-      <main className="flex-1 p-10 overflow-y-auto">
-        {children}
-      </main>
+      )}
+
+      {/* --- MAIN CONTENT AREA --- */}
+      {/* This div now correctly sits to the right of the desktop sidebar */}
+      <div className="md:pl-64 flex flex-col h-full">
+        {/* We now have a consistent header for both mobile and desktop */}
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+
+        {/* The actual page content renders here */}
+        <main className="flex-1 p-4 md:p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
-};
-
-export default Layout;
+}
