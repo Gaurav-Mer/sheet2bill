@@ -3,6 +3,7 @@ export type Client = {
     id: number;
     name: string;
     notes?: string
+    email?: string
     // ... all other client fields
 };
 
@@ -42,4 +43,49 @@ export type Brief = {
     // ... any other relational data if needed
 
     // ... all other brief fields
+};
+
+// in types.ts
+export type Profile = {
+    id: string;
+    full_name: string | null;
+    company_name: string | null;
+    avatar_url: string | null;
+    website: string | null;
+    phone_number: string | null;
+    address_line_1: string | null;
+    address_line_2: string | null;
+    city: string | null;
+    state_province_region: string | null;
+    postal_code: string | null;
+    country: string | null;
+    tax_id: string | null;
+    updated_at: string | null;
+    email?: string; // Optional email from auth
+};
+
+
+// in types.ts
+
+export type TemplateSettings = {
+    theme: {
+        primaryColor: string;
+        backgroundColor: string;
+        textColor: string;
+        headingColor: string;
+    };
+    typography: {
+        fontFamily: string;
+        googleFontUrl?: string;
+    };
+    layout: {
+        headerAlignment: string
+    };
+};
+
+export type InvoiceTemplateDefinition = {
+    id: string | number; // string for pre-defined (e.g., 'zurich'), number for custom
+    name: string;
+    description: string;
+    settings: TemplateSettings;
 };

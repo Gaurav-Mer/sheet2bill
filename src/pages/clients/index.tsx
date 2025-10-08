@@ -89,7 +89,7 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
   }
 
   return (
-    <div className="container mx-auto mt-10 max-w-6xl">
+    <div className="container mx-auto max-w-6xl">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-3xl font-bold">Client Hub</h1>

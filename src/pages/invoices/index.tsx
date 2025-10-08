@@ -23,6 +23,7 @@ type Invoice = {
     total: number;
     currency: string;
     clients: { name: string } | null;
+    invoice_token?: string
 };
 
 type PageProps = {
@@ -88,7 +89,7 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
     }
 
     return (
-        <div className="container mx-auto mt-10 max-w-7xl">
+        <div className="container mx-auto max-w-7xl">
             <div className="flex justify-between items-center mb-4">
                 <div>
                     <h1 className="text-3xl font-bold">Invoices</h1>
@@ -130,9 +131,15 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
                                             <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem disabled>Download PDF</DropdownMenuItem>
-                                            {invoice.status !== 'paid' && (
+                                            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
+                                            <DropdownMenuItem asChild>
+                                                <a href={`/invoice/${invoice.invoice_token}`} target="_blank" rel="noopener noreferrer">View Public Page</a>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem asChild>
+                                                <a href={`/api/invoices/${invoice.id}/pdf`} target="_blank" rel="noopener noreferrer">
+                                                    Download PDF
+                                                </a>
+                                            </DropdownMenuItem>                                            {invoice.status !== 'paid' && (
                                                 <DropdownMenuItem onSelect={() => updateStatusMutation.mutate({ id: invoice.id, status: 'paid' })}>Mark as Paid</DropdownMenuItem>
                                             )}
                                             {invoice.status === 'paid' && (

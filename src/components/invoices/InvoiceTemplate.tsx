@@ -1,0 +1,158 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// components/invoices/InvoiceTemplate.tsx
+
+import { Client, Profile, TemplateSettings } from "@/types";
+
+// The full data structure required by the template
+type InvoiceTemplateData = any & {
+    client: Client;
+    invoice_line_items: any[];
+    profile: Profile & { email?: string };
+};
+
+type InvoiceTemplateProps = {
+    data: InvoiceTemplateData;
+};
+
+// This is a pure, stateless component. Date formatting is handled by the parent.
+const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
+    // A professional color scheme for the PDF.
+    const primaryColor = 'black'; // Indigo
+    const { settings } = data;
+    const { theme, typography, layout } = settings;
+
+    // Self-contained CSS for perfect PDF rendering
+    const getCss = (settings: TemplateSettings) => `
+        body { 
+            font-family: ${settings.typography.fontFamily}; 
+            -webkit-font-smoothing: antialiased; 
+            font-size: 14px; 
+            color: ${settings.theme.textColor}; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #fff; 
+        }
+        .invoice-container { max-width: 800px; margin: auto; padding: 40px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .header-left { text-align: left; }
+        .header-center { text-align: center; }
+        .header-right { text-align: right; }
+        .header > div:first-child { flex-grow: 1; text-align: ${settings.layout.headerAlignment === 'left' ? 'left' : 'center'}; }
+        .header > div:last-child { flex-shrink: 0; text-align: right; }
+        .logo { max-width: 150px; max-height: 70px; object-fit: contain; margin: ${settings.layout.headerAlignment === 'center' ? '0 auto' : '0'}; }
+        .invoice-details h1 { font-size: 36px; font-weight: bold; color: ${settings.theme.headingColor}; margin: 0 0 10px 0; }
+        .invoice-details p { margin: 0; line-height: 1.6; }
+        .company-info { margin-bottom: 40px; display: flex; justify-content: space-between; }
+        .line-items-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .line-items-table thead th { text-align: left; color: #6b7280; text-transform: uppercase; font-size: 12px; padding: 12px 0; border-bottom: 2px solid ${settings.theme.primaryColor}; }
+        .line-items-table tbody td { border-bottom: 1px solid #e5e7eb; padding: 12px 0; }
+        .totals { margin-top: 30px; display: flex; justify-content: flex-end; }
+        .totals table { width: 100%; max-width: 300px; }
+        .totals td { padding: 8px 0; text-align: right; }
+        .totals td:first-child { text-align: left; color: #6b7280; }
+        .totals .total-amount td { font-size: 18px; font-weight: bold; color: ${settings.theme.headingColor}; border-top: 2px solid #374151; }
+        .footer { margin-top: 40px; border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center; color: #9ca3af; font-size: 12px; }
+    `;
+
+    // Helper to format dates consistently for the PDF
+    const formatDate = (dateString: string | null) => {
+        if (!dateString) return 'N/A';
+        return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
+
+    return (
+        <html>
+            <head>
+                <meta charSet="utf-8" />
+                {/* Font link moved to pages/_document.tsx for global loading */}
+                {typography.googleFontUrl && <link href={typography.googleFontUrl} rel="stylesheet" />}
+                <style dangerouslySetInnerHTML={{ __html: getCss(settings) }} />
+            </head>
+            <body>
+                <div className="invoice-container">
+                    <header className="header">
+                        <div>
+                            {data.profile.avatar_url ? (
+                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                            ) : (
+                                <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: theme.textColor ?? primaryColor, margin: 0 }}>
+                                    {data.profile.company_name || data.profile.full_name}
+                                </h2>
+                            )}
+                        </div>
+                        <div className="invoice-details">
+                            <h1 style={{ color: theme.headingColor }}>Invoice</h1>
+                            <p><b>Invoice #:</b> {data.invoice_number}</p>
+                            <p><b>Issued:</b> {formatDate(data.issue_date)}</p>
+                            <p><b>Due:</b> {formatDate(data.due_date)}</p>
+                        </div>
+                    </header>
+
+                    <section className="company-info">
+                        <div className="from">
+                            <p style={{ color: '#6b7280', fontWeight: 'bold' }}>FROM</p>
+                            <p><b>{data.profile.company_name || data.profile.full_name}</b></p>
+                            <p>{data.profile.address_line_1}</p>
+                            <p>{data.profile.city}{data.profile.country && data.profile.city && ","} {data.profile.country}</p>
+                            <p>{data.profile.email}</p>
+                        </div>
+                        <div className="bill-to" style={{ textAlign: 'right' }}>
+                            <p style={{ color: '#6b7280', fontWeight: 'bold' }}>BILL TO</p>
+                            <p><b>{data.client.name}</b></p>
+                            <p>{data.client.address_line_1}</p>
+                            <p>{data.client.city}{data.client.country && data.client.city && ","} {data.client.country}</p>
+                            <p>{data.client.email}</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <table className="line-items-table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th className="text-center">Qty</th>
+                                    <th className="text-right">Unit Price</th>
+                                    <th className="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.invoice_line_items?.map((item: any, index: number) => (
+                                    <tr key={index}>
+                                        <td>{item.description}</td>
+                                        <td className="text-center">{item.quantity}</td>
+                                        <td className="text-right">{item.unit_price.toFixed(2)}</td>
+                                        <td className="text-right">{(item.quantity * item.unit_price).toFixed(2)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section className="totals">
+                        <table>
+                            <tbody>
+                                <tr><td>Subtotal</td><td>{data.subtotal.toFixed(2)}</td></tr>
+                                <tr><td>Tax ({data.tax_rate}%)</td><td>{data.tax_amount.toFixed(2)}</td></tr>
+                                <tr className="total-amount"><td>Total</td><td>{data.currency} {data.total.toFixed(2)}</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    {(data.profile.tax_id || data.notes) && (
+                        <section style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '10px', fontSize: '12px', color: '#6b7280' }}>
+                            {data.notes && <div><strong>Notes:</strong><p>{data.notes}</p></div>}
+                            {data.profile.tax_id && <div style={{ marginTop: '10px' }}><strong>Tax ID:</strong><p>{data.profile.tax_id}</p></div>}
+                        </section>
+                    )}
+
+                    <footer className="footer">
+                        <p>Thank you for your business!</p>
+                        <p>{data.profile.company_name || 'Sheet2bill'}</p>
+                    </footer>
+                </div>
+            </body>
+        </html>
+    );
+};
+
+export default InvoiceTemplate;

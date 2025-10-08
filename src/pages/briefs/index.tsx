@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 // pages/briefs/index.tsx
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
@@ -13,6 +14,7 @@ import { Pagination } from '@/components/clients/Pagination';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { MoreHorizontal } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type Brief = {
     id: number;
@@ -38,6 +40,8 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
     const router = useRouter();
     const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const [selectedBrief, setSelectedBrief] = useState<Brief | null>(null);
+    const queryClient = useQueryClient(); // NEW: Initialize query client for cache invalidation
+
 
     const refreshData = () => router.replace(router.asPath);
 
@@ -69,6 +73,29 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
             default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'; // for 'draft'
         }
     }
+
+    // NEW: Mutation for converting a brief to an invoice
+    const convertToInvoiceMutation = useMutation({
+        mutationFn: async (brief_id: number) => {
+            const response = await fetch('/api/invoices/convert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ brief_id }),
+            });
+            if (!response.ok) throw new Error('Failed to generate invoice');
+            return response.json();
+        },
+        onSuccess: (newInvoice: any) => {
+            toast.success(`Invoice #${newInvoice.invoice_number} generated!`);
+            // Invalidate briefs data and redirect to the new invoices page
+            queryClient.invalidateQueries({ queryKey: ['briefs'] });
+            router.push('/invoices');
+        },
+        onError: (error: Error) => {
+            toast.error(`Error generating invoice: ${error.message}`);
+        }
+    });
+
 
     const totalPages = Math.ceil(count / ITEMS_PER_PAGE)
     return (
@@ -113,6 +140,15 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
                                             <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
+                                            {brief.status === 'approved' && (
+                                                <DropdownMenuItem
+                                                    onSelect={() => convertToInvoiceMutation.mutate(brief.id)}
+                                                    disabled={convertToInvoiceMutation.isPending}
+                                                    className="font-semibold text-primary focus:text-primary"
+                                                >
+                                                    {convertToInvoiceMutation.isPending ? 'Generating...' : 'Generate Invoice'}
+                                                </DropdownMenuItem>
+                                            )}
                                             <DropdownMenuItem onSelect={() => {
                                                 router.push(`/brief/${brief.brief_token}`)
                                             }}>View Public Page</DropdownMenuItem>
