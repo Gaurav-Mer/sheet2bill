@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 import { InvoiceTemplateDefinition, TemplateSettings } from '@/types';
-import { PREDEFINED_TEMPLATES } from '@/lib/templates';
+// import { PREDEFINED_TEMPLATES } from '@/lib/templates';
 import InvoiceTemplate from '@/components/invoices/InvoiceTemplate'; // Our premium template
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -85,7 +85,7 @@ export default function TemplateEditorPage({ template, isCustomTemplate }: PageP
                                 <Input
                                     id="primaryColor"
                                     type="color"
-                                    value={settings.theme.primaryColor}
+                                    value={settings?.theme?.primaryColor}
                                     onChange={e => handleSettingChange('theme', 'primaryColor', e.target.value)}
                                     className="w-full h-10"
                                 />
@@ -129,7 +129,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     } else {
         // It's a pre-defined template, find it in our local array
         isCustomTemplate = false;
-        template = PREDEFINED_TEMPLATES.find(t => t.id === id) || null;
+        // template = PREDEFINED_TEMPLATES.find(t => t.id === id) || null;
     }
 
     if (!template) {

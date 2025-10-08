@@ -51,6 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 tax_amount: brief.tax_amount,
                 total: brief.total,
                 notes: brief.notes,
+                template_id: brief.template_id || 'zurich', // Default to 'zurich' if none
             })
             .select()
             .single();

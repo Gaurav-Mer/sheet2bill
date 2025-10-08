@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const {
         clientId, lineItems, title, currency, notes,
         subtotal, tax_rate, tax_amount, total, due_date,
-        is_password_protected, access_password
+        is_password_protected, access_password, template_id
     } = req.body;
 
     if (!clientId || !lineItems || !lineItems.length || !title) {
@@ -53,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             title, currency, notes, subtotal, tax_rate, tax_amount, total, due_date,
             brief_number: newBriefNumber,
             is_password_protected: is_password_protected || false,
+            template_id: template_id || "zurich",
         };
 
         // --- NEW: Handle Password Hashing ---

@@ -5,7 +5,6 @@ import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PREDEFINED_TEMPLATES } from '@/lib/templates'; // Import our pre-defined templates
 import { InvoiceTemplateDefinition } from '@/types';
 
 type PageProps = {
@@ -39,7 +38,7 @@ export default function TemplatesPage({ customTemplates }: PageProps) {
             {/* --- Section for Pre-defined Templates --- */}
             <section>
                 <h2 className="text-2xl font-semibold mb-4">Choose a Style</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {PREDEFINED_TEMPLATES.map(template => (
                         <Card key={template.id} className="overflow-hidden">
                             <TemplatePreview settings={template.settings} />
@@ -54,7 +53,7 @@ export default function TemplatesPage({ customTemplates }: PageProps) {
                             </CardFooter>
                         </Card>
                     ))}
-                </div>
+                </div> */}
             </section>
 
             {/* --- Section for User's Custom Templates --- */}

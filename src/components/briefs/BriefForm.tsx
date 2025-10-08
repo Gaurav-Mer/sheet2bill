@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Client, Brief, LineItem } from '@/types';
 import { AlertCircle } from 'lucide-react';
 import { Switch } from '../ui/switch';
+import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 
 type BriefFormProps = {
     clients: Client[];
@@ -43,6 +44,7 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
     const [lineItems, setLineItems] = useState<LineItem[]>(initialData?.line_items.length ? initialData.line_items : [{ description: '', quantity: 1, unit_price: 0 }]);
     const [isPasswordProtected, setIsPasswordProtected] = useState(initialData?.is_password_protected || false);
     const [password, setPassword] = useState('');
+    const [templateId, setTemplateId] = useState(initialData?.template_id ?? 'zurich'); // NEW: State for selected template
 
     // --- Calculations ---
     const totals = useMemo(() => {
@@ -209,6 +211,19 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                 <Select onValueChange={setCurrency} defaultValue={currency}>
                                     <SelectTrigger id="currency"><SelectValue /></SelectTrigger>
                                     <SelectContent><SelectItem value="INR">INR</SelectItem><SelectItem value="USD">USD</SelectItem><SelectItem value="EUR">EUR</SelectItem></SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <Label htmlFor="template">Template</Label>
+                                <Select onValueChange={setTemplateId} defaultValue={templateId}>
+                                    <SelectTrigger className='w-full' id="template"><SelectValue /></SelectTrigger>
+                                    <SelectContent className='w-full'>
+                                        {AVAILABLE_TEMPLATES.map(template => (
+                                            <SelectItem key={template.id} value={template.id as string}>
+                                                {template.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
                                 </Select>
                             </div>
                         </CardContent>

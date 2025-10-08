@@ -40,6 +40,7 @@ export type Brief = {
     brief_token: string; // Unique token for public access
     clients?: { name: string; email?: string | null }; // Joined client data
     is_password_protected?: boolean
+    template_id?: string; // NEW: Template identifier
     // ... any other relational data if needed
 
     // ... all other brief fields
@@ -68,17 +69,17 @@ export type Profile = {
 // in types.ts
 
 export type TemplateSettings = {
-    theme: {
+    theme?: {
         primaryColor: string;
         backgroundColor: string;
         textColor: string;
         headingColor: string;
     };
-    typography: {
+    typography?: {
         fontFamily: string;
         googleFontUrl?: string;
     };
-    layout: {
+    layout?: {
         headerAlignment: string
     };
 };

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/invoice/[token].tsx
+import { CurrentTemplate } from '@/components/templates/CurrentTemplate';
 import { createClient } from '@supabase/supabase-js';
 import { GetServerSidePropsContext } from 'next';
 import { ReactElement } from 'react';
-import InvoiceTemplate from '@/components/invoices/InvoiceTemplate'; // We will reuse our template!
 
 
 // This page's job is just to display the invoice.
@@ -14,7 +14,7 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
     }
 
     // CORRECTED: We must pass mode="web" to prevent hydration errors.
-    return <InvoiceTemplate data={invoice as any} />;
+    return <CurrentTemplate templateId={invoice?.template_id ?? undefined} data={invoice as any} />
 }
 
 // In pages/invoice/[token].tsx

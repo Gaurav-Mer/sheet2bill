@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/invoices/InvoiceTemplate.tsx
 
-import { Client, Profile, TemplateSettings } from "@/types";
+import { Client, Profile } from "@/types";
 
 // The full data structure required by the template
 type InvoiceTemplateData = any & {
@@ -18,39 +18,28 @@ type InvoiceTemplateProps = {
 const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
     // A professional color scheme for the PDF.
     const primaryColor = 'black'; // Indigo
-    const { settings } = data;
-    const { theme, typography, layout } = settings;
 
     // Self-contained CSS for perfect PDF rendering
-    const getCss = (settings: TemplateSettings) => `
-        body { 
-            font-family: ${settings.typography.fontFamily}; 
-            -webkit-font-smoothing: antialiased; 
-            font-size: 14px; 
-            color: ${settings.theme.textColor}; 
-            margin: 0; 
-            padding: 0; 
-            background-color: #fff; 
-        }
-        .invoice-container { max-width: 800px; margin: auto; padding: 40px; }
+    const css = `
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; color: #374151; margin: 0; padding: 0; background-color: #fff; }
+        .invoice-container { max-width: 800px; margin: auto; padding: 40px; border:1px solid #e5e7eb; border-radius: 8px; }
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
-        .header-left { text-align: left; }
-        .header-center { text-align: center; }
-        .header-right { text-align: right; }
-        .header > div:first-child { flex-grow: 1; text-align: ${settings.layout.headerAlignment === 'left' ? 'left' : 'center'}; }
-        .header > div:last-child { flex-shrink: 0; text-align: right; }
-        .logo { max-width: 150px; max-height: 70px; object-fit: contain; margin: ${settings.layout.headerAlignment === 'center' ? '0 auto' : '0'}; }
-        .invoice-details h1 { font-size: 36px; font-weight: bold; color: ${settings.theme.headingColor}; margin: 0 0 10px 0; }
+        .logo { max-width: 150px; max-height: 70px; object-fit: contain; }
+        .invoice-details { text-align: right; }
+        .invoice-details h1 { font-size: 36px; font-weight: bold; color: ${primaryColor}; margin: 0 0 10px 0; }
         .invoice-details p { margin: 0; line-height: 1.6; }
         .company-info { margin-bottom: 40px; display: flex; justify-content: space-between; }
+        .bill-to p, .from p { margin: 0; line-height: 1.6; }
         .line-items-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .line-items-table thead th { text-align: left; color: #6b7280; text-transform: uppercase; font-size: 12px; padding: 12px 0; border-bottom: 2px solid ${settings.theme.primaryColor}; }
+        .line-items-table thead th { text-align: left; color: #6b7280; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
         .line-items-table tbody td { border-bottom: 1px solid #e5e7eb; padding: 12px 0; }
+        .line-items-table .text-right { text-align: right; }
+        .line-items-table .text-center { text-align: center; }
         .totals { margin-top: 30px; display: flex; justify-content: flex-end; }
         .totals table { width: 100%; max-width: 300px; }
         .totals td { padding: 8px 0; text-align: right; }
         .totals td:first-child { text-align: left; color: #6b7280; }
-        .totals .total-amount td { font-size: 18px; font-weight: bold; color: ${settings.theme.headingColor}; border-top: 2px solid #374151; }
+        .totals .total-amount td { font-size: 18px; font-weight: bold; color: #111827; border-top: 1px solid #374151; }
         .footer { margin-top: 40px; border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center; color: #9ca3af; font-size: 12px; }
     `;
 
@@ -65,8 +54,7 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
             <head>
                 <meta charSet="utf-8" />
                 {/* Font link moved to pages/_document.tsx for global loading */}
-                {typography.googleFontUrl && <link href={typography.googleFontUrl} rel="stylesheet" />}
-                <style dangerouslySetInnerHTML={{ __html: getCss(settings) }} />
+                <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>
                 <div className="invoice-container">
@@ -75,13 +63,13 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                             {data.profile.avatar_url ? (
                                 <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
-                                <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: theme.textColor ?? primaryColor, margin: 0 }}>
+                                <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: primaryColor, margin: 0 }}>
                                     {data.profile.company_name || data.profile.full_name}
                                 </h2>
                             )}
                         </div>
                         <div className="invoice-details">
-                            <h1 style={{ color: theme.headingColor }}>Invoice</h1>
+                            <h1>Invoice</h1>
                             <p><b>Invoice #:</b> {data.invoice_number}</p>
                             <p><b>Issued:</b> {formatDate(data.issue_date)}</p>
                             <p><b>Due:</b> {formatDate(data.due_date)}</p>

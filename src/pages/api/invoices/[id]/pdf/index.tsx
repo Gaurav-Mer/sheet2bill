@@ -3,9 +3,12 @@
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { renderToStaticMarkup } from 'react-dom/server';
-import InvoiceTemplate from '@/components/invoices/InvoiceTemplate';
-// import chromium from 'chrome-aws-lambda';
-const playwright = await import("playwright-core");
+import playwright from 'playwright-core';
+
+// Import our template definitions
+import { AVAILABLE_TEMPLATES } from '@/lib/templates';
+import { TemplateSettings } from '@/types';
+import { CurrentTemplate } from '@/components/templates/CurrentTemplate';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const supabase = createPagesServerClient({ req, res });
@@ -15,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { id } = req.query;
 
     try {
-        // 1. Fetch all necessary data
+        // --- 1. Fetch all necessary data ---
         const [invoiceQuery, profileQuery] = await Promise.all([
             supabase.from('invoices').select('*, client:clients!client_id(*), invoice_line_items(*)').eq('id', id).single(),
             supabase.from('profiles').select('*').eq('id', session.user.id).single()
@@ -28,36 +31,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(404).send('Invoice or profile not found');
         }
 
-        const fullInvoiceData = { ...invoiceData, profile: profileData, client: invoiceData.client };
+        // --- 2. Get the Correct Template Settings ---
+        let templateSettings: TemplateSettings
+        const templateId = invoiceData.template_id; // e.g., 'zurich'
 
-        // 2. Render React component to HTML
-        const html = renderToStaticMarkup(<InvoiceTemplate data={fullInvoiceData as any} />);
+        // For now, we only have pre-defined templates.
+        // In the future, you would add an 'else' block here to fetch custom templates from the database.
+        const foundTemplate = AVAILABLE_TEMPLATES.find(t => t.id === templateId);
 
-        // --- THIS IS THE CORRECTED SECTION ---
-        // 3. Get the browser executable path
+        if (foundTemplate) {
+            templateSettings = foundTemplate.settings;
+        } else {
+            // Default to the first pre-defined template if none is found
+            templateSettings = AVAILABLE_TEMPLATES[0].settings;
+        }
 
+        // --- 3. Combine all data for the template ---
+        const fullInvoiceData = {
+            ...invoiceData,
+            profile: { ...profileData, email: session.user.email },
+            client: invoiceData.client,
+            settings: templateSettings, // Pass the settings to the template
+        };
+
+        // --- 4. Render React component to HTML ---
+        const html = renderToStaticMarkup(<CurrentTemplate templateId={templateId ?? undefined} data={fullInvoiceData as any} />);
+
+        // --- 5. Generate PDF with Playwright ---
         // const executablePath = await chromium.executablePath;
-
-        // 4. Launch a headless browser with the correct path
         // const browser = await playwright.chromium.launch({
         //     args: chromium.args,
-        //     executablePath: executablePath || undefined, // Use the path, or undefined if not found
+        //     executablePath: executablePath || undefined,
         //     headless: chromium.headless,
         // });
-
         const browser = await playwright.chromium.launch({
             headless: true,
             executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
         });
-
-        // --- END OF CORRECTION ---
 
         const page = await browser.newPage();
         await page.setContent(html, { waitUntil: 'networkidle' });
         const pdf = await page.pdf({ format: 'A4', printBackground: true });
         await browser.close();
 
-        // 5. Send the PDF as a response
+        // --- 6. Send the PDF as a response ---
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename=invoice-${invoiceData.invoice_number}.pdf`);
         return res.send(pdf);

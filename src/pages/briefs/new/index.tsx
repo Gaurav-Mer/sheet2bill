@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 
 type Client = { id: number; name: string; };
 type LineItem = {
@@ -38,6 +39,7 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
     const [currency, setCurrency] = useState('INR');
     const [issueDate, setIssueDate] = useState(getTodayDate());
     const [dueDate, setDueDate] = useState('');
+    const [templateId, setTemplateId] = useState('zurich'); // NEW: State for selected template
 
     const [lineItems, setLineItems] = useState<LineItem[]>([
         { description: '', quantity: 1, unit_price: 0 }
@@ -110,6 +112,7 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
             total: totals.grandTotal,
             issue_date: issueDate,
             due_date: dueDate || null,
+            template_id: templateId, // NEW: Include selected template ID
         });
     }
 
@@ -180,8 +183,21 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                 <div>
                                     <Label htmlFor="currency">Currency</Label>
                                     <Select onValueChange={setCurrency} defaultValue={currency}>
-                                        <SelectTrigger id="currency"><SelectValue /></SelectTrigger>
+                                        <SelectTrigger className='w-full' id="currency"><SelectValue /></SelectTrigger>
                                         <SelectContent><SelectItem value="INR">INR</SelectItem><SelectItem value="USD">USD</SelectItem><SelectItem value="EUR">EUR</SelectItem></SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <Label htmlFor="template">Template</Label>
+                                    <Select onValueChange={setTemplateId} defaultValue={templateId}>
+                                        <SelectTrigger className='w-full' id="template"><SelectValue /></SelectTrigger>
+                                        <SelectContent className='w-full'>
+                                            {AVAILABLE_TEMPLATES.map(template => (
+                                                <SelectItem key={template.id} value={template.id as string}>
+                                                    {template.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
                                 </div>
                             </CardContent>
