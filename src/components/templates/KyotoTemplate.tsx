@@ -12,8 +12,8 @@ type TemplateProps = {
 };
 
 export const KyotoTemplate = ({ data }: TemplateProps) => {
-    const accentColor = '#0B2B40'; // Deep, sophisticated blue
-
+    const accentColor = data?.profile?.brand_color ?? '#00000'; // Deep, sophisticated blue
+    const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
     const css = `
     body { 
       font-family: 'Montserrat', sans-serif; 
@@ -61,7 +61,8 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
       letter-spacing: 1px; 
       color: #888; 
       padding: 10px 0; 
-      border-bottom: 2px solid #ddd; 
+      border-bottom: 2px solid ${accentColor}; 
+
     }
     .line-items-table tbody td { padding: 15px 0; border-bottom: 1px solid #eee; }
     .line-items-table .text-right { text-align: right; }
@@ -104,13 +105,13 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
                             <h2>From</h2>
                             <p><b>{data.profile.company_name || data.profile.full_name}</b></p>
                             <p>{data.profile.address_line_1}</p>
-                            <p>{data.profile.city}, {data.profile.country}</p>
+                            <p>{data.profile.city}{data.profile.city && data.profile.country && ","} {data.profile.country}</p>
                         </div>
                         <div className="bill-to">
                             <h2>Bill To</h2>
                             <p><b>{data.client.name}</b></p>
                             <p>{data.client.address_line_1}</p>
-                            <p>{data.client.city}, {data.client.country}</p>
+                            <p>{data.client.city}{data.client.city && data.client.city && ","} {data.client.country}</p>
                         </div>
                         <div className="invoice-info">
                             <h2>Details</h2>
@@ -147,7 +148,7 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
                     </section>
 
                     <footer className="footer">
-                        <p>Thank you for your business!</p>
+                        <p>{thanksMessage}</p>
                     </footer>
                 </div>
             </body>

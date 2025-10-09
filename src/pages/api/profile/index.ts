@@ -15,7 +15,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const {
         full_name, company_name, avatar_url, phone_number,
         address_line_1, address_line_2, city, state_province_region,
-        postal_code, country, tax_id
+        postal_code, country, tax_id,
+        brand_color, // Add the brand_color to the upsert
+        thank_u_note
+
     } = req.body;
 
     // Use 'upsert' to update the profile with all the new data
@@ -27,7 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Pass all the fields to be updated
             full_name, company_name, avatar_url, phone_number,
             address_line_1, address_line_2, city, state_province_region,
-            postal_code, country, tax_id
+            postal_code, country, tax_id,
+            brand_color, // Add the brand_color to the upsert
+            thank_u_note
         })
         .select()
         .single();

@@ -13,7 +13,8 @@ type TemplateProps = {
 };
 
 export const ManhattanTemplate = ({ data }: TemplateProps) => {
-    const primaryColor = '#1A237E'; // A deep, corporate navy blue
+    const primaryColor = data.profile?.brand_color || '#1A237E';
+    const thank_u_note = data.profile?.thank_u_note || "Thank you for your business!";
 
     const css = `
     body { 
@@ -33,7 +34,7 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
     .parties h2 { font-family: 'Georgia', serif; font-size: 16px; letter-spacing: 1px; color: #616161; margin: 0 0 10px 0; }
     .parties p { margin: 0; line-height: 1.7; }
     .line-items-table { width: 100%; border-collapse: collapse; }
-    .line-items-table thead th { text-align: left; font-size: 12px; letter-spacing: 1px; color: #fff; background-color: #283593; padding: 12px; }
+    .line-items-table thead th { text-align: left; font-size: 12px; letter-spacing: 1px; color: #fff; background-color: ${primaryColor}; padding: 12px; }
     .line-items-table tbody td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
     .line-items-table .text-right { text-align: right; }
     .line-items-table .text-center { text-align: center; }
@@ -46,10 +47,7 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
     .footer { margin-top: 50px; border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center; color: #757575; font-size: 12px; }
   `;
 
-    const formatDate = (dateString: string | null) => {
-        if (!dateString) return 'N/A';
-        return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    };
+
 
     return (
         <html>
@@ -71,7 +69,7 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
                             )}
                         </div>
                         <div className="header-right">
-                            <h1>INVOICE</h1>
+                            <h1 style={{ color: primaryColor }}>INVOICE</h1>
                             <p><b>Invoice #:</b> {data.invoice_number}</p>
                         </div>
                     </header>
@@ -81,14 +79,14 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
                             <h2>From</h2>
                             <p><b>{data.profile.company_name || data.profile.full_name}</b></p>
                             <p>{data.profile.address_line_1}</p>
-                            <p>{data.profile.city}, {data.profile.country}</p>
+                            <p>{data.profile.city}{data.profile.city && data.profile.country && ","} {data.profile.country}</p>
                             <p>{data.profile.email}</p>
                         </div>
                         <div className="bill-to">
                             <h2>Bill To</h2>
                             <p><b>{data.client.name}</b></p>
                             <p>{data.client.address_line_1}</p>
-                            <p>{data.client.city}, {data.client.country}</p>
+                            <p>{data.client.city}{data.client.city && data.client.country && ","} {data.client.country}</p>
                             <p>{data.client.email}</p>
                         </div>
                     </section>
@@ -122,7 +120,7 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
                     {data.notes && <div style={{ marginTop: '50px' }}><h2 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#616161' }}>Notes</h2><p>{data.notes}</p></div>}
 
                     <footer className="footer">
-                        <p>Thank you for your business! If you have any questions, please contact {data.profile.email}.</p>
+                        <p>{thank_u_note}</p>
                     </footer>
                 </div>
             </body>

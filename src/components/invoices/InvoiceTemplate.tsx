@@ -18,7 +18,7 @@ type InvoiceTemplateProps = {
 const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
     // A professional color scheme for the PDF.
     const primaryColor = 'black'; // Indigo
-
+    const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
     // Self-contained CSS for perfect PDF rendering
     const css = `
         body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; color: #374151; margin: 0; padding: 0; background-color: #fff; }
@@ -134,7 +134,7 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                     )}
 
                     <footer className="footer">
-                        <p>Thank you for your business!</p>
+                        <p>{thanksMessage}</p>
                         <p>{data.profile.company_name || 'Sheet2bill'}</p>
                     </footer>
                 </div>

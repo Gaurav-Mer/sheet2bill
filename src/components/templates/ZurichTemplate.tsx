@@ -12,8 +12,8 @@ type TemplateProps = {
 };
 
 export const ZurichTemplate = ({ data }: TemplateProps) => {
-    const primaryColor = "black"; // Indigo for the "Zurich" theme
-
+    const primaryColor = data.profile?.brand_color || 'hsl(243, 75%, 59%)';
+    const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
     const css = `
     body { 
       font-family: 'Inter', sans-serif; 
@@ -27,13 +27,13 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
     .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 50px; }
     .logo { max-width: 120px; max-height: 50px; object-fit: contain; }
     .header-right { text-align: right; }
-    .header-right h1 { font-size: 32px; font-weight: bold; color: #111827; margin: 0; }
+    .header-right h1 { font-size: 32px; font-weight: bold; color: ${primaryColor}; margin: 0; }
     .header-right p { margin: 2px 0 0 0; color: #6b7280; }
     .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 50px; }
     .parties h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #6b7280; margin: 0 0 10px 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; }
     .parties p { margin: 0; line-height: 1.7; }
     .line-items-table { width: 100%; border-collapse: collapse; }
-    .line-items-table thead th { text-align: left; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; color: #6b7280; padding: 10px; border-bottom: 2px solid #111827; }
+    .line-items-table thead th { text-align: left; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; color: #6b7280; padding: 10px; border-bottom: 2px solid ${primaryColor}; }
     .line-items-table tbody td { padding: 15px 10px; border-bottom: 1px solid #e5e7eb; }
     .line-items-table .text-right { text-align: right; }
     .line-items-table .text-center { text-align: center; }
@@ -42,7 +42,7 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
     .totals-table td { padding: 10px 0; }
     .totals-table .label { text-align: left; color: #6b7280; }
     .totals-table .value { text-align: right; }
-    .totals-table .total-amount { font-size: 20px; font-weight: bold; color: #111827; border-top: 2px solid #111827; }
+    .totals-table .total-amount { font-size: 20px; font-weight: bold; color: ${primaryColor}; border-top: 2px solid #111827; }
     .footer { margin-top: 50px; border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center; color: #9ca3af; font-size: 12px; }
   `;
 
@@ -121,7 +121,7 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
                     {data.notes && <div style={{ marginTop: '50px' }}><h2 style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: '#6b7280' }}>Notes</h2><p>{data.notes}</p></div>}
 
                     <footer className="footer">
-                        <p>Thank you for your business!</p>
+                        <p>{thanksMessage}</p>
                     </footer>
                 </div>
             </body>

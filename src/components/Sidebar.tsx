@@ -9,7 +9,7 @@ const navItems = [
     { href: '/briefs', label: 'Briefs', icon: FileText },
     { href: '/invoices', label: 'Invoices', icon: FileText },
     { href: '/reports', label: 'Reports', icon: BarChart3 }, // ADD THIS LINE
-    { href: '/settings/templates', label: 'Templates', icon: Palette }, // ADD THIS LINE
+    // { href: '/settings/templates', label: 'Templates', icon: Palette }, // ADD THIS LINE
 
 
     // We can add a '/settings' link later

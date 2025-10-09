@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Profile } from '@/types';
 import { uploadLogo } from '@/lib/supabase/storage';
+import { Textarea } from '@/components/ui/textarea';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -33,6 +34,9 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
     const [city, setCity] = useState(profile?.city || '');
     const [country, setCountry] = useState(profile?.country || '');
     const [taxId, setTaxId] = useState(profile?.tax_id || '');
+    const [brandColor, setBrandColor] = useState(profile?.brand_color || '#4f46e5'); // NEW STATE
+    const [footerMessage, setFooterMessage] = useState(profile?.thank_u_note || 'Thank you for your business!'); // NEW STATE
+
 
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [logoPreview, setLogoPreview] = useState<string | null>(profile?.avatar_url || null);
@@ -86,12 +90,15 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
             address_line_1: address1,
             city: city,
             country: country,
-            tax_id: taxId
+            tax_id: taxId,
+            brand_color: brandColor, // NEW
+            thank_u_note: footerMessage
+
         });
     };
 
     return (
-        <div className="container mx-auto mt-10 max-w-4xl">
+        <div className="container mx-auto  max-w-4xl">
             <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="flex justify-between items-center">
                     <div>
@@ -121,8 +128,8 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2"><Label htmlFor="fullName">Full Name</Label><Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>
-                            <div className="space-y-2"><Label htmlFor="companyName">Company Name</Label><Input id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} /></div>
+                            <div className="space-y-2"><Label htmlFor="fullName">Full Name</Label><Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} maxLength={100} /></div>
+                            <div className="space-y-2"><Label htmlFor="companyName">Company Name</Label><Input id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} maxLength={150} /></div>
                         </div>
                     </CardContent>
                 </Card>
@@ -131,8 +138,10 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                     <CardHeader><CardTitle>Contact Details</CardTitle></CardHeader>
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" value={user?.email || ''} disabled /></div>
-                        <div className="space-y-2"><Label htmlFor="phone">Phone Number</Label><Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} /></div>
-                        <div className="space-y-2 col-span-full"><Label htmlFor="website">Website</Label><Input id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." /></div>
+
+                        <div className="space-y-2"><Label htmlFor="phone">Phone Number</Label><Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} /></div>
+
+                        <div className="space-y-2 col-span-full"><Label htmlFor="website">Website</Label><Input maxLength={100} id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." /></div>
                     </CardContent>
                 </Card>
 
@@ -145,6 +154,52 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                             <div className="space-y-2"><Label htmlFor="country">Country</Label><Input id="country" value={country} onChange={(e) => setCountry(e.target.value)} /></div>
                         </div>
                         <div className="space-y-2"><Label htmlFor="taxId">Tax ID (e.g., GSTIN, VAT ID)</Label><Input id="taxId" value={taxId} onChange={(e) => setTaxId(e.target.value)} /></div>
+                    </CardContent>
+                </Card>
+
+                <Card id="branding">
+                    <CardHeader>
+                        <CardTitle>Branding</CardTitle>
+                        <CardDescription>Customize the look of your invoices.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        {/* Logo Upload Section */}
+                        <div className="space-y-2">
+                            <Label>Company Logo</Label>
+                            {/* ... logo upload JSX ... */}
+                        </div>
+
+                        {/* --- NEW: BRAND COLOR PICKER --- */}
+                        <div className="space-y-2">
+                            <Label htmlFor="brandColor">Brand Color</Label>
+                            <div className="flex items-center gap-2">
+                                <Input
+                                    id="brandColor"
+                                    type="color"
+                                    value={brandColor}
+                                    onChange={(e) => setBrandColor(e.target.value)}
+                                    className="p-1 h-10 w-14"
+                                />
+                                <Input
+                                    type="text"
+                                    value={brandColor}
+                                    onChange={(e) => setBrandColor(e.target.value)}
+                                    className="max-w-[120px]"
+                                />
+                            </div>
+                            <p className="text-sm text-muted-foreground">This color will be used on your invoices.</p>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="footerMessage">Invoice Footer Message</Label>
+                            <Textarea
+                                id="footerMessage"
+                                value={footerMessage}
+                                onChange={(e) => setFooterMessage(e.target.value)}
+                                placeholder="e.g., Thank you for your business!"
+                                maxLength={250}
+                            />
+                            <p className="text-sm text-muted-foreground">This message will appear at the bottom of your invoices.</p>
+                        </div>
                     </CardContent>
                 </Card>
             </form>

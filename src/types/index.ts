@@ -63,6 +63,8 @@ export type Profile = {
     tax_id: string | null;
     updated_at: string | null;
     email?: string; // Optional email from auth
+    brand_color?: string;
+    thank_u_note?: string
 };
 
 
