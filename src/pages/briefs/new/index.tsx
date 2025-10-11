@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
+import { FeatureGate } from '@/components/FeatureGate';
 
 type Client = { id: number; name: string; };
 type LineItem = {
@@ -189,16 +190,18 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                 </div>
                                 <div>
                                     <Label htmlFor="template">Template</Label>
-                                    <Select onValueChange={setTemplateId} defaultValue={templateId}>
-                                        <SelectTrigger className='w-full' id="template"><SelectValue /></SelectTrigger>
-                                        <SelectContent className='w-full'>
-                                            {AVAILABLE_TEMPLATES.map(template => (
-                                                <SelectItem key={template.id} value={template.id as string}>
-                                                    {template.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <FeatureGate>
+                                        <Select onValueChange={setTemplateId} defaultValue={templateId}>
+                                            <SelectTrigger className='w-full' id="template"><SelectValue /></SelectTrigger>
+                                            <SelectContent className='w-full'>
+                                                {AVAILABLE_TEMPLATES.map(template => (
+                                                    <SelectItem key={template.id} value={template.id as string}>
+                                                        {template.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FeatureGate>
                                 </div>
                             </CardContent>
                         </Card>

@@ -3,13 +3,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Check, X } from 'lucide-react';
 import { ReactElement, useState } from 'react';
-import Link from 'next/link';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { GetServerSidePropsContext } from 'next';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 // import { loadStripe } from '@stripe/stripe-js';
 import toast from 'react-hot-toast';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { Profile } from '@/types';
+import Link from 'next/link';
 
 // --- THE DATA STRUCTURE: Your Single Source of Truth ---
 // in pages/pricing.tsx
@@ -87,12 +90,13 @@ const PLANS = [
 ];
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 const stripePromise = ""
-export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
+export default function PricingPage({ currency, profile }: { currency: 'inr' | 'usd', profile?: Profile },) {
     const [isAnnual, setIsAnnual] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState<string | null>(null);
+    const router = useRouter()
 
-    const handleUpgradeClick = async () => {
-        setIsLoading(true);
+    const handleUpgradeClick = async (planName: string) => {
+        setIsLoading(planName);
         try {
             const proPlan = PLANS.find(p => p.name === 'Pro');
             if (!proPlan) throw new Error("Pro plan not found.");
@@ -112,7 +116,7 @@ export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
 
             if (!response.ok) throw new Error("Could not create checkout session.");
 
-            const { sessionId } = await response.json();
+            // const { sessionId } = await response.json();
             const stripe = await stripePromise;
             if (stripe) {
                 // await stripe.redirectToCheckout({ sessionId });
@@ -121,12 +125,41 @@ export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
             toast.error(error.message || 'An error occurred.');
             console.error(error);
         } finally {
-            setIsLoading(false);
+            setIsLoading(null);
         }
     };
 
+    // --- Mutation for starting a trial ---
+    const startTrialMutation = useMutation({
+        mutationFn: () => fetch('/api/subscription/start-trial', { method: 'POST' }),
+        onSuccess: async (res) => {
+            if (!res.ok) {
+                const error = await res.json();
+                throw new Error(error.message || 'Failed to start trial.');
+            }
+            toast.success('Your 7-day Pro trial has started!');
+            router.replace("/dashboard"); // Reload the page to reflect the new trial status
+        },
+        onError: (error: Error) => toast.error(error.message),
+    });
+
+    // Helper to calculate trial days remaining
+    const getTrialDaysRemaining = () => {
+        if (!profile?.subscription_ends_at) return 0;
+        const endDate = new Date(profile.subscription_ends_at);
+        const now = new Date();
+        const diffTime = endDate.getTime() - now.getTime();
+        return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    };
+
+
     return (
         <div className="container mx-auto mt-10 max-w-6xl">
+            {profile?.subscription_status === 'trialing' && (
+                <div className="mb-8 p-4 bg-primary/10 border border-primary/20 rounded-lg text-center">
+                    <p className="font-semibold">You are on a Pro trial! You have {getTrialDaysRemaining()} days remaining.</p>
+                </div>
+            )}
             <div className="text-center mb-12 animate-fade-in-up">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Simple Pricing for Every Business</h1>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Start for free and scale as you grow. No hidden fees.</p>
@@ -142,6 +175,9 @@ export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
                     const price = isAnnual && plan.price[currency]?.annually
                         ? plan.price[currency].annually
                         : plan.price[currency].monthly;
+                    const isCurrentUserPlan = profile?.subscription_status === plan.name.toLowerCase();
+                    const canStartTrial = plan.name === 'Pro' && profile?.subscription_status === 'free';
+                    const canUpgrade = !isCurrentUserPlan && plan.name !== 'Free' && !canStartTrial;
 
                     return (
                         <Card
@@ -177,14 +213,33 @@ export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
                                 </ul>
                             </CardContent>
                             <CardFooter>
-                                <Button
-                                    className="w-full h-11"
-                                    variant={plan.isPopular ? 'default' : 'outline'}
-                                    onClick={plan.name === 'Pro' ? handleUpgradeClick : undefined}
-                                    disabled={isLoading && plan.name === 'Pro'}
-                                >
-                                    {isLoading && plan.name === 'Pro' ? 'Redirecting...' : plan.cta}
-                                </Button>
+                                {isCurrentUserPlan ? (
+                                    <Button className="w-full h-11" disabled>Your Current Plan</Button>
+                                ) : canStartTrial ? (
+                                    <Button
+                                        className="w-full h-11"
+                                        onClick={() => startTrialMutation.mutate()}
+                                        disabled={startTrialMutation.isPending}
+                                    >
+                                        {startTrialMutation.isPending ? 'Starting Trial...' : plan.cta}
+                                    </Button>
+                                ) : canUpgrade && profile ? (
+                                    <Button
+                                        className="w-full h-11"
+                                        variant={plan.isPopular ? 'default' : 'outline'}
+                                        onClick={() => handleUpgradeClick(plan.name)}
+                                        disabled={isLoading === plan.name}
+                                    >
+                                        {isLoading === plan.name ? 'Redirecting...' : plan.cta}
+                                    </Button>
+                                ) : (
+                                    // For logged-out users
+                                    <Link href="/signup" passHref className="w-full">
+                                        <Button className="w-full h-11" variant={plan.isPopular ? 'default' : 'outline'}>
+                                            {plan.cta}
+                                        </Button>
+                                    </Link>
+                                )}
                             </CardFooter>
                         </Card>
                     );
@@ -194,15 +249,27 @@ export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
     );
 }
 
+// --- CORRECTED: getServerSideProps now fetches the user's profile ---
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const country = (ctx.req.headers['x-vercel-ip-country'] as string) || 'US';
     const currency = country === 'IN' ? 'inr' : 'usd';
-    // Check for session to redirect if needed, but the page is public.
+
     const supabase = createPagesServerClient(ctx);
     const { data: { session } } = await supabase.auth.getSession();
-    if (session) { /* You might want to fetch the user's current plan and show it on the page */ }
 
-    return { props: { currency } };
+    let profile = null;
+    if (session) {
+        // Fetch the user's profile to get their subscription status
+        const { data } = await supabase.from('profiles').select('*').single();
+        profile = data;
+    }
+
+    return {
+        props: {
+            currency,
+            profile, // Pass the profile (or null if logged out) to the page
+        }
+    };
 };
 
 PricingPage.getLayout = function getLayout(page: ReactElement) {

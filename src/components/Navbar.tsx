@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Menu, UserCircle, ChevronRight, Bell } from 'lucide-react';
+import { Menu, UserCircle, ChevronRight, Bell, Star } from 'lucide-react';
 import { Button } from './ui/button';
 import {
     DropdownMenu,
@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { NotificationBell } from './NotificationBell';
+import { useProfile } from '@/hooks/useProfile';
 
 type NavbarProps = {
     onMenuClick: () => void;
@@ -32,12 +33,57 @@ const generateBreadcrumbs = (pathname: string) => {
     return [{ href: '/dashboard', label: 'Home' }, ...breadcrumbs];
 };
 
+// Helper function to check if the user is on any paid or trial plan
+const isPaidPlan = (status: string | null | undefined): boolean => {
+    if (!status) return false;
+    return ['trialing', 'starter', 'pro'].includes(status);
+};
+
+export const PlanStatus = () => {
+    const { profile, isLoading } = useProfile();
+
+    if (isLoading || !profile) {
+        return <div className="h-8 w-24 rounded-md bg-muted animate-pulse" />; // Loading skeleton
+    }
+
+    const getTrialDaysRemaining = () => {
+        if (!profile?.subscription_ends_at) return 0;
+        const endDate = new Date(profile.subscription_ends_at);
+        const now = new Date();
+        return Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+    };
+
+    return (
+        <div className="hidden sm:flex items-center gap-4">
+            {isPaidPlan(profile.subscription_status) ? (
+                <div className="flex items-center gap-2 text-sm font-semibold text-primary">
+                    <Star className="h-4 w-4" />
+                    {profile.subscription_status === 'trialing'
+                        ? `Pro Trial (${getTrialDaysRemaining()}d left)`
+                        : `${(profile?.subscription_status ?? "")?.charAt(0)?.toUpperCase() + profile?.subscription_status?.slice(1)} Plan`
+                    }
+                </div>
+            ) : (
+                <>
+                    <p className="text-sm text-muted-foreground">Free Plan</p>
+                    <Link href="/pricing" passHref>
+                        <Button size="sm">Upgrade</Button>
+                    </Link>
+                </>
+            )}
+        </div>
+    );
+};
+
+
+
 
 export function Navbar({ onMenuClick }: NavbarProps) {
     const user = useUser();
     const router = useRouter();
     const supabaseClient = useSupabaseClient();
     const [breadcrumbs, setBreadcrumbs] = useState<{ href: string, label: string }[]>([]);
+
 
     // Update breadcrumbs whenever the page changes
     useEffect(() => {
@@ -70,7 +116,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             </nav>
 
             <div className="flex flex-1 items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-                <div className="ml-auto flex-1 sm:flex-initial">
+                <div className="ml-auto flex items-center gap-4">
+                    <PlanStatus />
                     <NotificationBell />
                 </div>
 

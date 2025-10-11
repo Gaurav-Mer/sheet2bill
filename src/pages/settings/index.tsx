@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Profile } from '@/types';
 import { uploadLogo } from '@/lib/supabase/storage';
 import { Textarea } from '@/components/ui/textarea';
+import { FeatureGate } from '@/components/FeatureGate';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -157,51 +158,53 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                     </CardContent>
                 </Card>
 
-                <Card id="branding">
-                    <CardHeader>
-                        <CardTitle>Branding</CardTitle>
-                        <CardDescription>Customize the look of your invoices.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        {/* Logo Upload Section */}
-                        <div className="space-y-2">
-                            <Label>Company Logo</Label>
-                            {/* ... logo upload JSX ... */}
-                        </div>
-
-                        {/* --- NEW: BRAND COLOR PICKER --- */}
-                        <div className="space-y-2">
-                            <Label htmlFor="brandColor">Brand Color</Label>
-                            <div className="flex items-center gap-2">
-                                <Input
-                                    id="brandColor"
-                                    type="color"
-                                    value={brandColor}
-                                    onChange={(e) => setBrandColor(e.target.value)}
-                                    className="p-1 h-10 w-14"
-                                />
-                                <Input
-                                    type="text"
-                                    value={brandColor}
-                                    onChange={(e) => setBrandColor(e.target.value)}
-                                    className="max-w-[120px]"
-                                />
+                <FeatureGate>
+                    <Card id="branding">
+                        <CardHeader>
+                            <CardTitle>Branding</CardTitle>
+                            <CardDescription>Customize the look of your invoices.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            {/* Logo Upload Section */}
+                            <div className="space-y-2">
+                                <Label>Company Logo</Label>
+                                {/* ... logo upload JSX ... */}
                             </div>
-                            <p className="text-sm text-muted-foreground">This color will be used on your invoices.</p>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="footerMessage">Invoice Footer Message</Label>
-                            <Textarea
-                                id="footerMessage"
-                                value={footerMessage}
-                                onChange={(e) => setFooterMessage(e.target.value)}
-                                placeholder="e.g., Thank you for your business!"
-                                maxLength={250}
-                            />
-                            <p className="text-sm text-muted-foreground">This message will appear at the bottom of your invoices.</p>
-                        </div>
-                    </CardContent>
-                </Card>
+
+                            {/* --- NEW: BRAND COLOR PICKER --- */}
+                            <div className="space-y-2">
+                                <Label htmlFor="brandColor">Brand Color</Label>
+                                <div className="flex items-center gap-2">
+                                    <Input
+                                        id="brandColor"
+                                        type="color"
+                                        value={brandColor}
+                                        onChange={(e) => setBrandColor(e.target.value)}
+                                        className="p-1 h-10 w-14"
+                                    />
+                                    <Input
+                                        type="text"
+                                        value={brandColor}
+                                        onChange={(e) => setBrandColor(e.target.value)}
+                                        className="max-w-[120px]"
+                                    />
+                                </div>
+                                <p className="text-sm text-muted-foreground">This color will be used on your invoices.</p>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="footerMessage">Invoice Footer Message</Label>
+                                <Textarea
+                                    id="footerMessage"
+                                    value={footerMessage}
+                                    onChange={(e) => setFooterMessage(e.target.value)}
+                                    placeholder="e.g., Thank you for your business!"
+                                    maxLength={250}
+                                />
+                                <p className="text-sm text-muted-foreground">This message will appear at the bottom of your invoices.</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </FeatureGate>
             </form>
         </div>
     );

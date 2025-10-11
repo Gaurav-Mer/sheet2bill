@@ -64,7 +64,9 @@ export type Profile = {
     updated_at: string | null;
     email?: string; // Optional email from auth
     brand_color?: string;
-    thank_u_note?: string
+    thank_u_note?: string;
+    subscription_ends_at?: string
+    subscription_status?: string
 };
 
 

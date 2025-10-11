@@ -1,4 +1,5 @@
-// pages/api/clients.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { checkPlanLimits } from '@/lib/permission';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -14,37 +15,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    // Destructure all the possible fields from the request body
-    const {
-        name, email, phone_number, contact_person,
-        address_line_1, city, state_province_region,
-        postal_code, country, tax_id, notes
-    } = req.body;
+    try {
+        // --- THIS IS THE GATEKEEPER ---
+        // Before we do anything else, we check if the user is allowed to perform this action.
+        await checkPlanLimits(supabase, session.user.id, 'CREATE_CLIENT');
 
-    if (!name) {
-        return res.status(400).json({ message: 'Client name is required.' });
-    }
+        // If checkPlanLimits succeeds (doesn't throw an error), we proceed.
+        const { name, ...clientData } = req.body;
 
-    const { data, error } = await supabase
-        .from('clients')
-        .insert({
-            // Map all fields to their database columns
-            name, email, phone_number, contact_person,
-            address_line_1, city, state_province_region,
-            postal_code, country, tax_id, notes,
-            user_id: session.user.id,
-        })
-        .select()
-        .single(); // Using .single() is fine here as we insert one record
-
-    if (error) {
-        if (error.code === '23505') {
-            return res.status(409).json({ message: 'A client with this email already exists.' });
+        if (!name) {
+            return res.status(400).json({ message: 'Client name is required.' });
         }
-        console.error('Detailed Supabase Error:', error);
-        return res.status(500).json({ message: 'Error inserting client', error });
+
+        const { data, error } = await supabase
+            .from('clients')
+            .insert({
+                user_id: session.user.id,
+                name,
+                ...clientData
+            })
+            .select()
+            .single();
+
+        if (error) {
+            // Specifically handle the duplicate email error
+            if (error.code === '23505') {
+                return res.status(409).json({ message: 'A client with this email already exists.' });
+            }
+            // For other database errors, re-throw to be caught by the outer catch block
+            throw error;
+        }
+
+        return res.status(201).json(data);
+
+    } catch (error: any) {
+        // This catch block will now handle errors from our checkPlanLimits function
+        // and any other unexpected database errors.
+
+        // A 402 "Payment Required" status is the standard code for hitting a plan limit.
+        return res.status(402).json({ message: error.message });
     }
-
-    return res.status(201).json(data);
 }
-

@@ -14,6 +14,7 @@ import { Client, Brief, LineItem } from '@/types';
 import { AlertCircle } from 'lucide-react';
 import { Switch } from '../ui/switch';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
+import { FeatureGate } from '../FeatureGate';
 
 type BriefFormProps = {
     clients: Client[];
@@ -215,16 +216,18 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                             </div>
                             <div>
                                 <Label htmlFor="template">Template</Label>
-                                <Select onValueChange={setTemplateId} defaultValue={templateId}>
-                                    <SelectTrigger className='w-full' id="template"><SelectValue /></SelectTrigger>
-                                    <SelectContent className='w-full'>
-                                        {AVAILABLE_TEMPLATES.map(template => (
-                                            <SelectItem key={template.id} value={template.id as string}>
-                                                {template.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                <FeatureGate>
+                                    <Select onValueChange={setTemplateId} defaultValue={templateId}>
+                                        <SelectTrigger className='w-full' id="template"><SelectValue /></SelectTrigger>
+                                        <SelectContent className='w-full'>
+                                            {AVAILABLE_TEMPLATES.map(template => (
+                                                <SelectItem key={template.id} value={template.id as string}>
+                                                    {template.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FeatureGate>
                             </div>
                         </CardContent>
                     </Card>

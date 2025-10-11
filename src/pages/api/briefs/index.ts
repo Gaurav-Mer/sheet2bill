@@ -3,6 +3,7 @@
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
+import { checkPlanLimits } from '@/lib/permission';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -29,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
+        await checkPlanLimits(supabase, session.user.id, 'CREATE_BRIEF');
+
         // --- Auto-generate the brief_number ---
         const { data: lastBrief } = await supabase
             .from('briefs')
@@ -94,6 +97,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     } catch (error: any) {
         console.error("Error creating brief:", error);
-        return res.status(500).json({ message: 'Error creating brief', error });
+        return res.status(402).json({ message: error.message }); // 402 = Payment Required
     }
 }

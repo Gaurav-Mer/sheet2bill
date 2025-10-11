@@ -15,6 +15,7 @@ import { Pagination } from '@/components/clients/Pagination';
 import { ClientForm } from '@/components/clients/Clientform';
 import toast from 'react-hot-toast';
 import { ErrorList } from '@/lib/errorList';
+import { UpgradeModal } from '@/components/UpgradeModal';
 
 export type Client = {
   id: number;
@@ -45,6 +46,9 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  // --- NEW STATE FOR THE UPGRADE FLOW ---
+  const [isUpgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const [upgradeMessage, setUpgradeMessage] = useState('');
 
   const refreshData = () => router.replace(router.asPath);
 
@@ -71,7 +75,16 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
       if (!res.ok) {
         // Get the specific error message from the API
         const errorData = await res.json();
-        throw new Error(errorData.message || 'An unknown error occurred.');
+        // If it's a "Payment Required" error (402), trigger the upgrade modal.
+        if (res.status === 402) {
+          setAddModalOpen(false); // Close the current "Add Client" modal
+          setUpgradeMessage(errorData.message);
+          setUpgradeModalOpen(true);
+        } else {
+          // For other errors (like duplicate email), show a standard toast.
+          throw new Error(errorData.message || 'An unknown error occurred.');
+        }
+        return //stop execution
       }
       setAddModalOpen(false);
       refreshData();
@@ -102,6 +115,11 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
 
   return (
     <div className="container mx-auto max-w-6xl">
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+        message={upgradeMessage}
+      />
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-3xl font-bold">Client Hub</h1>
