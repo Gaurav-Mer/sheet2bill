@@ -15,33 +15,28 @@ const legalLinks = [
 
 export function Footer() {
     return (
-        <footer className="border-t border-border bg-slate-800  text-white">
+        <footer className="border-t border-border/50 bg-background">
             <div className="container mx-auto px-6 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 
-                    {/* Column 1: Brand & Socials */}
-                    <div className="col-span-1 md:col-span-3 lg:col-span-2">
+                    {/* Brand Info */}
+                    <div className="md:col-span-2">
                         <Link href="/" className="flex items-center space-x-2">
-                            <Logo className="h-8 w-8" />
+                            <Logo className="h-6 w-6" />
                             <span className="font-bold text-xl">Sheet2Bill</span>
                         </Link>
-                        <p className="mt-4  max-w-xs">
+                        <p className="mt-4 text-muted-foreground max-w-xs">
                             The smart, professional workflow for freelancers and small agencies.
                         </p>
-                        {/* <div className="mt-6 flex space-x-4">
-                            <Link href="#" className=""><Twitter /></Link>
-                            <Link href="#" className=""><Linkedin /></Link>
-                            <Link href="#" className=""><Github /></Link>
-                        </div> */}
                     </div>
 
-                    {/* Column 2: Product Links */}
-                    <div className="col-span-1">
-                        <h3 className="font-semibold  mb-4">Product</h3>
+                    {/* Product Links */}
+                    <div>
+                        <h3 className="font-semibold mb-4">Product</h3>
                         <ul className="space-y-2">
                             {productLinks.map(link => (
-                                <li key={link.href}>
-                                    <Link href={link.href} className="  transition-colors">
+                                <li key={link.label}>
+                                    <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
                                         {link.label}
                                     </Link>
                                 </li>
@@ -49,13 +44,13 @@ export function Footer() {
                         </ul>
                     </div>
 
-                    {/* Column 3: Legal Links */}
-                    <div className="col-span-1">
-                        <h3 className="font-semibold  mb-4">Legal</h3>
+                    {/* Legal Links */}
+                    <div>
+                        <h3 className="font-semibold mb-4">Legal</h3>
                         <ul className="space-y-2">
                             {legalLinks.map(link => (
-                                <li key={link.href}>
-                                    <Link href={link.href} className="text-white  transition-colors">
+                                <li key={link.label}>
+                                    <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
                                         {link.label}
                                     </Link>
                                 </li>
@@ -65,8 +60,8 @@ export function Footer() {
 
                 </div>
 
-                {/* --- Bottom Bar --- */}
-                <div className="mt-12 border-t border-border pt-6 text-center text-sm text-white">
+                {/* Bottom Bar */}
+                <div className="mt-12 border-t border-border/50 pt-6 text-center text-sm text-muted-foreground">
                     <p>© {new Date().getFullYear()} Sheet2Bill. All Rights Reserved.</p>
                 </div>
             </div>
