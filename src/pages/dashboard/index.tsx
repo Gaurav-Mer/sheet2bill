@@ -43,7 +43,7 @@ export default function Dashboard({ user, stats, recentBriefs }: DashboardProps)
   }
 
   return (
-    <div className="container mx-auto mt-10 max-w-7xl">
+    <div className="container mx-auto  max-w-7xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
         <div>
@@ -134,12 +134,19 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (!session) {
     return { redirect: { destination: '/login', permanent: false } };
   }
+  const userId = session.user.id;
 
   // Run queries in parallel for high performance
   const [statsQuery, recentBriefsQuery] = await Promise.all([
     supabase.rpc('get_dashboard_stats').single(),
-    supabase.from('briefs').select('id, title, status, total, currency, clients(name)').limit(5).order('created_at', { ascending: false })
-  ]);
+    supabase.from('briefs')
+      .select('id, title, status, total, currency, clients(name)')
+      // --- THIS IS THE CRITICAL FIX ---
+      // We must ensure we only fetch briefs belonging to the logged-in user.
+      .eq('user_id', userId)
+      // --- END OF FIX ---
+      .order('created_at', { ascending: false })
+      .limit(5)]);
 
   const { data: stats, error: statsError } = statsQuery;
   const { data: recentBriefs, error: briefsError } = recentBriefsQuery;

@@ -38,9 +38,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .single(); // Using .single() is fine here as we insert one record
 
     if (error) {
+        if (error.code === '23505') {
+            return res.status(409).json({ message: 'A client with this email already exists.' });
+        }
         console.error('Detailed Supabase Error:', error);
         return res.status(500).json({ message: 'Error inserting client', error });
     }
 
     return res.status(201).json(data);
 }
+

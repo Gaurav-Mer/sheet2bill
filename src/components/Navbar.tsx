@@ -1,4 +1,5 @@
-import { Menu, UserCircle, ChevronRight } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Menu, UserCircle, ChevronRight, Bell } from 'lucide-react';
 import { Button } from './ui/button';
 import {
     DropdownMenu,
@@ -12,6 +13,7 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { NotificationBell } from './NotificationBell';
 
 type NavbarProps = {
     onMenuClick: () => void;
@@ -29,6 +31,7 @@ const generateBreadcrumbs = (pathname: string) => {
     // Always start with a link to the main dashboard
     return [{ href: '/dashboard', label: 'Home' }, ...breadcrumbs];
 };
+
 
 export function Navbar({ onMenuClick }: NavbarProps) {
     const user = useUser();
@@ -68,7 +71,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
             <div className="flex flex-1 items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
                 <div className="ml-auto flex-1 sm:flex-initial">
-                    {/* Future Global Search Bar can go here */}
+                    <NotificationBell />
                 </div>
 
                 {/* --- PREMIUM: User Dropdown Menu with User Info --- */}

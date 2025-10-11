@@ -9,6 +9,9 @@ import { BarChart, Check, CheckCheck, Clock, FileDown, FilePlus, FileText, Setti
 import { Logo } from '@/components/Logo';
 import { CurrentTemplate } from '@/components/templates/CurrentTemplate';
 import { sampleInvoiceData } from '@/lib/sample-data';
+import { HowItWorks } from '@/components/landing/HowItWorks';
+import { FaqSection } from '@/components/landing/FaqSection';
+import { Footer } from '@/components/landing/Footer';
 
 const benefits = [
   { icon: Clock, title: 'Save Hours Every Month', description: 'Automate your entire billing process and get back to the work that matters.' },
@@ -22,7 +25,7 @@ export default function LandingPage() {
       {/* --- Header --- */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur">
         <div className="container mx-auto h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2"><Logo className="h-8 w-8" /><span className="font-bold text-xl">Sheet2Bill</span></Link>
+          <Link href="/" className="flex items-center space-x-2"><Logo className="h-4 w-4" /><span className="font-bold text-xl">Sheet2Bill</span></Link>
           <nav className="space-x-2"><Link href="/login" passHref><Button variant="ghost">Login</Button></Link><Link href="/signup" passHref><Button>Start Free</Button></Link></nav>
         </div>
       </header>
@@ -99,14 +102,11 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
-        {/* --- Interactive Hero Component --- */}
-        <div className="container mx-auto px-6">
-          <p className='text-center text-4xl my-4 font-bold'>Basic example of template </p>
-          <CurrentTemplate templateId={"default"} data={{ ...sampleInvoiceData, currency: "USD" }} />
-        </div>
+        <section>
+          <HowItWorks />
+        </section>
         {/* --- Benefits Section --- */}
-        <section className="bg-primary/10 my-4 py-24">
+        <section className="bg-gradient-to-b from-secondary/50 to-secondary/20  py-24">
           <div className="container mx-auto px-6">
             <div className="grid md:grid-cols-3 gap-12">
               {benefits.map((item, index) => (
@@ -119,6 +119,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
 
         {/* --- Testimonial --- */}
         <section className="py-24">
@@ -133,6 +134,9 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <section>
+          <FaqSection />
+        </section>
         {/* --- Final CTA --- */}
         <section className="bg-secondary/50 py-24">
           <div className="container mx-auto px-6 text-center">
@@ -143,12 +147,8 @@ export default function LandingPage() {
       </main>
 
       {/* --- Footer --- */}
-      <footer className="border-t border-border">
-        <div className="container mx-auto px-6 py-6 text-center text-muted-foreground text-sm">
-          © {new Date().getFullYear()} Sheet2Bill. All Rights Reserved.
-        </div>
-      </footer>
-    </div>
+      <Footer />
+    </div >
   );
 }
 

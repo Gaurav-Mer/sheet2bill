@@ -162,7 +162,7 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
                 </table>
             </div>
 
-            <Pagination currentPage={page} totalPages={Math.ceil(count / ITEMS_PER_PAGE)} totalCount={count} searchQuery={searchQuery} />
+            <Pagination currentPage={page} totalPages={Math.ceil(count / ITEMS_PER_PAGE)} totalCount={count} searchQuery={searchQuery} basePath='/invoices' />
 
             <Dialog open={isDeleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
                 <DialogContent>

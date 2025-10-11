@@ -2,34 +2,18 @@ import React from 'react';
 
 export const Logo = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => {
     return (
-        <svg width="200" height="200" className={className} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <svg width="30" height="30" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_102_117)">
+                <path d="M104 0H24C10.7452 0 0 10.7452 0 24V104C0 117.255 10.7452 128 24 128H104C117.255 128 128 117.255 128 104V24C128 10.7452 117.255 0 104 0Z" fill="#475B06" />
+                <path d="M64.0001 98.5H56.3334C41.8779 98.5 34.6482 98.5 30.1594 94.0073C25.6706 89.5147 25.6667 82.2888 25.6667 67.8333V60.1667C25.6667 45.7112 25.6667 38.4815 30.1594 33.9927C34.6521 29.5038 41.8779 29.5 56.3334 29.5H71.6667C86.1222 29.5 93.3519 29.5 97.8407 33.9927C102.33 38.4853 102.333 45.7112 102.333 60.1667V65.9167M25.6667 52.5H102.333M25.6667 75.5H64.0001" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M48.6667 29.5V98.5M85.3901 68.8568C85.5325 68.5498 85.7598 68.2899 86.045 68.1078C86.3303 67.9257 86.6616 67.8289 87.0001 67.8289C87.3385 67.8289 87.6699 67.9257 87.9552 68.1078C88.2404 68.2899 88.4677 68.5498 88.6101 68.8568L91.0136 74.005C92.0713 76.2737 93.8939 78.0976 96.1617 79.157L101.31 81.5567C101.617 81.6991 101.877 81.9263 102.059 82.2116C102.241 82.4968 102.338 82.8282 102.338 83.1667C102.338 83.5051 102.241 83.8365 102.059 84.1217C101.877 84.407 101.617 84.6342 101.31 84.7767L96.1617 87.1802C93.8945 88.2386 92.072 90.0611 91.0136 92.3283L88.6101 97.4765C88.4677 97.7835 88.2404 98.0434 87.9552 98.2255C87.6699 98.4076 87.3385 98.5044 87.0001 98.5044C86.6616 98.5044 86.3303 98.4076 86.045 98.2255C85.7598 98.0434 85.5325 97.7835 85.3901 97.4765L82.9904 92.3283C81.931 90.0605 80.1071 88.2379 77.8384 87.1802L72.6902 84.7767C72.3832 84.6342 72.1234 84.407 71.9412 84.1217C71.7591 83.8365 71.6624 83.5051 71.6624 83.1667C71.6624 82.8282 71.7591 82.4968 71.9412 82.2116C72.1234 81.9263 72.3832 81.6991 72.6902 81.5567L77.8384 79.157C80.1063 78.0976 81.9289 76.2737 82.9866 74.005L85.3901 68.8568Z" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
             <defs>
-                <linearGradient id="gradientSheet" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#4CAF50" />
-                    <stop offset="100%" stop-color="#66BB6A" />
-                </linearGradient>
-                <linearGradient id="gradientBill" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#2196F3" />
-                    <stop offset="100%" stop-color="#42A5F5" />
-                </linearGradient>
+                <clipPath id="clip0_102_117">
+                    <rect width="128" height="128" fill="white" />
+                </clipPath>
             </defs>
-
-            <rect x="40" y="50" width="60" height="100" rx="8" ry="8" fill="url(#gradientSheet)" />
-            <rect x="48" y="60" width="44" height="10" fill="#E8F5E9" />
-            <rect x="48" y="75" width="44" height="10" fill="#E8F5E9" />
-            <rect x="48" y="90" width="44" height="10" fill="#E8F5E9" />
-
-            <path d="M 95 95 L 115 100 L 95 105 Z" fill="#607D8B" />
-            <rect x="90" y="98" width="20" height="4" rx="1" ry="1" fill="#607D8B" />
-
-            <rect x="100" y="50" width="60" height="100" rx="8" ry="8" fill="url(#gradientBill)" />
-            <rect x="110" y="65" width="40" height="8" fill="#E3F2FD" />
-            <rect x="110" y="80" width="30" height="8" fill="#E3F2FD" />
-            <rect x="110" y="95" width="45" height="8" fill="#E3F2FD" />
-            <rect x="110" y="110" width="25" height="8" fill="#E3F2FD" />
-
-            <text x="40" y="175" font-family="Inter, sans-serif" font-size="20" font-weight="bold" fill="#4CAF50">Sheet</text>
-            <text x="120" y="175" font-family="Inter, sans-serif" font-size="20" font-weight="bold" fill="#2196F3">Bill</text>
         </svg>
+
     );
 };

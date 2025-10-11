@@ -34,7 +34,7 @@ type PageProps = {
     searchQuery: string;
 };
 
-const ITEMS_PER_PAGE = 15;
+const ITEMS_PER_PAGE = 10;
 
 export default function BriefsListPage({ briefs, count, page, searchQuery }: PageProps) {
     const router = useRouter();
@@ -112,8 +112,9 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
             </div>
 
             <div className="flex justify-between items-center mb-8">
-                <form className="w-full max-w-sm">
-                    <Input type="search" name="q" placeholder="Search by title or client name..." defaultValue={searchQuery} />
+                <form className="w-full max-w-sm flex items-center gap-0">
+                    <Input type="search" name="q" placeholder="Search by title or client name..." className='rounded-r-none' defaultValue={searchQuery} />
+                    <Button className='rounded-l-none'> Search</Button>
                 </form>
             </div>
 
@@ -121,7 +122,14 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
             {/* Briefs Table */}
             <div className="border border-border rounded-lg">
                 <table className="min-w-full divide-y divide-border">
-                    <thead className="bg-muted/50">{/* ... Table Head is the same ... */}</thead>
+                    <thead className="bg-muted/50"><tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Brief #</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Title</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Client</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Status</th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Total</th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Actions</th>
+                    </tr></thead>
                     <tbody className="bg-card divide-y divide-border">
                         {briefs.length > 0 ? briefs.map(brief => (
                             <tr key={brief.id}>
@@ -163,26 +171,23 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
                                     </DropdownMenu>
                                 </td>
                             </tr>
-                        )) : (<td colSpan={6} className="px-6 py-10 text-center text-muted-foreground">You haven't created any briefs yet.</td>
+                        )) : (<tr>
+                            <td colSpan={6} className="px-6 py-10 text-center text-muted-foreground">You haven't created any briefs yet.</td>
+                        </tr>
                         )}
                     </tbody>
                 </table>
             </div>
 
             {/* <Pagination currentPage={page} totalPages={Math.ceil(count / ITEMS_PER_PAGE)} totalCount={count} searchQuery={searchQuery} /> */}
-            <div className="flex items-center justify-between mt-6">
-                <div className="text-sm text-muted-foreground">
-                    Showing page {page} of {totalPages} ({count} total clients)
-                </div>
-                <div className="space-x-2">
-                    <Link href={`/briefs?q=${searchQuery}&page=${page - 1}`} passHref>
-                        <Button variant="outline" disabled={page <= 1}>Previous</Button>
-                    </Link>
-                    <Link href={`/briefs?q=${searchQuery}&page=${page + 1}`} passHref>
-                        <Button variant="outline" disabled={page >= totalPages}>Next</Button>
-                    </Link>
-                </div>
-            </div>
+            <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                totalCount={count}
+                searchQuery={searchQuery}
+                basePath="/briefs"
+                itemPerPage={ITEMS_PER_PAGE}
+            />
             {/* Delete Confirmation Dialog */}
             <Dialog open={isDeleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
                 <DialogContent>

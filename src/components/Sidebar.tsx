@@ -2,6 +2,7 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { LayoutDashboard, Users, FileText, Settings, LogOut, BarChart3, Palette } from 'lucide-react';
+import { Logo } from './Logo';
 
 const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -28,8 +29,8 @@ export function Sidebar() {
     return (
         <aside className="flex flex-col w-64 bg-card border-r border-border h-full">
             <div className="p-4 border-b border-border">
-                <Link href="/dashboard" className="font-bold text-xl text-primary">
-                    Sheet2Bill
+                <Link href="/dashboard" className="font-bold text-xl text-black flex items-center gap-1">
+                    <Logo /> Sheet2Bill
                 </Link>
             </div>
             <nav className="flex-grow p-4 space-y-2">

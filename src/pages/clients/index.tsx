@@ -13,6 +13,8 @@ import { ClientTable } from '@/components/clients/ClientTable';
 import { Pagination } from '@/components/clients/Pagination';
 // CORRECTED: 'Clientform' to 'ClientForm'
 import { ClientForm } from '@/components/clients/Clientform';
+import toast from 'react-hot-toast';
+import { ErrorList } from '@/lib/errorList';
 
 export type Client = {
   id: number;
@@ -58,14 +60,24 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
 
   async function handleAddClient(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    await fetch('/api/clients', {
-      method: 'POST',
-      body: JSON.stringify(Object.fromEntries(formData)),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    setAddModalOpen(false);
-    refreshData();
+    try {
+      const formData = new FormData(event.currentTarget);
+      const res = await fetch('/api/clients', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      console.log("res", res.body)
+      if (!res.ok) {
+        // Get the specific error message from the API
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'An unknown error occurred.');
+      }
+      setAddModalOpen(false);
+      refreshData();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   }
 
   async function handleEditClient(event: React.FormEvent<HTMLFormElement>) {
@@ -99,8 +111,10 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
       </div>
 
       <div className="flex justify-between items-center mb-8">
-        <form className="w-full max-w-sm">
-          <Input type="search" name="q" placeholder="Search by name or email..." defaultValue={searchQuery} />
+        <form className="w-full max-w-sm flex items-center gap-0">
+          <Input type="search" name="q" placeholder="Search by name or email..." className='rounded-r-none' defaultValue={searchQuery} />
+          <Button className='rounded-l-none'> Search</Button>
+
         </form>
       </div>
 
@@ -111,6 +125,8 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
         totalPages={Math.ceil(count / ITEMS_PER_PAGE)}
         totalCount={count}
         searchQuery={searchQuery}
+        basePath="/clients"
+        itemPerPage={ITEMS_PER_PAGE}
       />
 
       {/* Modals & Dialogs */}

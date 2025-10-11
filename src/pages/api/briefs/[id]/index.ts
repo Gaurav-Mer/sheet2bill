@@ -65,6 +65,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const { data, error } = await supabase.from('briefs').update({ status, rejection_reason }).eq('id', id).select().single();
         if (error) return res.status(500).json({ message: 'Error updating status', error });
+
+        // --- NEW: Notification Logic ---
+        if (data) {
+            try {
+                const clientName = (data.clients as any)?.name || 'A client';
+                const message = status === 'approved'
+                    ? `${clientName} has approved your brief: "${data.title}"`
+                    : `${clientName} has requested changes on your brief: "${data.title}"`;
+
+                const link_to = status === 'rejected' ? `/briefs/${data.id}/edit` : '/briefs';
+
+                // Insert a new row into the notifications table
+                await supabase.from('notifications').insert({
+                    user_id: data.user_id,
+                    message: message,
+                    link_to: link_to,
+                });
+
+            } catch (notificationError) {
+                // Log the error but don't fail the whole request if notification fails
+                console.error("Failed to create notification:", notificationError);
+            }
+        }
+        // --- END OF NOTIFICATION LOGIC ---
+
         return res.status(200).json(data);
     }
 
