@@ -1,6 +1,5 @@
 import { Logo } from "@/components/Logo";
 import Link from "next/link";
-import { Twitter, Linkedin, Github } from 'lucide-react';
 
 const productLinks = [
     { href: "#features", label: "Features" },

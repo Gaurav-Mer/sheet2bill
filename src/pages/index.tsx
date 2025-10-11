@@ -28,7 +28,11 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur">
         <div className="container mx-auto h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2"><Logo className="h-4 w-4" /><span className="font-bold text-xl">Sheet2Bill</span></Link>
-          <nav className="space-x-2"><Link href="/login" passHref><Button variant="ghost">Login</Button></Link><Link href="/signup" passHref><Button>Start Free</Button></Link></nav>
+          <nav className="space-x-2"><Link href="/login" passHref><Button variant="ghost">Login</Button>
+          </Link>
+            <Link href="/pricing" passHref><Button variant={"ghost"}>pricing</Button></Link>
+            <Link href="/signup" passHref><Button>Start Free</Button></Link>
+          </nav>
         </div>
       </header>
 
