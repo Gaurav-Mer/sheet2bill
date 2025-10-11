@@ -12,6 +12,9 @@ import { sampleInvoiceData } from '@/lib/sample-data';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { FaqSection } from '@/components/landing/FaqSection';
 import { Footer } from '@/components/landing/Footer';
+import Blob from 'react-blob';
+import Image from 'next/image';
+
 
 const benefits = [
   { icon: Clock, title: 'Save Hours Every Month', description: 'Automate your entire billing process and get back to the work that matters.' },
@@ -32,70 +35,73 @@ export default function LandingPage() {
 
       <main className="flex-grow">
         {/* --- Hero Section --- */}
-        <section className=" w-full pt-24 py-16 text-center bg-gradient-to-br from-primary/10 to-secondary/10 ">
-          <h1 className="text-4xl md:text-6xl font-extrabold ">
-            Your Professional <span className='bg-primary text-white p-3 py-2 rounded-tl-4xl rounded-br-4xl'>Billing</span> Hub.
-          </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining.
-          </p>
-          <div className="mt-8">
-            <Link href="/signup" passHref><Button size="lg" className="h-12 text-lg ">Get Started - It's Free</Button></Link>
+        <section className="relative w-full py-16 bg-gradient-to-br from-primary/10 to-secondary/10 overflow-hidden">
+          <div className="container mx-auto px-6">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="text-left">
+                <h1 className="text-4xl md:text-6xl font-extrabold ">
+                  Your Professional <span className='bg-primary text-white p-3 py-2 rounded-tl-2xl rounded-br-2xl'>Billing</span> Hub.
+                </h1>
+                <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+                  Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining.
+                </p>
+                <div className="mt-8">
+                  <Link href="/signup" passHref><Button size="lg" className="h-12 text-lg">Get Started - It's Free</Button></Link>
+                </div>
+              </div>
+              <div className="relative h-64 md:h-auto">
+                <Blob size="600px" style={{ position: 'absolute', top: '-100px', right: '-100px', zIndex: 0, backgroundColor: '#A0AEC0', opacity: 0.2 }} />
+                <Image src="/hero-image.jpg" alt="Billing Hub" layout="fill" objectFit="cover" className="rounded-lg shadow-lg" />
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* --- Social Proof --- */}
+        {/* --- Features Section --- */}
         <section className="container mx-auto px-6 py-24">
-          <div className="text-center mb-12 animate-fade-in-up">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold">Your Complete Billing Command Center</h2>
             <p className="mt-3 max-w-xl mx-auto text-muted-foreground">Packed with powerful features to save you time and make you look like a pro.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Feature 1: Client Management */}
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <div className="space-y-2">
               <Users className="h-8 w-8 text-primary" />
               <h3 className="text-xl font-semibold pt-2">Smart Client Hub</h3>
               <p className="text-muted-foreground">A full CRM to create, read, update, delete, and search all your clients. Keep every detail and billing history in one organized place.</p>
             </div>
 
-            {/* Feature 2: Brief Workflow */}
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <div className="space-y-2">
               <CheckCheck className="h-8 w-8 text-primary" />
               <h3 className="text-xl font-semibold pt-2">Pre-Invoice Approval Flow</h3>
               <p className="text-muted-foreground">Eliminate invoice errors and disputes. Send a professional brief for client approval via a secure link before you ever send a bill.</p>
             </div>
 
-            {/* Feature 3: Invoice Generation */}
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <div className="space-y-2">
               <FilePlus className="h-8 w-8 text-primary" />
               <h3 className="text-xl font-semibold pt-2">One-Click Invoice Conversion</h3>
               <p className="text-muted-foreground">Turn any approved brief into a final, sequentially-numbered invoice with a single click. No more re-typing data.</p>
             </div>
 
-            {/* Feature 4: Invoice Management */}
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <div className="space-y-2">
               <Zap className="h-8 w-8 text-primary" />
               <h3 className="text-xl font-semibold pt-2">Invoice Tracking Dashboard</h3>
               <p className="text-muted-foreground">See the status of all your invoices at a glance—from 'draft', to 'sent', to 'paid'. Never lose track of a payment again.</p>
             </div>
 
-            {/* Feature 5: PDF Generation */}
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+            <div className="space-y-2">
               <FileDown className="h-8 w-8 text-primary" />
               <h3 className="text-xl font-semibold pt-2">Premium PDF Exports</h3>
               <p className="text-muted-foreground">Download beautiful, branded PDF invoices that are ready to send to your clients, generated by a powerful server-side engine.</p>
             </div>
 
-            {/* Feature 6: Core Analytics */}
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+            <div className="space-y-2">
               <BarChart className="h-8 w-8 text-primary" />
               <h3 className="text-xl font-semibold pt-2">At-a-Glance Reporting</h3>
               <p className="text-muted-foreground">Your main dashboard gives you instant insights into your business with key metrics like Total Revenue and Outstanding Amount.</p>
             </div>
 
-            {/* Feature 7: User Settings */}
-            <div className="space-y-2 animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
+            <div className="space-y-2">
               <Settings className="h-8 w-8 text-primary" />
               <h3 className="text-xl font-semibold pt-2">Profile & Brand Customization</h3>
               <p className="text-muted-foreground">Add your company logo, full address, and a custom brand color to make every invoice and communication truly yours.</p>
