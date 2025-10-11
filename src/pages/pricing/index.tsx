@@ -12,12 +12,16 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import toast from 'react-hot-toast';
 
 // --- THE DATA STRUCTURE: Your Single Source of Truth ---
+// in pages/pricing.tsx
+
+// in pages/pricing.tsx
+
 const ALL_FEATURES = {
     clients: "Manage Clients",
     briefsInvoices: "Briefs & Invoices / month",
     pdf_downloads: "Premium PDF Downloads",
     custom_branding: "Custom Branding (Logo & Color)",
-    premium_templates: "Premium Template Gallery",
+    premium_templates: "Choice of Premium Templates",
     csv_import: "CSV Data Import",
     reports: "Analytics & Reports",
     team_members: "Team Members",
@@ -28,56 +32,59 @@ const PLANS = [
     {
         name: 'Free',
         price: {
-            inr: { monthly: '₹0', annually: '₹0' },
-            usd: { monthly: '$0', annually: '$0' }
+            inr: { monthly: '₹0' },
+            usd: { monthly: '$0' }
         },
         description: 'For individuals and hobby projects just getting started.',
-        cta: 'Get Started',
+        cta: 'Current Plan',
         features: [
             { text: `5 ${ALL_FEATURES.clients}`, included: true },
             { text: `10 ${ALL_FEATURES.briefsInvoices}`, included: true },
             { text: ALL_FEATURES.pdf_downloads, included: true },
             { text: ALL_FEATURES.custom_branding, included: false },
             { text: ALL_FEATURES.premium_templates, included: false },
+            { text: ALL_FEATURES.csv_import, included: false, isComingSoon: false },
         ],
         isPopular: false,
     },
     {
+        name: 'Starter',
+        price: {
+            // IMPORTANT: Create these new Price IDs in your Stripe Dashboard
+            inr: { monthly: '₹499', annually: '₹4,990', monthlyPriceId: 'price_YOUR_INR_STARTER_MONTHLY', annuallyPriceId: 'price_YOUR_INR_STARTER_ANNUALLY' },
+            usd: { monthly: '$8', annually: '$80', monthlyPriceId: 'price_YOUR_USD_STARTER_MONTHLY', annuallyPriceId: 'price_YOUR_USD_STARTER_ANNUALLY' }
+        },
+        description: 'For serious freelancers with a growing client base.',
+        cta: 'Upgrade to Starter',
+        features: [
+            { text: `50 ${ALL_FEATURES.clients}`, included: true },
+            { text: `200 ${ALL_FEATURES.briefsInvoices}`, included: true },
+            { text: ALL_FEATURES.pdf_downloads, included: true },
+            { text: ALL_FEATURES.custom_branding, included: true },
+            { text: ALL_FEATURES.premium_templates, included: false },
+            { text: ALL_FEATURES.csv_import, included: false },
+        ],
+        isPopular: true, // This is now the most popular plan
+    },
+    {
         name: 'Pro',
         price: {
-            // IMPORTANT: Replace these with your actual Price IDs from your Stripe Dashboard
-            inr: { monthly: '₹799', annually: '₹7,990', monthlyPriceId: 'price_YOUR_INR_MONTHLY_ID', annuallyPriceId: 'price_YOUR_INR_ANNUALLY_ID' },
-            usd: { monthly: '$10', annually: '$100', monthlyPriceId: 'price_YOUR_USD_MONTHLY_ID', annuallyPriceId: 'price_YOUR_USD_ANNUALLY_ID' }
+            inr: { monthly: '₹1299', annually: '₹12,990', monthlyPriceId: 'price_YOUR_INR_PRO_MONTHLY', annuallyPriceId: 'price_YOUR_INR_PRO_ANNUALLY' },
+            usd: { monthly: '$19', annually: '$190', monthlyPriceId: 'price_YOUR_USD_PRO_MONTHLY', annuallyPriceId: 'price_YOUR_USD_PRO_ANNUALLY' }
         },
-        description: 'For growing freelancers and businesses who need more power.',
-        cta: 'Start 7-Day Free Trial',
+        description: 'For power users and businesses who need unlimited access.',
+        cta: 'Upgrade to Pro',
         features: [
             { text: 'Unlimited Clients', included: true },
             { text: 'Unlimited Briefs & Invoices', included: true },
             { text: ALL_FEATURES.pdf_downloads, included: true },
             { text: ALL_FEATURES.custom_branding, included: true },
             { text: ALL_FEATURES.premium_templates, included: true },
-        ],
-        isPopular: true,
-    },
-    {
-        name: 'Agency',
-        price: {
-            inr: { monthly: 'Contact Us' },
-            usd: { monthly: 'Contact Us' }
-        },
-        description: 'For teams and agencies managing multiple clients.',
-        cta: 'Contact Sales',
-        features: [
-            { text: 'Everything in Pro', included: true },
-            { text: ALL_FEATURES.team_members, included: true },
-            { text: ALL_FEATURES.priority_support, included: true },
-            { text: ALL_FEATURES.reports, included: true },
+            { text: ALL_FEATURES.csv_import, included: true, isComingSoon: true },
         ],
         isPopular: false,
     },
 ];
-
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 const stripePromise = ""
 export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
@@ -130,7 +137,7 @@ export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
                 </div>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8 items-start">
+            <div className="grid lg:grid-cols-3 gap-8 items-start mx-auto ">
                 {PLANS.map((plan, index) => {
                     const price = isAnnual && plan.price[currency]?.annually
                         ? plan.price[currency].annually
@@ -159,8 +166,14 @@ export default function PricingPage({ currency }: { currency: 'inr' | 'usd' }) {
                                                 : <X className="h-5 w-5 text-red-400 flex-shrink-0 mt-1" />
                                             }
                                             <span>{feature.text}</span>
+                                            {feature?.isComingSoon && (
+                                                <span className="ml-2 text-xs font-semibold bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded-full">
+                                                    Coming Soon
+                                                </span>
+                                            )}
                                         </li>
                                     ))}
+
                                 </ul>
                             </CardContent>
                             <CardFooter>
