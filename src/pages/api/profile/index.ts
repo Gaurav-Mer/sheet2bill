@@ -17,7 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         address_line_1, address_line_2, city, state_province_region,
         postal_code, country, tax_id,
         brand_color, // Add the brand_color to the upsert
-        thank_u_note
+        thank_u_note,
+        default_currency
 
     } = req.body;
 
@@ -32,7 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             address_line_1, address_line_2, city, state_province_region,
             postal_code, country, tax_id,
             brand_color, // Add the brand_color to the upsert
-            thank_u_note
+            thank_u_note,
+            default_currency
         })
         .select()
         .single();

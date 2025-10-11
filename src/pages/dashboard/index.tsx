@@ -4,11 +4,13 @@
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useRouter } from 'next/router';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DollarSign, Users, FileText } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-// Define the shape of our data
+// Define the shape of our data, including the new activeCurrency prop
 type DashboardProps = {
   user: any;
   stats: {
@@ -24,13 +26,29 @@ type DashboardProps = {
     currency: string;
     clients: { name: string } | null;
   }[];
+  activeCurrency: string; // e.g., 'all', 'INR', 'USD'
 };
 
-export default function Dashboard({ user, stats, recentBriefs }: DashboardProps) {
+export default function Dashboard({ user, stats, recentBriefs, activeCurrency = "USD" }: DashboardProps) {
+  const router = useRouter();
+
   // Helper to format currency professionally
-  const formatCurrency = (amount: number | null) => {
-    // You can customize the currency and locale
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount || 0);
+  const formatCurrency = (amount: number | null, currency: string) => {
+    // If 'all' is selected, don't show a currency symbol as it's a mixed total
+    if (currency === 'all') {
+      return new Intl.NumberFormat('en-IN', {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(amount || 0);
+    }
+    // Otherwise, format with the selected currency
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency }).format(amount || 0);
+  };
+
+  const handleCurrencyChange = (value: string) => {
+    const newUrl = value === 'all' ? '/dashboard' : `/dashboard?currency=${value}`;
+    router.push(newUrl);
   };
 
   const getStatusClass = (status: string) => {
@@ -38,20 +56,31 @@ export default function Dashboard({ user, stats, recentBriefs }: DashboardProps)
       case 'approved': return 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300';
       case 'rejected': return 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300';
       case 'sent': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'; // for 'draft'
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
     }
   }
 
   return (
-    <div className="container mx-auto  max-w-7xl">
+    <div className="container mx-auto max-w-7xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Welcome Back, {user?.email?.split('@')[0]}!</h1>
           <p className="text-muted-foreground mt-2">Here's a snapshot of your business.</p>
         </div>
-        <div className="flex space-x-2 mt-4 sm:mt-0">
-          <Link href="/clients" passHref><Button variant="outline">Manage Clients</Button></Link>
+        <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+          {/* --- THIS IS THE NEW CURRENCY FILTER --- */}
+          <Select defaultValue={activeCurrency} onValueChange={handleCurrencyChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter Currency" />
+            </SelectTrigger>
+            <SelectContent>
+              {/* <SelectItem value="all">All Currencies</SelectItem> */}
+              <SelectItem value="INR">Indian Rupee (INR)</SelectItem>
+              <SelectItem value="USD">US Dollar (USD)</SelectItem>
+              {/* Add more currencies as needed */}
+            </SelectContent>
+          </Select>
           <Link href="/briefs/new" passHref><Button>+ Create New Brief</Button></Link>
         </div>
       </div>
@@ -64,8 +93,10 @@ export default function Dashboard({ user, stats, recentBriefs }: DashboardProps)
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{formatCurrency(stats.total_revenue)}</div>
-            <p className="text-xs text-muted-foreground">All-time earnings from paid invoices.</p>
+            <div className="text-3xl font-bold">{formatCurrency(stats.total_revenue, activeCurrency)}</div>
+            <p className="text-xs text-muted-foreground">
+              {activeCurrency === 'all' ? 'From all currencies (not converted)' : `Earnings in ${activeCurrency}`}
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -74,8 +105,10 @@ export default function Dashboard({ user, stats, recentBriefs }: DashboardProps)
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{formatCurrency(stats.outstanding_amount)}</div>
-            <p className="text-xs text-muted-foreground">From sent and draft invoices.</p>
+            <div className="text-3xl font-bold">{formatCurrency(stats.outstanding_amount, activeCurrency)}</div>
+            <p className="text-xs text-muted-foreground">
+              {activeCurrency === 'all' ? 'From all currencies (not converted)' : `Pending in ${activeCurrency}`}
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -92,13 +125,13 @@ export default function Dashboard({ user, stats, recentBriefs }: DashboardProps)
 
       {/* --- PREMIUM Recent Briefs Table --- */}
       <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+        <h2 className="text-xl font-semibold mb-4">Recent Activity {activeCurrency !== 'all' && `(${activeCurrency})`}</h2>
         <Card>
           <CardContent className="p-0">
             <table className="w-full">
               <tbody className="divide-y divide-border">
                 {recentBriefs.length > 0 ? recentBriefs.map(brief => (
-                  <tr key={brief.id} className="hover:bg-muted/50">
+                  <tr key={brief.id} className="hover:bg-muted/fifty">
                     <td className="p-4">
                       <Link href={`/briefs/${brief.id}/edit`} className="font-semibold text-foreground hover:underline">
                         {brief.title || 'Untitled Brief'}
@@ -114,7 +147,7 @@ export default function Dashboard({ user, stats, recentBriefs }: DashboardProps)
                   </tr>
                 )) : (
                   <tr>
-                    <td className="p-10 text-center text-muted-foreground">You haven't created any briefs yet.</td>
+                    <td colSpan={2} className="p-10 text-center text-muted-foreground">No recent activity for this currency.</td>
                   </tr>
                 )}
               </tbody>
@@ -126,7 +159,7 @@ export default function Dashboard({ user, stats, recentBriefs }: DashboardProps)
   );
 }
 
-// --- PREMIUM getServerSideProps with Database Function ---
+// --- THIS IS THE UPDATED getServerSideProps FUNCTION ---
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createPagesServerClient(ctx);
   const { data: { session } } = await supabase.auth.getSession();
@@ -134,19 +167,25 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (!session) {
     return { redirect: { destination: '/login', permanent: false } };
   }
+  const { data: profile } = await supabase.from('profiles').select('default_currency').single();
+  const currencyFilter = (ctx.query.currency as string) || profile?.default_currency || 'USD';
+
   const userId = session.user.id;
 
-  // Run queries in parallel for high performance
   const [statsQuery, recentBriefsQuery] = await Promise.all([
-    supabase.rpc('get_dashboard_stats').single(),
-    supabase.from('briefs')
-      .select('id, title, status, total, currency, clients(name)')
-      // --- THIS IS THE CRITICAL FIX ---
-      // We must ensure we only fetch briefs belonging to the logged-in user.
-      .eq('user_id', userId)
-      // --- END OF FIX ---
-      .order('created_at', { ascending: false })
-      .limit(5)]);
+    supabase.rpc('get_dashboard_stats', { currency_filter: currencyFilter }).single(),
+    (() => {
+      let query = supabase.from('briefs')
+        .select('id, title, status, total, currency, clients(name)')
+        .eq('user_id', userId);
+
+      if (currencyFilter) {
+        query = query.eq('currency', currencyFilter);
+      }
+
+      return query.order('created_at', { ascending: false }).limit(5);
+    })()
+  ]);
 
   const { data: stats, error: statsError } = statsQuery;
   const { data: recentBriefs, error: briefsError } = recentBriefsQuery;
@@ -160,6 +199,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       user: session.user,
       stats: stats || { total_revenue: 0, outstanding_amount: 0, client_count: 0 },
       recentBriefs: recentBriefs || [],
+      activeCurrency: currencyFilter || 'all',
     },
   };
 };
+

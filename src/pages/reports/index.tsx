@@ -1,4 +1,4 @@
-// pages/reports/index.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { Client } from '@/types';
+import { Client, Profile } from '@/types';
 
 type ReportStats = {
     total_revenue: number;
@@ -16,6 +16,7 @@ type ReportStats = {
     avg_invoice_value: number;
 };
 
+// UPDATED: PageProps now includes currency in the filters
 type PageProps = {
     stats: ReportStats;
     clients: Client[];
@@ -23,24 +24,37 @@ type PageProps = {
         start_date: string;
         end_date: string;
         client_id: string;
+        currency: string;
     };
 };
 
-// Helper to format currency
-const formatCurrency = (amount: number | null) => {
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount || 0);
+// UPDATED: Helper now formats currency dynamically
+const formatCurrency = (amount: number | null, currency: string) => {
+    // If 'all' is selected, just show the number, as it's a mix of currencies.
+    if (currency === 'all') {
+        return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount || 0);
+    }
+    // Otherwise, format with the specific currency.
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency
+    }).format(amount || 0);
 };
 
 export default function ReportsPage({ stats, clients, filters }: PageProps) {
     const router = useRouter();
 
     const handleFilterChange = (key: string, value: string) => {
-        const query = { ...router.query, [key]: value };
+        const { page, ...rest } = router.query;
+        const query = { ...rest, [key]: value };
         router.push({ pathname: '/reports', query });
     };
 
     return (
-        <div className="container mx-auto  max-w-7xl">
+        <div className="container mx-auto max-w-7xl">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold">Reports & Analytics</h1>
                 <p className="text-muted-foreground mt-2">Filter and view your business performance.</p>
@@ -48,16 +62,10 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
 
             {/* --- Filter Bar --- */}
             <Card className="mb-8">
-                <CardContent className="p-4 flex flex-col md:flex-row gap-4 items-center">
+                <CardContent className="p-4 flex flex-col md:flex-row gap-4 items-end">
                     <div className="grid grid-cols-2 md:flex md:items-center gap-4 flex-grow">
-                        <div>
-                            <Label htmlFor="start_date">From</Label>
-                            <Input id="start_date" type="date" defaultValue={filters.start_date} onChange={e => handleFilterChange('start_date', e.target.value)} />
-                        </div>
-                        <div>
-                            <Label htmlFor="end_date">To</Label>
-                            <Input id="end_date" type="date" defaultValue={filters.end_date} onChange={e => handleFilterChange('end_date', e.target.value)} />
-                        </div>
+                        <div><Label htmlFor="start_date">From</Label><Input id="start_date" type="date" defaultValue={filters.start_date} onChange={e => handleFilterChange('start_date', e.target.value)} /></div>
+                        <div><Label htmlFor="end_date">To</Label><Input id="end_date" type="date" defaultValue={filters.end_date} onChange={e => handleFilterChange('end_date', e.target.value)} /></div>
                         <div>
                             <Label htmlFor="client_id">Client</Label>
                             <Select defaultValue={filters.client_id} onValueChange={value => handleFilterChange('client_id', value)}>
@@ -72,6 +80,19 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
                                 </SelectContent>
                             </Select>
                         </div>
+                        {/* --- NEW: Currency Filter Dropdown --- */}
+                        <div>
+                            <Label htmlFor="currency">Currency</Label>
+                            <Select defaultValue={filters.currency} onValueChange={value => handleFilterChange('currency', value)}>
+                                <SelectTrigger id="currency"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Currencies</SelectItem>
+                                    <SelectItem value="INR">INR</SelectItem>
+                                    <SelectItem value="USD">USD</SelectItem>
+                                    <SelectItem value="EUR">EUR</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                     <Button variant="outline" onClick={() => router.push('/reports')}>Reset Filters</Button>
                 </CardContent>
@@ -79,52 +100,39 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
 
             {/* --- Dynamic Stat Cards --- */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                    <CardHeader><CardTitle className="text-sm font-medium">Total Revenue</CardTitle></CardHeader>
-                    <CardContent><p className="text-3xl font-bold">{formatCurrency(stats.total_revenue)}</p></CardContent>
-                </Card>
-                <Card>
-                    <CardHeader><CardTitle className="text-sm font-medium">Taxes Collected</CardTitle></CardHeader>
-                    <CardContent><p className="text-3xl font-bold">{formatCurrency(stats.total_tax)}</p></CardContent>
-                </Card>
-                <Card>
-                    <CardHeader><CardTitle className="text-sm font-medium">Paid Invoices</CardTitle></CardHeader>
-                    <CardContent><p className="text-3xl font-bold">{stats.invoice_count}</p></CardContent>
-                </Card>
-                <Card>
-                    <CardHeader><CardTitle className="text-sm font-medium">Avg. Invoice Value</CardTitle></CardHeader>
-                    <CardContent><p className="text-3xl font-bold">{formatCurrency(stats.avg_invoice_value)}</p></CardContent>
-                </Card>
-            </div>
-
-            {/* Placeholder for future chart and transaction list */}
-            <div className="mt-10 text-center text-muted-foreground">
-                <p>(Chart and detailed transaction list will be displayed here in V2.0)</p>
+                <Card><CardHeader><CardTitle className="text-sm font-medium">Total Revenue</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">{formatCurrency(stats.total_revenue, filters.currency)}</p></CardContent></Card>
+                <Card><CardHeader><CardTitle className="text-sm font-medium">Taxes Collected</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">{formatCurrency(stats.total_tax, filters.currency)}</p></CardContent></Card>
+                <Card><CardHeader><CardTitle className="text-sm font-medium">Paid Invoices</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">{stats.invoice_count}</p></CardContent></Card>
+                <Card><CardHeader><CardTitle className="text-sm font-medium">Avg. Invoice Value</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">{formatCurrency(stats.avg_invoice_value, filters.currency)}</p></CardContent></Card>
             </div>
         </div>
     );
 }
 
+// --- UPDATED getServerSideProps ---
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return { redirect: { destination: '/login', permanent: false } };
 
-    // --- Read filters from URL query ---
-    const { start_date, end_date, client_id } = ctx.query;
+    // Fetch user's profile to get their default currency
+    const { data: profile } = await supabase.from('profiles').select('default_currency').single();
 
+    // Read all filters from the URL, with intelligent defaults
     const filters = {
-        start_date: start_date as string || '',
-        end_date: end_date as string || '',
-        client_id: client_id as string || 'all'
+        start_date: ctx.query.start_date as string || '',
+        end_date: ctx.query.end_date as string || '',
+        client_id: ctx.query.client_id as string || 'all',
+        currency: (ctx.query.currency as string) || profile?.default_currency || 'USD',
     };
 
-    // --- Fetch data using our RPC function and client list ---
     const [statsQuery, clientsQuery] = await Promise.all([
         supabase.rpc('get_revenue_report', {
             start_date: filters.start_date || null,
             end_date: filters.end_date || null,
-            client_id_filter: filters.client_id === 'all' ? null : parseInt(filters.client_id)
+            client_id_filter: filters.client_id === 'all' ? null : parseInt(filters.client_id),
+            // CORRECTED: Pass the currency filter to the RPC function
+            currency_filter: filters.currency === 'all' ? null : filters.currency,
         }).single(),
         supabase.from('clients').select('id, name').order('name')
     ]);
@@ -138,10 +146,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     return {
         props: {
-            user: session.user,
             stats: stats || { total_revenue: 0, total_tax: 0, invoice_count: 0, avg_invoice_value: 0 },
             clients: clients || [],
-            filters,
+            filters, // Pass the active filters to the page
         },
     };
 };

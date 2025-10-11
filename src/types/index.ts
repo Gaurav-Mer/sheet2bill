@@ -67,6 +67,7 @@ export type Profile = {
     thank_u_note?: string;
     subscription_ends_at?: string
     subscription_status?: string
+    default_currency?: string
 };
 
 

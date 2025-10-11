@@ -17,6 +17,7 @@ import { Profile } from '@/types';
 import { uploadLogo } from '@/lib/supabase/storage';
 import { Textarea } from '@/components/ui/textarea';
 import { FeatureGate } from '@/components/FeatureGate';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -37,6 +38,7 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
     const [taxId, setTaxId] = useState(profile?.tax_id || '');
     const [brandColor, setBrandColor] = useState(profile?.brand_color || '#4f46e5'); // NEW STATE
     const [footerMessage, setFooterMessage] = useState(profile?.thank_u_note || 'Thank you for your business!'); // NEW STATE
+    const [defaultCurrency, setDefaultCurrency] = useState(profile?.default_currency || 'USD'); // NEW STATE
 
 
     const [logoFile, setLogoFile] = useState<File | null>(null);
@@ -93,8 +95,8 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
             country: country,
             tax_id: taxId,
             brand_color: brandColor, // NEW
-            thank_u_note: footerMessage
-
+            thank_u_note: footerMessage,
+            default_currency: defaultCurrency // NEW
         });
     };
 
@@ -152,7 +154,29 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                         <div className="space-y-2"><Label htmlFor="address1">Address</Label><Input id="address1" value={address1} onChange={(e) => setAddress1(e.target.value)} /></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" value={city} onChange={(e) => setCity(e.target.value)} /></div>
-                            <div className="space-y-2"><Label htmlFor="country">Country</Label><Input id="country" value={country} onChange={(e) => setCountry(e.target.value)} /></div>
+                            <div className="space-y-2">
+                                <Label htmlFor="country">Country</Label>
+                                <Select onValueChange={setCountry} defaultValue={country}>
+                                    <SelectTrigger id="country"><SelectValue placeholder="Select your country..." /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="IN">India</SelectItem>
+                                        <SelectItem value="US">United States</SelectItem>
+                                        <SelectItem value="GB">United Kingdom</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="defaultCurrency">Default Currency</Label>
+                            <Select onValueChange={setDefaultCurrency} defaultValue={defaultCurrency}>
+                                <SelectTrigger id="defaultCurrency"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="INR">INR - Indian Rupee</SelectItem>
+                                    <SelectItem value="USD">USD - US Dollar</SelectItem>
+                                    <SelectItem value="EUR">EUR - Euro</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="space-y-2"><Label htmlFor="taxId">Tax ID (e.g., GSTIN, VAT ID)</Label><Input id="taxId" value={taxId} onChange={(e) => setTaxId(e.target.value)} /></div>
                     </CardContent>
