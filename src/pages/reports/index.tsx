@@ -86,7 +86,6 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
                             <Select defaultValue={filters.currency} onValueChange={value => handleFilterChange('currency', value)}>
                                 <SelectTrigger id="currency"><SelectValue /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Currencies</SelectItem>
                                     <SelectItem value="INR">INR</SelectItem>
                                     <SelectItem value="USD">USD</SelectItem>
                                     <SelectItem value="EUR">EUR</SelectItem>

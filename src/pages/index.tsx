@@ -34,7 +34,7 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* --- Hero Section --- */}
-        <section className="relative h-[95vh] min-h-[600px] flex items-center">
+        <section className="relative h-[95vh] min-h-[600px] flex items-center bg-gradient-to-b from-secondary  to-secondary/50 overflow-hidden">
           {/* Background Shape */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/10 rounded-full filter blur-3xl opacity-50 animate-pulse" />
@@ -45,12 +45,12 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               {/* Left: Text Content */}
               <div className="text-center md:text-left">
-                <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary font-semibold rounded-full text-sm mb-4">
+                <span className="inline-block px-4 py-1.5 bg-secondary text-black font-semibold rounded-full text-sm mb-4">
                   The Future of Freelance Invoicing is Here
                 </span>
-                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+                <h1 className="text-4xl md:text-6xl font-extrabold ">
                   Effortless Billing, <br />
-                  <span className="text-primary">Professional</span> Results.
+                  <span className="text-white bg-primary leading-relaxed px-2 rounded-b-2xl rounded-t-lg " style={{ rotate: "82deg" }}>Professional</span> Results.
                 </h1>
                 <p className="mt-6 max-w-xl mx-auto md:mx-0 text-lg text-muted-foreground">
                   Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining.
@@ -69,7 +69,7 @@ export default function LandingPage() {
 
               {/* Right: Visual */}
               <div className="hidden md:block">
-                <div className="relative p-8 bg-card/50 backdrop-blur-sm border border-border/20 rounded-2xl shadow-lg">
+                <div className="relative p-4 bg-card/50 backdrop-blur-sm border border-border/20 rounded-2xl shadow-lg">
                   {/* Mockup of the app UI */}
                   <div className="aspect-video bg-background rounded-lg p-2 border border-border/10">
                     <div className="flex justify-between items-center mb-2">
@@ -81,20 +81,21 @@ export default function LandingPage() {
                       <div className="text-xs text-muted-foreground">Dashboard</div>
                       <div></div>
                     </div>
-                    <div className="bg-muted h-full rounded-sm p-4">
+                    <div className="bg-secondary/20 h-full rounded-sm p-4">
                       {/* Simplified UI elements */}
-                      <div className="flex justify-between items-center mb-4">
+                      <div className="flex justify-between items-center mb-8">
                         <h3 className="font-bold text-lg">Project Alpha</h3>
                         <div className="px-2 py-1 bg-green-500/10 text-green-500 text-xs rounded-full">Paid</div>
                       </div>
-                      <div className="space-y-2">
+                      <Image src={"/landing.png"} alt='Landing' width={300} height={100} className='w-fit h-fi mx-auto scale-125' />
+                      {/* <div className="space-y-2">
                         <div className="h-4 bg-primary/20 rounded-full w-3/4"></div>
                         <div className="h-4 bg-primary/10 rounded-full w-full"></div>
                         <div className="h-4 bg-primary/10 rounded-full w-5/6"></div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
-                  <p className="text-center mt-4 text-sm text-muted-foreground">A glimpse into your new command center.</p>
+                  <p className="text-center mt-4 text-sm text-black">A glimpse into your new command center.</p>
                 </div>
               </div>
             </div>

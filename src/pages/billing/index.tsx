@@ -24,7 +24,7 @@ export default function BillingPage({ profile }: BillingPageProps) {
     const endDate = getFormattedEndDate();
 
     return (
-        <div className="container mx-auto mt-10 max-w-4xl">
+        <div className="container mx-auto  max-w-4xl">
             <div className="space-y-8">
                 <div>
                     <h1 className="text-3xl font-bold">Billing & Plan</h1>
