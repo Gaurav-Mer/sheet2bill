@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
+import Head from 'next/head';
 import Link from 'next/link';
 import { ReactElement } from 'react';
 // import Link from 'next/link'; // Replaced with standard <a> tag for compatibility
@@ -7,6 +8,10 @@ import { ReactElement } from 'react';
 export default function PrivacyPolicyPage() {
     return (
         <>
+            <Head>
+                <title>Privacy Policy - Sheet2Bill</title>
+                <meta name="description" content="Read the Sheet2Bill privacy policy to understand how we collect, use, and protect your data." />
+            </Head>
             <NonLoginNavbar />
             <main className="bg-background mt-4">
                 <div className="container mx-auto max-w-prose py-16 px-6">

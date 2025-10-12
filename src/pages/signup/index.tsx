@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import Head from 'next/head';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 
@@ -41,6 +42,10 @@ export default function SignUpPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-primary/10 to-secondary flex items-center justify-center bg-white px-4">
+            <Head>
+                <title>Sign Up - Sheet2Bill</title>
+                <meta name="description" content="Create a new Sheet2Bill account to start managing your clients and invoices." />
+            </Head>
             <Card className="w-full max-w-md shadow-md border border-white pt-0 border-t-0 ">
                 <div className='mx-auto flex flex-col items-center justify-center bg-primary rounded-t-xl rounded-b-[45%] w-full'>
                     <div className='mt-2'>

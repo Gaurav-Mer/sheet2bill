@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { Profile } from '@/types';
+import Head from 'next/head';
 import Link from 'next/link';
 
 // --- THE DATA STRUCTURE: Your Single Source of Truth ---
@@ -179,6 +180,16 @@ export default function PricingPage({ currency, profile }: { currency: 'inr' | '
 
     return (
         <div className="container mx-auto mt-10 max-w-6xl">
+            <Head>
+                <title>Pricing - Sheet2Bill</title>
+                <meta name="description" content="Simple, transparent pricing for freelancers and businesses of all sizes. Start for free." />
+                <meta property="og:title" content="Pricing - Sheet2Bill" />
+                <meta property="og:description" content="Choose the perfect plan for your freelance business. Monthly and annual options available." />
+                <meta property="og:url" content="https://sheet2bill.com/pricing" />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content="Pricing - Sheet2Bill" />
+                <meta name="twitter:description" content="Find the right plan to streamline your invoicing and client management." />
+            </Head>
             {profile?.subscription_status === 'trialing' && (
                 <div className="mb-8 p-4 bg-primary/10 border border-primary/20 rounded-lg text-center">
                     <p className="font-semibold">You are on a Pro trial! You have {getTrialDaysRemaining()} days remaining.</p>

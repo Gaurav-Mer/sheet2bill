@@ -9,8 +9,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { Layout } from '@/components/Layout'
 import { NextPage } from 'next'
+import Head from 'next/head'
 import { FeedbackLink } from '@/components/landing/FeedbackLink'
 import CookieConsent from "react-cookie-consent"; // <-- 1. Import the component
+
 
 
 const queryClient = new QueryClient({
@@ -44,6 +46,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}
       >
+        <Head>
+          <title>Sheet2Bill</title>
+          <meta name="description" content="The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
+        </Head>
         {getLayout(<Component {...pageProps} />)}
         {/* --- ADD THESE TWO LINES --- */}
         {pageProps.user && <FeedbackLink />}
