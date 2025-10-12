@@ -20,8 +20,12 @@ const faqs = [
         a: "A 'Brief' is a pre-invoice summary of work that you send to your client for approval. This prevents disputes and errors. Once the client approves the Brief with a single click, you can convert it into a final, legal 'Invoice' for payment."
     },
     {
-        q: "Can I import my existing data from a spreadsheet?",
-        a: "Yes! Our CSV import feature allows you to easily migrate your existing client lists and project data, making the switch to Sheet2Bill seamless and fast."
+        q: "How can I share a brief with my client or team?",
+        a: "Absolutely. You can generate a unique, shareable link for any brief. For quick access, you can make the link public, or for added security, you can protect it with a password before sending it to clients or collaborators."
+    },
+    {
+        q: "Can I customize my invoices?",
+        a: "Yes! You can add your company logo, choose a brand color, and include personalized notes on both your briefs and invoices to maintain a professional and consistent brand image."
     },
 ];
 

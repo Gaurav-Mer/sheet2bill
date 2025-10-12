@@ -3,13 +3,13 @@ import Link from "next/link";
 
 const productLinks = [
     { href: "#features", label: "Features" },
-    { href: "#pricing", label: "Pricing" },
+    { href: "/pricing", label: "Pricing" },
     { href: "/login", label: "Login" },
 ];
 
 const legalLinks = [
-    { href: "#", label: "Privacy Policy" },
-    { href: "#", label: "Terms of Service" },
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/term-condition", label: "Terms of Service" },
 ];
 
 export function Footer() {

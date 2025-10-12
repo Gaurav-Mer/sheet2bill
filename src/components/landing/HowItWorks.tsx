@@ -4,17 +4,17 @@ const steps = [
     {
         icon: Zap,
         title: '1. Create Your Brief',
-        description: 'Build a detailed brief from scratch or a CSV. Add line items, notes, choose a premium template, and generate a secure link.',
+        description: 'Quickly build a detailed brief with all your work items and notes. Share it with your client using a secure public or password-protected link.',
     },
     {
         icon: CheckCircle,
         title: '2. Get Client Approval',
-        description: 'Your client reviews the work and approves it with a single click. Revisions are handled seamlessly, all in one place.',
+        description: 'Your client reviews the brief via the link and approves the work with a single click. Revisions are handled seamlessly, all in one place.',
     },
     {
         icon: FileText,
         title: '3. Generate Your Invoice',
-        description: 'Convert the approved brief into a stunning PDF invoice. Download it or send it to your client to get paid faster.',
+        description: 'Instantly convert the approved brief into a professional PDF invoice. Download it or send it to your client to get paid faster.',
     },
 ];
 
@@ -39,7 +39,7 @@ export function HowItWorks() {
                     />
 
                     <div className="relative grid md:grid-cols-3 gap-8">
-                        {steps.map((step, index) => (
+                        {steps.map((step) => (
                             <div
                                 key={step.title}
                                 className="relative p-8 bg-card border border-border/50 rounded-xl shadow-sm"
