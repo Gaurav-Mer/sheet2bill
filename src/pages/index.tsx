@@ -15,6 +15,7 @@ import { Footer } from '@/components/landing/Footer';
 import Laptop from '@/components/SVG/Laptop';
 import Image from 'next/image';
 import { BetaBanner } from '@/components/BetaBanner';
+import Head from 'next/head';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 
 const benefits = [
@@ -26,6 +27,19 @@ const benefits = [
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
+      <Head>
+        <title>Sheet2Bill - Effortless Billing for Freelancers</title>
+        <meta name="description" content="Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining." />
+        <meta name="keywords" content="freelance billing, invoicing software, client management, online invoicing, freelance tools" />
+        <meta property="og:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
+        <meta property="og:description" content="The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
+        <meta property="og:image" content="https://sheet2bill.com/hero-image.jpg" />
+        <meta property="og:url" content="https://sheet2bill.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
+        <meta name="twitter:description" content="Streamline your freelance business with Sheet2Bill. Effortless client management and invoicing." />
+        <meta name="twitter:image" content="https://sheet2bill.com/hero-image.jpg" />
+      </Head>
       {/* --- Header --- */}
       <NonLoginNavbar />
 

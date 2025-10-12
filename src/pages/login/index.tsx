@@ -3,6 +3,7 @@ import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, ReactElement, useState } from 'react';
@@ -34,6 +35,10 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-dvh flex items-center justify-center p-4 bg-gradient-to-b from-primary/10 to-secondary ">
+            <Head>
+                <title>Login - Sheet2Bill</title>
+                <meta name="description" content="Log in to your Sheet2Bill account to manage your clients and invoices." />
+            </Head>
             <div className="w-full max-w-md rounded-2xl shadow-md border border-white/20 p-8 pt-0 px-0 bg-white">
                 <div className='mx-auto flex flex-col items-center justify-center bg-primary rounded-t-xl rounded-b-[45%] w-full'>
                     <div className='mt-2'>

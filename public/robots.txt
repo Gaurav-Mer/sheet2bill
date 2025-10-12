@@ -1,0 +1,13 @@
+# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+
+User-agent: *
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /invoices/
+Disallow: /clients/
+Disallow: /briefs/
+Disallow: /reports/
+Disallow: /notifications/
+Disallow: /templates/
+
+Sitemap: https://sheet2bill.com/sitemap.xml
