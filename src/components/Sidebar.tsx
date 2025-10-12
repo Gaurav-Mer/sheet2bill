@@ -12,7 +12,7 @@ const navItems = [
     { href: '/reports', label: 'Reports', icon: BarChart3 }, // ADD THIS LINE
     // { href: '/settings/templates', label: 'Templates', icon: Palette }, // ADD THIS LINE
     { href: '/billing', label: 'Billing', icon: CreditCard }, // ADD THIS LINE
-
+    { href: "/how-it-works", label: "How it Works", icon: Settings },
 
     // We can add a '/settings' link later
 ];
@@ -28,7 +28,7 @@ export function Sidebar() {
     };
 
     return (
-        <aside className="flex flex-col w-64 bg-card border-r border-border h-full">
+        <aside className="flex flex-col w-64 bg-card border-r border-border h-full min-h-dvh">
             <div className="p-4 border-b border-border">
                 <Link href="/dashboard" className="font-bold text-xl text-black flex items-center gap-1">
                     <Logo /> Sheet2Bill

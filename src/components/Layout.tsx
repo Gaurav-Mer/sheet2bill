@@ -1,10 +1,40 @@
 // components/Layout.tsx
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
+import { TrialExpiredBanner } from './TrialExpiredBanner';
+import { useProfile } from '@/hooks/useProfile';
 
 export function Layout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showTrialBanner, setShowTrialBanner] = useState(false);
+  const { profile, isLoading } = useProfile();
+
+  useEffect(() => {
+    // Don't do anything until the user's profile has loaded
+    if (isLoading || !profile) {
+      return;
+    }
+    // --- The Core Logic ---
+    // Condition 1: User must be on the 'free' plan.
+    const isOnFreePlan = profile.subscription_status === 'free';
+    // Condition 2: They must have a trial end date that is in the past.
+    const trialHasEnded = profile.subscription_ends_at && new Date(profile.subscription_ends_at) < new Date();
+    // Condition 3: They must not have already dismissed the banner.
+    const bannerNotDismissed = localStorage.getItem('trialBannerDismissed') !== 'true';
+
+    if (isOnFreePlan && trialHasEnded && bannerNotDismissed) {
+      setShowTrialBanner(true);
+    }
+  }, [profile, isLoading]);
+
+
+  const handleDismissBanner = () => {
+    // Hide the banner in the UI
+    setShowTrialBanner(false);
+    // Remember the user's choice so we don't show it again
+    localStorage.setItem('trialBannerDismissed', 'true');
+  };
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -17,6 +47,8 @@ export function Layout({ children }: { children: ReactNode }) {
       {/* --- MOBILE SIDEBAR (Slide-out) --- */}
       {sidebarOpen && (
         <div className="md:hidden fixed inset-0 z-50">
+          {showTrialBanner && <TrialExpiredBanner onDismiss={handleDismissBanner} />}
+
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)}></div>
           {/* Sidebar itself */}
