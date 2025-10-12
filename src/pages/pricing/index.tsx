@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Check, X } from 'lucide-react';
+import { Check, Info, X } from 'lucide-react';
 import { ReactElement, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -18,6 +18,17 @@ import Link from 'next/link';
 // in pages/pricing.tsx
 
 // in pages/pricing.tsx
+
+// --- 1. THE MASTER SWITCH FOR YOUR BETA PERIOD ---
+const BETA_INFO = {
+    isActive: true,
+    endDate: "January 31st, 2026",
+    proPlanLimit: {
+        clients: 500,
+        briefs: 1000,
+    }
+};
+
 
 const ALL_FEATURES = {
     clients: "Manage Clients",
@@ -88,6 +99,19 @@ const PLANS = [
         isPopular: false,
     },
 ];
+
+// --- 2. LOGIC TO MODIFY PLANS DURING BETA ---
+if (BETA_INFO.isActive) {
+    // Find the Pro plan and update its features for the beta display
+    const proPlanIndex = PLANS.findIndex(p => p.name === 'Pro');
+    if (proPlanIndex !== -1) {
+        PLANS[proPlanIndex].features[0].text = `${BETA_INFO.proPlanLimit.clients} Clients (Beta Limit)`;
+        PLANS[proPlanIndex].features[1].text = `${BETA_INFO.proPlanLimit.briefs} Briefs & Invoices (Beta Limit)`;
+    }
+    // Make the Pro plan the "popular" one during beta
+    PLANS.forEach(p => p.isPopular = p.name === 'Pro');
+}
+
 // const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 const stripePromise = ""
 export default function PricingPage({ currency, profile }: { currency: 'inr' | 'usd', profile?: Profile },) {
@@ -163,21 +187,45 @@ export default function PricingPage({ currency, profile }: { currency: 'inr' | '
             <div className="text-center mb-12 animate-fade-in-up">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Simple Pricing for Every Business</h1>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">Start for free and scale as you grow. No hidden fees.</p>
-                <div className="flex items-center justify-center space-x-2 mt-8">
-                    <Label htmlFor="billing-cycle">Monthly</Label>
-                    <Switch id="billing-cycle" checked={isAnnual} onCheckedChange={setIsAnnual} />
-                    <Label htmlFor="billing-cycle">Annually <span className="text-green-600 font-semibold">(Save 15%)</span></Label>
-                </div>
+
+                {BETA_INFO.isActive ? (
+                    <div className="mt-8 max-w-2xl mx-auto">
+                        <div className="rounded-md bg-primary/10 p-4 border-l-4 border-primary dark:bg-blue-900/30">
+                            <div className="flex items-start gap-x-3">
+                                <Info className="h-5 w-5 text-primary mt-0.5" aria-hidden="true" />
+                                <div className="text-sm text-left">
+                                    <p className="font-semibold text-primary dark:text-primary">Public Beta Offer</p>
+                                    <p className="mt-1 text-primary dark:text-primary">
+                                        All features, including the Pro plan, are <strong>free to use until {BETA_INFO.endDate}</strong>. Sign up now to lock in your free access.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-center space-x-2 mt-8">
+                        <Label htmlFor="billing-cycle">Monthly</Label>
+                        <Switch id="billing-cycle" checked={isAnnual} onCheckedChange={setIsAnnual} />
+                        <Label htmlFor="billing-cycle">Annually <span className="text-green-600 font-semibold">(Save 15%)</span></Label>
+                    </div>
+                )}
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8 items-start mx-auto ">
                 {PLANS.map((plan, index) => {
-                    const price = isAnnual && plan.price[currency]?.annually
+                    let price = isAnnual && plan.price[currency]?.annually
                         ? plan.price[currency].annually
                         : plan.price[currency].monthly;
+
                     const isCurrentUserPlan = profile?.subscription_status === plan.name.toLowerCase();
                     const canStartTrial = plan.name === 'Pro' && profile?.subscription_status === 'free';
                     const canUpgrade = !isCurrentUserPlan && plan.name !== 'Free' && !canStartTrial;
+
+                    if (BETA_INFO.isActive) {
+                        price = plan.name === 'Free' ? '₹0' : 'Free';
+                    }
+
+                    const isProOrTrialing = profile?.subscription_status === 'pro' || profile?.subscription_status === 'trialing';
 
                     return (
                         <Card
@@ -192,7 +240,9 @@ export default function PricingPage({ currency, profile }: { currency: 'inr' | '
                             <CardContent className="flex-grow space-y-6">
                                 <div className="flex items-baseline">
                                     <span className="text-4xl font-bold">{price}</span>
-                                    {price !== 'Contact Us' && price !== '₹0' && price !== '$0' && <span className="text-muted-foreground ml-2">/ {isAnnual ? 'year' : 'month'}</span>}
+                                    {/* {price !== 'Contact Us' && price !== '₹0' && price !== '$0' && <span className="text-muted-foreground ml-2">/ {isAnnual ? 'year' : 'month'}</span>} */}
+                                    {!BETA_INFO.isActive && price !== 'Contact Us' && price !== '₹0' && price !== '$0' && <span className="text-muted-foreground ml-2">/ {isAnnual ? 'year' : 'month'}</span>}
+
                                 </div>
                                 <ul className="space-y-3">
                                     {plan.features.map(feature => (
@@ -212,7 +262,29 @@ export default function PricingPage({ currency, profile }: { currency: 'inr' | '
 
                                 </ul>
                             </CardContent>
-                            <CardFooter>
+                            {BETA_INFO.isActive ? (
+                                // Simplified logic for the Beta Period
+                                (() => {
+                                    if (plan.name === 'Free') {
+                                        return <CardFooter >
+                                            <Button className="w-full h-11 " disabled> Current Plan</Button>
+                                        </CardFooter>;
+                                    }
+                                    if (isProOrTrialing) {
+                                        return <CardFooter ><Button className="w-full h-11" disabled>You&apos;re All Set</Button></CardFooter>;
+                                    }
+                                    // For everyone else (logged-out or free users), show the signup link
+                                    return (
+                                        <CardFooter>
+                                            <Link href="/signup" passHref className="w-full">
+                                                <Button className="w-full h-11" variant={plan.isPopular ? 'default' : 'outline'}>
+                                                    Get Started for Free
+                                                </Button>
+                                            </Link>
+                                        </CardFooter>
+                                    );
+                                })()
+                            ) : <CardFooter>
                                 {isCurrentUserPlan ? (
                                     <Button className="w-full h-11" disabled>Your Current Plan</Button>
                                 ) : canStartTrial ? (
@@ -241,11 +313,13 @@ export default function PricingPage({ currency, profile }: { currency: 'inr' | '
                                     </Link>
                                 )}
                             </CardFooter>
+
+                            }
                         </Card>
                     );
                 })}
             </div>
-        </div>
+        </div >
     );
 }
 

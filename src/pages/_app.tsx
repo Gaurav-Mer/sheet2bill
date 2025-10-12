@@ -9,6 +9,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { Layout } from '@/components/Layout'
 import { NextPage } from 'next'
+import { FeedbackLink } from '@/components/landing/FeedbackLink'
+import CookieConsent from "react-cookie-consent"; // <-- 1. Import the component
 
 
 const queryClient = new QueryClient({
@@ -28,6 +30,7 @@ export type NextPageWithLayout<P = any, IP = P> = NextPage<P, IP> & {
 
 type AppPropsWithLayout = AppProps<{ initialSession: Session }> & {
   Component: NextPageWithLayout;
+  pageProps?: any
 };
 
 
@@ -42,6 +45,24 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         initialSession={pageProps.initialSession}
       >
         {getLayout(<Component {...pageProps} />)}
+        {/* --- ADD THESE TWO LINES --- */}
+        {pageProps.user && <FeedbackLink />}
+        {/* --------------------------- */}
+
+        {/* --- 2. ADD THE COOKIE CONSENT COMPONENT --- */}
+        <CookieConsent
+          location="bottom"
+          buttonText="I understand"
+          cookieName="sheet2bill-cookie-consent"
+          style={{ background: "#2B373B" }}
+          buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+          expires={150}
+        >
+          This website uses cookies to ensure you get the best experience on our website.
+        </CookieConsent>
+        {/* ------------------------------------------- */}
+
+
         <Toaster // This component will render the toast notifications
           position="bottom-right"
           toastOptions={{
