@@ -96,6 +96,23 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
         }
     });
 
+    // --- NEW: Mutation for duplicating a brief ---
+    const duplicateBriefMutation = useMutation({
+        mutationFn: async (brief_id: number) => {
+            const response = await fetch(`/api/briefs/${brief_id}/duplicate`, {
+                method: 'POST',
+            });
+            if (!response.ok) throw new Error('Failed to duplicate brief');
+            return response.json();
+        },
+        onSuccess: (data) => {
+            toast.success('Brief duplicated successfully!');
+            // Redirect to the edit page of the NEW brief
+            router.push(`/briefs/${data.newBriefId}/edit`);
+        },
+        onError: (error: Error) => toast.error(`Error duplicating brief: ${error.message}`),
+    });
+
 
     const totalPages = Math.ceil(count / ITEMS_PER_PAGE)
     return (
@@ -164,6 +181,12 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
                                             {(brief.status === 'draft' || brief.status === 'rejected') && (
                                                 <DropdownMenuItem onSelect={() => router.push(`/briefs/${brief.id}/edit`)}>Edit</DropdownMenuItem>
                                             )}
+
+                                            {/* --- THIS IS THE NEW DUPLICATE BUTTON --- */}
+                                            <DropdownMenuItem onSelect={() => duplicateBriefMutation.mutate(brief.id)} disabled={duplicateBriefMutation.isPending}>
+                                                {duplicateBriefMutation.isPending ? 'Duplicating...' : 'Duplicate'}
+                                            </DropdownMenuItem>
+
                                             {brief.status === 'draft' && (
                                                 <DropdownMenuItem onSelect={() => handleOpenDelete(brief)} className="text-destructive">Delete</DropdownMenuItem>
                                             )}
