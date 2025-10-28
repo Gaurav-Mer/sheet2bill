@@ -3,7 +3,7 @@ import { MessageSquare } from 'lucide-react';
 
 export function FeedbackLink() {
     // Replace with your actual support email
-    const email = 'support@sheet2bill.com';
+    const email = 'admin@sheet2bill.com';
 
     // Pre-fill the subject line for the user
     const subject = encodeURIComponent('Feedback for Sheet2Bill Beta');
