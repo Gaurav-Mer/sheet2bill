@@ -33,7 +33,7 @@ export const NotificationBell = () => {
         queryKey: ['notifications'],
         queryFn: async () => {
             // CORRECTED: URL is plural
-            const res = await fetch('/api/notifications');
+            const res = await fetch('/api/notification');
             if (!res.ok) throw new Error('Failed to fetch notifications');
             return res.json();
         },
@@ -42,12 +42,12 @@ export const NotificationBell = () => {
     });
 
     const markAllAsReadMutation = useMutation({
-        mutationFn: () => fetch('/api/notifications/read', { method: 'PATCH' }),
+        mutationFn: () => fetch('/api/notification/read', { method: 'PATCH' }),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }),
     });
 
     const markOneAsReadMutation = useMutation({
-        mutationFn: (id: number) => fetch('/api/notifications/read', {
+        mutationFn: (id: number) => fetch('/api/notification/read', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ notification_id: id }),

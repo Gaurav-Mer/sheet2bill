@@ -10,17 +10,22 @@ export function useProfile() {
         queryKey: ['profile', user?.id],
         queryFn: async () => {
             if (!user) return null;
+
+            // --- THIS IS THE FIX ---
+            // .maybeSingle() will return { data: null, error: null } if no row is found,
+            // instead of throwing a PGRST116 error.
             const { data, error } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', user.id)
-                .single();
+                .maybeSingle(); // Changed from .single()
+            // --- END OF FIX ---
 
             if (error) {
-                // Don't throw an error if the profile just doesn't exist yet
-                if (error.code === 'PGRST116') return null;
-                throw new Error('Failed to fetch profile');
+                // This will now only catch REAL errors (like network issues, etc.)
+                throw new Error('Failed to fetch profile: ' + error.message);
             }
+
             return data;
         },
         // Only run the query if the user is logged in
@@ -29,3 +34,4 @@ export function useProfile() {
 
     return { profile, isLoading, error };
 }
+

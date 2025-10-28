@@ -41,7 +41,7 @@ const isPaidPlan = (status: string | null | undefined): boolean => {
 
 export const PlanStatus = () => {
     const { profile, isLoading } = useProfile();
-
+    console.log('Profile in PlanStatus:', profile);
     if (isLoading || !profile) {
         return <div className="h-8 w-24 rounded-md bg-muted animate-pulse" />; // Loading skeleton
     }
