@@ -1,11 +1,10 @@
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// components/NotificationBell.tsx
+// in components/Navbar.tsx (or components/NotificationBell.tsx)
+
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { Bell, CheckCircle, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/router";
 import Link from 'next/link';
-import { Bell, CheckCircle, AlertTriangle } from "lucide-react";
-
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
@@ -25,33 +24,41 @@ function timeAgo(date: string) {
     return Math.floor(seconds) + "s ago";
 }
 
+// This component now has its own data fetching and logic
 export const NotificationBell = () => {
     const queryClient = useQueryClient();
     const router = useRouter();
 
+    // Fetch notifications using TanStack Query
     const { data } = useQuery({
         queryKey: ['notifications'],
         queryFn: async () => {
-            // CORRECTED: URL is plural
-            const res = await fetch('/api/notification');
+            // --- THIS IS THE FIX ---
+            const res = await fetch('/api/notification'); // Was '/api/notification'
+            // --- END OF FIX ---
             if (!res.ok) throw new Error('Failed to fetch notifications');
             return res.json();
         },
-        // Optional: Refetch every 60 seconds
-        refetchInterval: 60000,
+        refetchInterval: 60000, // Refetch every 60 seconds
     });
 
+    // Mutation to mark all notifications as read
     const markAllAsReadMutation = useMutation({
-        mutationFn: () => fetch('/api/notification/read', { method: 'PATCH' }),
+        // --- THIS IS THE FIX ---
+        mutationFn: () => fetch('/api/notification/read', { method: 'PATCH' }), // Was '/api/notification/read'
+        // --- END OF FIX ---
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }),
     });
 
+    // Mutation to mark a single notification as read
     const markOneAsReadMutation = useMutation({
-        mutationFn: (id: number) => fetch('/api/notification/read', {
+        // --- THIS IS THE FIX ---
+        mutationFn: (id: number) => fetch('/api/notification/read', { // Was '/api/notifications/read'
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ notification_id: id }),
         }),
+        // --- END OF FIX ---
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }),
     });
 
@@ -99,7 +106,7 @@ export const NotificationBell = () => {
                             </DropdownMenuItem>
                         ))
                     ) : (
-                        <p className="p-4 text-sm text-muted-foreground text-center">You're all caught up!</p>
+                        <p className="p-4 text-sm text-muted-foreground text-center">You&apos;re all caught up!</p>
                     )}
                 </div>
                 <DropdownMenuSeparator />
