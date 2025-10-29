@@ -4,6 +4,10 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
+import { Resend } from 'resend'; // 1. Import Resend
+
+// 2. Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
@@ -63,34 +67,99 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { status, rejection_reason } = req.body;
         if (!status) return res.status(400).json({ message: 'Status is required.' });
 
-        const { data, error } = await supabase.from('briefs').update({ status, rejection_reason }).eq('id', id).select().single();
-        if (error) return res.status(500).json({ message: 'Error updating status', error });
+        const { data: updatedBrief, error } = await supabase
+            .from('briefs')
+            .update({ status, rejection_reason })
+            .eq('id', id)
+            .select('*, clients(name)')
+            .single();
 
-        // --- NEW: Notification Logic ---
-        if (data) {
+        if (error) {
+            console.error("Error updating status:", error);
+            return res.status(500).json({ message: 'Error updating status', error });
+        }
+
+        // --- THIS IS THE CORRECTED NOTIFICATION LOGIC ---
+        if (updatedBrief) {
+            const clientName = (updatedBrief.clients as any)?.name || 'A client';
+            let subject = '';
+            let message = '';
+            const link_to = status === 'rejected' ? `/briefs/${updatedBrief.id}/edit` : '/briefs';
+
+            if (status === 'approved') {
+                subject = `✅ Your brief has been approved! (${updatedBrief.brief_number})`;
+                message = `${clientName} has approved your brief: "${updatedBrief.title}"`;
+            } else if (status === 'rejected') {
+                subject = `🔴 Changes requested on your brief (${updatedBrief.brief_number})`;
+                message = `${clientName} has requested changes on your brief: "${updatedBrief.title}"`;
+            }
+
+            // --- 1. Create In-App Notification (ALWAYS RUNS) ---
+            // This is critical and must always happen.
+            if (subject) { // We check for 'subject' to make sure it's an event we want to log
+                try {
+                    await supabase.from('notifications').insert({
+                        user_id: updatedBrief.user_id,
+                        message: message,
+                        link_to: link_to,
+                    });
+                } catch (notificationError) {
+                    console.error("Failed to create in-app notification:", notificationError);
+                }
+            }
+
+            // --- 2. Send Email Notification (RUNS CONDITIONALLY) ---
+            // Now, separately, we try to get the email and send.
             try {
-                const clientName = (data.clients as any)?.name || 'A client';
-                const message = status === 'approved'
-                    ? `${clientName} has approved your brief: "${data.title}"`
-                    : `${clientName} has requested changes on your brief: "${data.title}"`;
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('email')
+                    .eq('id', updatedBrief.user_id)
+                    .single();
 
-                const link_to = status === 'rejected' ? `/briefs/${data.id}/edit` : '/briefs';
+                const userEmail = profile?.email;
 
-                // Insert a new row into the notifications table
-                await supabase.from('notifications').insert({
-                    user_id: data.user_id,
-                    message: message,
-                    link_to: link_to,
-                });
-
-            } catch (notificationError) {
-                // Log the error but don't fail the whole request if notification fails
-                console.error("Failed to create notification:", notificationError);
+                if (userEmail && subject) {
+                    await resend.emails.send({
+                        from: 'Sheet2Bill <admin@sheet2bill.com>',
+                        to: userEmail,
+                        subject: subject,
+                        html: `<p>${message}</p><p>You can view it here: ${process.env.NEXT_PUBLIC_BASE_URL}${link_to}</p>`,
+                    });
+                }
+            } catch (emailError) {
+                console.error("Failed to send email notification:", emailError);
             }
         }
+
+        // const { data, error, updatedBrief } = await supabase.from('briefs').update({ status, rejection_reason }).eq('id', id).select().single();
+        // if (error) return res.status(500).json({ message: 'Error updating status', error });
+
+        // --- NEW: Notification Logic ---
+        // if (data) {
+        //     try {
+        //         const clientName = (data.clients as any)?.name || 'A client';
+        //         const message = status === 'approved'
+        //             ? `${clientName} has approved your brief: "${data.title}"`
+        //             : `${clientName} has requested changes on your brief: "${data.title}"`;
+
+        //         const link_to = status === 'rejected' ? `/briefs/${data.id}/edit` : '/briefs';
+
+        //         // Insert a new row into the notifications table
+        //         await supabase.from('notifications').insert({
+        //             user_id: data.user_id,
+        //             message: message,
+        //             link_to: link_to,
+        //         });
+
+        //     } catch (notificationError) {
+        //         // Log the error but don't fail the whole request if notification fails
+        //         console.error("Failed to create notification:", notificationError);
+        //     }
+        // }
         // --- END OF NOTIFICATION LOGIC ---
 
-        return res.status(200).json(data);
+        return res.status(200).json(updatedBrief);
     }
 
     // --- HANDLE A LOGGED-IN USER DELETING THE BRIEF ---
