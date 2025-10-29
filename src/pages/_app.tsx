@@ -12,7 +12,7 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import { FeedbackLink } from '@/components/landing/FeedbackLink'
 import CookieConsent from "react-cookie-consent"; // <-- 1. Import the component
-
+import { Analytics } from "@vercel/analytics/next"
 
 
 const queryClient = new QueryClient({
@@ -76,6 +76,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           }}
         />
       </SessionContextProvider>
+      <Analytics />
     </QueryClientProvider>
   )
 }
