@@ -30,6 +30,9 @@ export function useProfile() {
         },
         // Only run the query if the user is logged in
         enabled: !!user,
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+
     });
 
     return { profile, isLoading, error };
