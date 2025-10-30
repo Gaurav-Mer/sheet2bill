@@ -3,7 +3,7 @@
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, Session } from '@supabase/auth-helpers-react'
 import { AppProps } from 'next/app'
-import { ReactElement, ReactNode, useState } from 'react'
+import { ReactElement, ReactNode, useEffect, useState } from 'react'
 import '../styles/globals.css' // Assuming your global styles are here
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
@@ -13,6 +13,8 @@ import Head from 'next/head'
 import { FeedbackLink } from '@/components/landing/FeedbackLink'
 import CookieConsent from "react-cookie-consent"; // <-- 1. Import the component
 import { Analytics } from "@vercel/analytics/next"
+import { useRouter } from 'next/router'
+import { pageview } from "@/lib/gtag"
 
 
 const queryClient = new QueryClient({
@@ -39,6 +41,25 @@ type AppPropsWithLayout = AppProps<{ initialSession: Session }> & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient())
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+  const router = useRouter(); // 1. Get the router
+
+  // --- THIS IS THE NEW PART ---
+  useEffect(() => {
+    // This function will be called every time a route changes
+    const handleRouteChange = (url: string) => {
+      pageview(url);
+    };
+
+    // Listen for the 'routeChangeComplete' event
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Clean up the listener when the component unmounts
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+  // --- END OF NEW PART ---
+
 
   return (
     <QueryClientProvider client={queryClient}>

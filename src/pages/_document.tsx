@@ -17,6 +17,7 @@ const svgString = `
 
 export default function Document() {
   const faviconDataUri = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
     <Html lang="en">
@@ -25,6 +26,25 @@ export default function Document() {
         <title>Sheet2Bill</title>
         {/* This is the correct and only place for the favicon link */}
         <link rel="icon" href={faviconDataUri} />
+        {/* --- Google Analytics Scripts --- */}
+        {gaId && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
+        {/* --- End Google Analytics --- */}
       </Head>
       <body className="antialiased">
         {/* REMOVED the duplicate link from here */}
