@@ -4,17 +4,13 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-// UI Components
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-// Our New Reusable Components
 import { ClientTable } from '@/components/clients/ClientTable';
 import { Pagination } from '@/components/clients/Pagination';
-// CORRECTED: 'Clientform' to 'ClientForm'
 import { ClientForm } from '@/components/clients/Clientform';
 import toast from 'react-hot-toast';
-import { ErrorList } from '@/lib/errorList';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
 export type Client = {
@@ -29,7 +25,6 @@ export type Client = {
   notes: string | null;
 };
 
-// CORRECTED: Added the 'user' prop to the PageProps type
 type PageProps = {
   clients: Client[];
   user: any;
@@ -46,7 +41,6 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  // --- NEW STATE FOR THE UPGRADE FLOW ---
   const [isUpgradeModalOpen, setUpgradeModalOpen] = useState(false);
   const [upgradeMessage, setUpgradeMessage] = useState('');
 
@@ -71,20 +65,17 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
         body: JSON.stringify(Object.fromEntries(formData)),
         headers: { 'Content-Type': 'application/json' },
       });
-      console.log("res", res.body)
+
       if (!res.ok) {
-        // Get the specific error message from the API
         const errorData = await res.json();
-        // If it's a "Payment Required" error (402), trigger the upgrade modal.
         if (res.status === 402) {
-          setAddModalOpen(false); // Close the current "Add Client" modal
+          setAddModalOpen(false);
           setUpgradeMessage(errorData.message);
           setUpgradeModalOpen(true);
         } else {
-          // For other errors (like duplicate email), show a standard toast.
           throw new Error(errorData.message || 'An unknown error occurred.');
         }
-        return //stop execution
+        return;
       }
       setAddModalOpen(false);
       refreshData();
@@ -114,58 +105,101 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
   }
 
   return (
-    <div className="container mx-auto max-w-6xl">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
       <UpgradeModal
         isOpen={isUpgradeModalOpen}
         onClose={() => setUpgradeModalOpen(false)}
         message={upgradeMessage}
       />
-      <div className="flex justify-between items-center mb-4">
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Client Hub</h1>
-          <p className="text-muted-foreground mt-2">Manage all your clients in one place.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Client Hub</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
+            Manage all your clients in one place.
+          </p>
         </div>
-        <Button onClick={() => setAddModalOpen(true)}>+ Add New Client</Button>
+        <Button onClick={() => setAddModalOpen(true)} className="w-full sm:w-auto">
+          + Add New Client
+        </Button>
       </div>
 
-      <div className="flex justify-between items-center mb-8">
-        <form className="w-full max-w-sm flex items-center gap-0">
-          <Input type="search" name="q" placeholder="Search by name or email..." className='rounded-r-none' defaultValue={searchQuery} />
-          <Button className='rounded-l-none'> Search</Button>
-
+      {/* Search Bar */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 items-stretch sm:items-center mb-6">
+        <form className="flex w-full max-w-md">
+          <Input
+            type="search"
+            name="q"
+            placeholder="Search by name or email..."
+            className="rounded-r-none flex-1"
+            defaultValue={searchQuery}
+          />
+          <Button type="submit" className="rounded-l-none whitespace-nowrap">
+            Search
+          </Button>
         </form>
       </div>
 
-      <ClientTable clients={clients} onEdit={handleOpenEdit} onDelete={handleOpenDelete} searchQuery={searchQuery} />
+      {/* Client Table */}
+      <div className="overflow-x-auto rounded-lg border border-border shadow-sm bg-background">
+        <ClientTable
+          clients={clients}
+          onEdit={handleOpenEdit}
+          onDelete={handleOpenDelete}
+          searchQuery={searchQuery}
+        />
+      </div>
 
-      <Pagination
-        currentPage={page}
-        totalPages={Math.ceil(count / ITEMS_PER_PAGE)}
-        totalCount={count}
-        searchQuery={searchQuery}
-        basePath="/clients"
-        itemPerPage={ITEMS_PER_PAGE}
-      />
+      {/* Pagination */}
+      <div className="mt-6 flex justify-center">
+        <Pagination
+          currentPage={page}
+          totalPages={Math.ceil(count / ITEMS_PER_PAGE)}
+          totalCount={count}
+          searchQuery={searchQuery}
+          basePath="/clients"
+          itemPerPage={ITEMS_PER_PAGE}
+        />
+      </div>
 
-      {/* Modals & Dialogs */}
+      {/* Modals */}
       <Dialog open={isAddModalOpen} onOpenChange={setAddModalOpen}>
-        <DialogContent className="sm:max-w-2xl"><DialogHeader><DialogTitle>Add New Client</DialogTitle></DialogHeader><ClientForm onSubmit={handleAddClient} submitButtonText="Save Client" /></DialogContent>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Add New Client</DialogTitle>
+          </DialogHeader>
+          <ClientForm onSubmit={handleAddClient} submitButtonText="Save Client" />
+        </DialogContent>
       </Dialog>
+
       <Dialog open={isEditModalOpen} onOpenChange={setEditModalOpen}>
-        <DialogContent className="sm:max-w-2xl"><DialogHeader><DialogTitle>Edit Client: {selectedClient?.name}</DialogTitle></DialogHeader><ClientForm client={selectedClient} onSubmit={handleEditClient} submitButtonText="Save Changes" /></DialogContent>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Edit Client: {selectedClient?.name}</DialogTitle>
+          </DialogHeader>
+          <ClientForm client={selectedClient} onSubmit={handleEditClient} submitButtonText="Save Changes" />
+        </DialogContent>
       </Dialog>
+
       <Dialog open={isDeleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Are you sure?</DialogTitle></DialogHeader>
-          <DialogDescription>This action will permanently delete the client "{selectedClient?.name}".</DialogDescription>
-          <DialogFooter><Button variant="outline" onClick={() => setDeleteAlertOpen(false)}>Cancel</Button><Button variant="destructive" onClick={handleDeleteClient}>Yes, Delete</Button></DialogFooter>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>
+            This action will permanently delete the client "{selectedClient?.name}".
+          </DialogDescription>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteAlertOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleDeleteClient}>Yes, Delete</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
   );
 }
 
-// CORRECTED: getServerSideProps now has the full search and pagination logic
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createPagesServerClient(ctx);
   const { data: { session } } = await supabase.auth.getSession();
@@ -174,7 +208,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     return { redirect: { destination: '/login', permanent: false } };
   }
 
-  const searchQuery = ctx.query.q as string || '';
+  const searchQuery = (ctx.query.q as string) || '';
   const page = parseInt(ctx.query.page as string, 10) || 1;
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE - 1;
@@ -188,23 +222,18 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     query = query.or(`name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
   }
 
-  query = query
-    .order('name')
-    .range(startIndex, endIndex);
-
+  query = query.order('name').range(startIndex, endIndex);
   const { data: clients, error, count } = await query;
 
-  if (error) {
-    console.error("Error fetching clients:", error);
-  }
+  if (error) console.error("Error fetching clients:", error);
 
   return {
     props: {
       user: session.user,
       clients: clients || [],
       count: count || 0,
-      page: page,
-      searchQuery: searchQuery
+      page,
+      searchQuery,
     },
   };
 };

@@ -53,7 +53,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)}></div>
           {/* Sidebar itself */}
           <div className="relative z-50 w-64">
-            <Sidebar />
+            <Sidebar onClose={() => setSidebarOpen(false)} />
           </div>
         </div>
       )}

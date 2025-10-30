@@ -17,7 +17,7 @@ const navItems = [
     // We can add a '/settings' link later
 ];
 
-export function Sidebar() {
+export function Sidebar({ onClose }: { onClose?: () => void }) {
     const router = useRouter();
     const user = useUser();
     const supabaseClient = useSupabaseClient();
@@ -45,6 +45,7 @@ export function Sidebar() {
                                 ? 'bg-primary text-primary-foreground'
                                 : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                                 }`}
+                            onClick={onClose}
                         >
                             <item.icon className="h-5 w-5" />
                             <span>{item.label}</span>

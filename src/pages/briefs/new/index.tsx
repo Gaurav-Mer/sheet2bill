@@ -4,35 +4,29 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { useState, useMemo } from 'react';
-// UI Components
+import toast from 'react-hot-toast';
+import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useMutation } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '@/components/FeatureGate';
 
-type Client = { id: number; name: string; };
-type LineItem = {
-    description: string;
-    quantity: number;
-    unit_price: number;
-};
+type Client = { id: number; name: string };
+type LineItem = { description: string; quantity: number; unit_price: number };
 
-// Function to get today's date in YYYY-MM-DD format
-const getTodayDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-}
+// Utility: Format date
+const getTodayDate = () => new Date().toISOString().split('T')[0];
 
 export default function NewBriefPage({ clients }: { clients: Client[] }) {
     const router = useRouter();
 
-    // --- State Management ---
+    // Form state
     const [title, setTitle] = useState('');
     const [clientId, setClientId] = useState<string>('');
     const [notes, setNotes] = useState('Payment due within 14 days.');
@@ -40,163 +34,246 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
     const [currency, setCurrency] = useState('INR');
     const [issueDate, setIssueDate] = useState(getTodayDate());
     const [dueDate, setDueDate] = useState('');
-    const [templateId, setTemplateId] = useState('zurich'); // NEW: State for selected template
-
+    const [templateId, setTemplateId] = useState('zurich');
     const [lineItems, setLineItems] = useState<LineItem[]>([
-        { description: '', quantity: 1, unit_price: 0 }
+        { description: '', quantity: 1, unit_price: 0 },
     ]);
 
-    // --- NEW: TanStack Query Mutation ---
+    // Mutation to save brief
     const createBriefMutation = useMutation({
         mutationFn: async (newBrief: any) => {
-            const response = await fetch('/api/briefs', {
+            const res = await fetch('/api/briefs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newBrief),
             });
-            if (!response.ok) {
-                throw new Error('Failed to create brief');
-            }
-            return response.json();
+            if (!res.ok) throw new Error('Failed to create brief');
+            return res.json();
         },
         onSuccess: () => {
             toast.success('Brief saved successfully!');
-            // We will redirect to a briefs list page in the future
             router.push('/briefs');
         },
         onError: (error) => {
-            toast.error('Error saving brief. Please try again.');
             console.error(error);
+            toast.error('Error saving brief. Please try again.');
         },
     });
 
-    // --- Calculations ---
+    // Compute totals
     const totals = useMemo(() => {
-        const subtotal = lineItems.reduce((total, item) => total + (item.quantity * item.unit_price), 0);
+        const subtotal = lineItems.reduce((acc, item) => acc + item.quantity * item.unit_price, 0);
         const taxAmount = subtotal * (taxRate / 100);
         const grandTotal = subtotal + taxAmount;
-        return {
-            subtotal: subtotal,
-            taxAmount: taxAmount,
-            grandTotal: grandTotal,
-        };
+        return { subtotal, taxAmount, grandTotal };
     }, [lineItems, taxRate]);
 
-    // --- Event Handlers ---
+    // Handlers
     const handleLineItemChange = (index: number, field: keyof LineItem, value: string | number) => {
-        const updatedLineItems = [...lineItems];
-        updatedLineItems[index] = { ...updatedLineItems[index], [field]: value };
-        setLineItems(updatedLineItems);
+        const updated = [...lineItems];
+        updated[index] = { ...updated[index], [field]: value };
+        setLineItems(updated);
     };
 
-    const addLineItem = () => {
+    const addLineItem = () =>
         setLineItems([...lineItems, { description: '', quantity: 1, unit_price: 0 }]);
-    };
 
-    const removeLineItem = (index: number) => {
-        const updatedLineItems = lineItems.filter((_, i) => i !== index);
-        setLineItems(updatedLineItems);
-    };
+    const removeLineItem = (index: number) =>
+        setLineItems(lineItems.filter((_, i) => i !== index));
 
-    async function handleSubmit(event: React.FormEvent) {
-        event.preventDefault();
-        if (!clientId) {
-            alert('Please select a client.');
-            return;
-        }
-        // Call the mutation with the payload
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!title.trim()) return toast.error('Brief title is required.');
+        if (!clientId) return toast.error('Please select a client.');
+        if (!lineItems.some((item) => item.description.trim() && item.unit_price > 0))
+            return toast.error('Add at least one valid line item.');
+
         createBriefMutation.mutate({
-            clientId, lineItems, title, currency, notes,
+            clientId,
+            lineItems,
+            title,
+            currency,
+            notes,
             subtotal: totals.subtotal,
             tax_rate: taxRate,
             tax_amount: totals.taxAmount,
             total: totals.grandTotal,
             issue_date: issueDate,
             due_date: dueDate || null,
-            template_id: templateId, // NEW: Include selected template ID
+            template_id: templateId,
         });
-    }
+    };
 
     return (
-        <div className="container mx-auto  max-w-7xl">
+        <div className="container mx-auto max-w-7xl">
             <form onSubmit={handleSubmit}>
-                {/* --- Header --- */}
+                {/* Header */}
                 <div className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="text-3xl font-bold">Create New Brief</h1>
                         <p className="text-muted-foreground mt-2">Brief # will be auto-generated upon saving.</p>
                     </div>
-                    <Button isLoading={createBriefMutation.isPending} type="submit" size="lg">Save Draft Brief</Button>
+                    <Button
+                        type="submit"
+                        size="lg"
+                        disabled={createBriefMutation.isPending}
+                        isLoading={createBriefMutation.isPending}
+                    >
+                        Save Draft Brief
+                    </Button>
                 </div>
 
-                {/* --- Main Two-Column Layout --- */}
+                {/* Main Layout */}
                 <div className="flex flex-col md:flex-row gap-8">
-
-                    {/* --- Main Content: Line Items --- */}
+                    {/* Left: Line Items */}
                     <div className="flex-grow">
                         <Card>
-                            <CardHeader><CardTitle>Line Items</CardTitle></CardHeader>
+                            <CardHeader>
+                                <CardTitle>Line Items</CardTitle>
+                            </CardHeader>
                             <CardContent>
-                                <table className="w-full">
-                                    <thead className="text-left text-muted-foreground text-sm">
+                                <table className="w-full text-sm">
+                                    <thead className="text-muted-foreground">
                                         <tr>
-                                            <th className="pb-2 font-normal w-1/2">Description</th>
-                                            <th className="pb-2 font-normal">Qty</th>
-                                            <th className="pb-2 font-normal">Unit Price</th>
-                                            <th className="pb-2 font-normal text-right">Amount</th>
+                                            <th className="text-left pb-2">Description</th>
+                                            <th className="pb-2">Qty</th>
+                                            <th className="pb-2">Unit Price</th>
+                                            <th className="text-right pb-2">Amount</th>
                                             <th className="w-10"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {lineItems.map((item, index) => (
                                             <tr key={index} className="border-b">
-                                                <td className="py-2"><Input placeholder="Description of work..." value={item.description} onChange={(e) => handleLineItemChange(index, 'description', e.target.value)} required /></td>
-                                                <td className="py-2 px-2"><Input type="number" value={item.quantity} onChange={(e) => handleLineItemChange(index, 'quantity', parseFloat(e.target.value) || 0)} className="w-20" /></td>
-                                                <td className="py-2 px-2"><Input type="number" value={item.unit_price} onChange={(e) => handleLineItemChange(index, 'unit_price', parseFloat(e.target.value) || 0)} className="w-24" /></td>
-                                                <td className="py-2 text-right text-muted-foreground">{(item.quantity * item.unit_price).toFixed(2)}</td>
-                                                <td className="py-2 text-right"><Button type="button" variant="ghost" size="sm" onClick={() => removeLineItem(index)}>X</Button></td>
+                                                <td className="py-2">
+                                                    <Input
+                                                        placeholder="Description..."
+                                                        value={item.description}
+                                                        onChange={(e) =>
+                                                            handleLineItemChange(index, 'description', e.target.value)
+                                                        }
+                                                        required
+                                                    />
+                                                </td>
+                                                <td className="py-2 px-2 w-20">
+                                                    <Input
+                                                        type="number"
+                                                        value={item.quantity}
+                                                        onChange={(e) =>
+                                                            handleLineItemChange(index, 'quantity', parseFloat(e.target.value) || 0)
+                                                        }
+                                                    />
+                                                </td>
+                                                <td className="py-2 px-2 w-24">
+                                                    <Input
+                                                        type="number"
+                                                        value={item.unit_price}
+                                                        onChange={(e) =>
+                                                            handleLineItemChange(
+                                                                index,
+                                                                'unit_price',
+                                                                parseFloat(e.target.value) || 0
+                                                            )
+                                                        }
+                                                    />
+                                                </td>
+                                                <td className="py-2 text-right text-muted-foreground">
+                                                    {(item.quantity * item.unit_price).toFixed(2)}
+                                                </td>
+                                                <td className="py-2 text-right">
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => removeLineItem(index)}
+                                                    >
+                                                        ✕
+                                                    </Button>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                                <Button type="button" variant="outline" onClick={addLineItem} className="mt-4">+ Add Item</Button>
+                                <Button type="button" variant="outline" onClick={addLineItem} className="mt-4">
+                                    + Add Item
+                                </Button>
                             </CardContent>
                         </Card>
                     </div>
 
-                    {/* --- Sidebar: Metadata --- */}
+                    {/* Right: Details */}
                     <aside className="w-full md:w-80 lg:w-96 flex-shrink-0">
                         <Card>
-                            <CardHeader><CardTitle>Brief Details</CardTitle></CardHeader>
+                            <CardHeader>
+                                <CardTitle>Brief Details</CardTitle>
+                            </CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label htmlFor="title">Brief Title*</Label>
-                                    <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                                    <Label>Brief Title*</Label>
+                                    <Input value={title} onChange={(e) => setTitle(e.target.value)} required />
                                 </div>
+
                                 <div>
-                                    <Label className='w-full' htmlFor="client">Client*</Label>
-                                    <Select onValueChange={setClientId} required><SelectTrigger id="client" className='w-full'><SelectValue placeholder="Choose a client..." /></SelectTrigger><SelectContent className='w-full'>{clients.map(c => <SelectItem key={c.id} value={c.id.toString()}>{c.name}</SelectItem>)}</SelectContent></Select>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div><Label htmlFor="issue-date">Issue Date</Label><Input id="issue-date" type="date" value={issueDate} onChange={e => setIssueDate(e.target.value)} /></div>
-                                    <div><Label htmlFor="due-date">Due Date</Label><Input id="due-date" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} /></div>
-                                </div>
-                                <div>
-                                    <Label htmlFor="currency">Currency</Label>
-                                    <Select onValueChange={setCurrency} defaultValue={currency}>
-                                        <SelectTrigger className='w-full' id="currency"><SelectValue /></SelectTrigger>
-                                        <SelectContent><SelectItem value="INR">INR</SelectItem><SelectItem value="USD">USD</SelectItem><SelectItem value="EUR">EUR</SelectItem></SelectContent>
+                                    <Label>Client*</Label>
+                                    <Select onValueChange={setClientId} required>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Choose a client..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {clients.map((c) => (
+                                                <SelectItem key={c.id} value={c.id.toString()}>
+                                                    {c.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
                                 </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <Label>Issue Date</Label>
+                                        <Input
+                                            type="date"
+                                            value={issueDate}
+                                            onChange={(e) => setIssueDate(e.target.value)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label>Due Date</Label>
+                                        <Input
+                                            type="date"
+                                            value={dueDate}
+                                            onChange={(e) => setDueDate(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div>
-                                    <Label htmlFor="template">Template</Label>
+                                    <Label>Currency</Label>
+                                    <Select onValueChange={setCurrency} defaultValue={currency}>
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="INR">INR</SelectItem>
+                                            <SelectItem value="USD">USD</SelectItem>
+                                            <SelectItem value="EUR">EUR</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div>
+                                    <Label>Template</Label>
                                     <FeatureGate>
                                         <Select onValueChange={setTemplateId} defaultValue={templateId}>
-                                            <SelectTrigger className='w-full' id="template"><SelectValue /></SelectTrigger>
-                                            <SelectContent className='w-full'>
-                                                {AVAILABLE_TEMPLATES.map(template => (
-                                                    <SelectItem key={template.id} value={template.id as string}>
-                                                        {template.name}
+                                            <SelectTrigger>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {AVAILABLE_TEMPLATES.map((t) => (
+                                                    <SelectItem key={t.id} value={t.id}>
+                                                        {t.name}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -208,29 +285,41 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                     </aside>
                 </div>
 
-                {/* --- Footer: Notes and Totals --- */}
+                {/* Footer: Notes & Totals */}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                     <div>
-                        <Label htmlFor="notes">Notes / Terms</Label>
-                        <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="e.g., Payment due within 14 days." />
+                        <Label>Notes / Terms</Label>
+                        <Textarea
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
+                            placeholder="e.g., Payment due within 14 days."
+                        />
                     </div>
-                    <div className="space-y-4 rounded-lg border p-4 self-start">
-                        <div className="flex justify-between items-center text-muted-foreground">
+
+                    <div className="space-y-3 border rounded-lg p-4 self-start">
+                        <div className="flex justify-between text-muted-foreground">
                             <span>Subtotal</span>
-                            <span>{totals.subtotal}</span>
+                            <span>{totals.subtotal.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                            <Label htmlFor="tax-rate" className="text-muted-foreground">Tax Rate (%)</Label>
-                            <Input id="tax-rate" type="number" value={taxRate} onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)} className="w-24 h-8" />
+                        <div className="flex justify-between">
+                            <Label className="text-muted-foreground">Tax Rate (%)</Label>
+                            <Input
+                                type="number"
+                                value={taxRate}
+                                onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
+                                className="w-24 h-8"
+                            />
                         </div>
                         <div className="flex justify-between text-muted-foreground">
                             <span>Tax</span>
-                            <span>{totals.taxAmount}</span>
+                            <span>{totals.taxAmount.toFixed(2)}</span>
                         </div>
-                        <div className="border-t"></div>
-                        <div className="flex justify-between font-bold text-lg text-foreground">
+                        <div className="border-t my-2"></div>
+                        <div className="flex justify-between font-semibold text-lg">
                             <span>Total</span>
-                            <span>{currency} {totals.grandTotal}</span>
+                            <span>
+                                {currency} {totals.grandTotal.toFixed(2)}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -239,14 +328,13 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
     );
 }
 
-// getServerSideProps remains the same
+// --- Server Side ---
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
-        return { redirect: { destination: '/login', permanent: false } };
-    }
+    const {
+        data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) return { redirect: { destination: '/login', permanent: false } };
 
     const { data: clients } = await supabase
         .from('clients')

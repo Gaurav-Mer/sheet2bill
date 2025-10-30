@@ -137,8 +137,8 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
 
 
             {/* Briefs Table */}
-            <div className="border border-border rounded-lg">
-                <table className="min-w-full divide-y divide-border">
+            <div className="border border-border rounded-lg overflow-x-auto">
+                <table className="min-w-full divide-y divide-border text-sm">
                     <thead className="bg-muted/50"><tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Brief #</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Title</th>
