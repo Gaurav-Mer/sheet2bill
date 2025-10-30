@@ -33,12 +33,12 @@ export default function LandingPage() {
         <meta name="keywords" content="freelance billing, invoicing software, client management, online invoicing, freelance tools" />
         <meta property="og:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
         <meta property="og:description" content="The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
-        <meta property="og:image" content="https://sheet2bill.com/hero-image.jpg" />
+        <meta property="og:image" content="https://sheet2bill.com/landing.png" />
         <meta property="og:url" content="https://sheet2bill.com" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
         <meta name="twitter:description" content="Streamline your freelance business with Sheet2Bill. Effortless client management and invoicing." />
-        <meta name="twitter:image" content="https://sheet2bill.com/hero-image.jpg" />
+        <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
       </Head>
       {/* --- Header --- */}
       <NonLoginNavbar />
