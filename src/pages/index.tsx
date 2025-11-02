@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { BetaBanner } from '@/components/BetaBanner';
 import Head from 'next/head';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
+import { SocialProof } from '@/components/landing/SocialProof';
 
 const benefits = [
   { icon: Clock, title: 'Save Hours Every Month', description: 'Automate your entire billing process and get back to the work that matters.' },
@@ -25,20 +26,53 @@ const benefits = [
 ];
 
 export default function LandingPage() {
+  const ldJson = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Sheet2Bill",
+        "url": "https://sheet2bill.com",
+        "logo": "https://sheet2bill.com/logo.png",
+        "sameAs": [
+          // Add links to your social media profiles here
+          // "https://twitter.com/sheet2bill",
+          // "https://www.linkedin.com/company/sheet2bill"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "name": "Sheet2Bill",
+        "url": "https://sheet2bill.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://sheet2bill.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Head>
-        <title>Sheet2Bill - Effortless Billing for Freelancers</title>
-        <meta name="description" content="Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining." />
-        <meta name="keywords" content="freelance billing, invoicing software, client management, online invoicing, freelance tools" />
-        <meta property="og:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
-        <meta property="og:description" content="The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
-        <meta property="og:image" content="https://sheet2bill.com/landing.png" />
+        <title>Freelance Invoicing Software | Sheet2Bill | Client Billing Tool</title>
+        <meta name="description" content="The ultimate invoicing software for freelancers. Easily manage clients, create professional briefs, get approvals, and track payments—all in one place." />
+        <meta name="keywords" content="freelance invoicing software, client billing tool, online invoicing, freelance client management, invoice generator" />
+        <meta property="og:title" content="Freelance Invoicing Software | Sheet2Bill" />
+        <meta property="og:description" content="Streamline your entire billing process. Create briefs, get approvals, and generate professional invoices with ease. Sign up free!" />
+        <meta property="og:image" content="https://sheet2bill.com/og-image.png" />
         <meta property="og:url" content="https://sheet2bill.com" />
+        <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
-        <meta name="twitter:description" content="Streamline your freelance business with Sheet2Bill. Effortless client management and invoicing." />
-        <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
+        <meta name="twitter:title" content="Freelance Invoicing Software | Sheet2Bill" />
+        <meta name="twitter:description" content="The ultimate client billing tool for freelancers. Simplify your workflow from brief to payment. Get started for free." />
+        <meta name="twitter:image" content="https://sheet2bill.com/twitter-image.png" />
+        <link rel="canonical" href="https://sheet2bill.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+        />
       </Head>
       {/* --- Header --- */}
       <NonLoginNavbar />
@@ -68,17 +102,17 @@ export default function LandingPage() {
                 </div>
 
                 <h1 className="text-5xl md:text-7xl font-extrabold leading-tight">
-                  Effortless Billing,
+                  From Brief to Bill,
                   <br />
                   <span className="relative inline-block mt-2">
-                    <span className="relative z-10 text-white px-4 py-1">Professional</span>
+                    <span className="relative z-10 text-white px-4 py-1">Seamlessly</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 transform -rotate-1 rounded-lg" />
                   </span>
-                  {' '}Results.
+                  .
                 </h1>
 
                 <p className="text-xl text-muted-foreground max-w-xl mx-auto md:mx-0 leading-relaxed">
-                  Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining.
+                  The all-in-one platform for freelancers to manage clients, create professional briefs, get approvals, and get paid faster. Stop the chaos, start streamlining.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
@@ -146,10 +180,11 @@ export default function LandingPage() {
                         <div className="relative aspect-video bg-background/50 backdrop-blur-sm rounded-xl border border-border/30 overflow-hidden">
                           <Image
                             src="/landing.png"
-                            alt="Dashboard Preview"
+                            alt="Sheet2Bill Dashboard Preview - Client Project Alpha Invoice Paid"
                             width={400}
                             height={250}
                             className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
+                            priority
                           />
                         </div>
                       </div>
@@ -278,6 +313,8 @@ export default function LandingPage() {
         <section>
           <FaqSection />
         </section>
+
+        <SocialProof />
 
         {/* --- Final CTA --- */}
         <section className="relative py-32 overflow-hidden">

@@ -19,7 +19,7 @@ const NonLoginNavbar = () => {
                         <Button variant="ghost" className="hover:bg-primary/5">Pricing</Button>
                     </Link>
                     <Link href="/signup" passHref>
-                        <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25">
+                        <Button size="lg" className="h-11 px-6 text-base bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-xl shadow-primary/25 transform hover:scale-105 transition-transform">
                             Start Free
                         </Button>
                     </Link>

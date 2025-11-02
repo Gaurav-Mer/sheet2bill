@@ -6,6 +6,8 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 
+import Head from "next/head";
+
 const faqs = [
     {
         q: "Is Sheet2Bill really free to start?",
@@ -20,8 +22,8 @@ const faqs = [
         a: "A 'Brief' is a pre-invoice summary of work that you send to your client for approval. This prevents disputes and errors. Once the client approves the Brief with a single click, you can convert it into a final, legal 'Invoice' for payment."
     },
     {
-        q: "How can I share a brief with my client or team?",
-        a: "Absolutely. You can generate a unique, shareable link for any brief. For quick access, you can make the link public, or for added security, you can protect it with a password before sending it to clients or collaborators."
+        q: "Who is this platform for?",
+        a: "Sheet2Bill is built for freelancers, consultants, and small agencies who want to streamline their client billing process. If you're tired of messy spreadsheets and endless email chains for invoice approvals, this tool is for you."
     },
     {
         q: "Can I customize my invoices?",
@@ -30,8 +32,27 @@ const faqs = [
 ];
 
 export function FaqSection() {
+    const ldJson = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.a
+            }
+        }))
+    };
+
     return (
         <section className="py-24 sm:py-32 bg-secondary ">
+            <Head>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+                />
+            </Head>
             <div className="container mx-auto px-6">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
