@@ -9,6 +9,7 @@ import { BarChart, Check, CheckCheck, Clock, FileDown, FilePlus, FileText, Setti
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { FaqSection } from '@/components/landing/FaqSection';
 import { Footer } from '@/components/landing/Footer';
+import { Testimonials } from '@/components/landing/Testimonials';
 import Image from 'next/image';
 import { BetaBanner } from '@/components/BetaBanner';
 import Head from 'next/head';
@@ -133,57 +134,13 @@ export default function LandingPage() {
 
               {/* Right: Visual */}
               <div className="hidden md:block">
-                <div className="relative">
-                  {/* Floating Elements */}
-                  <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-2xl transform rotate-12 animate-pulse" />
-                  <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-secondary/20 rounded-2xl transform -rotate-12 animate-pulse" style={{ animationDelay: '1s' }} />
-
-                  {/* Main Card */}
-                  <div className="relative p-6 bg-gradient-to-br from-card/90 to-card/50 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl shadow-primary/10 transform hover:scale-105 transition-transform duration-500">
-                    {/* Browser Chrome */}
-                    <div className="bg-background/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-border/30">
-                      <div className="flex justify-between items-center px-4 py-3 bg-secondary/30 border-b border-border/30">
-                        <div className="flex space-x-2">
-                          <div className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors" />
-                          <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-colors" />
-                          <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors" />
-                        </div>
-                        <div className="text-xs font-medium text-muted-foreground bg-background/50 px-3 py-1 rounded-full">
-                          Dashboard
-                        </div>
-                        <div className="w-16" />
-                      </div>
-
-                      {/* App Preview */}
-                      <div className="p-6 bg-gradient-to-br from-secondary/10 to-background">
-                        <div className="flex justify-between items-center mb-6">
-                          <div>
-                            <h3 className="font-bold text-xl">Project Alpha</h3>
-                            <p className="text-sm text-muted-foreground mt-1">Client Dashboard</p>
-                          </div>
-                          <div className="px-4 py-2 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 text-green-600 text-sm font-semibold rounded-full">
-                            ✓ Paid
-                          </div>
-                        </div>
-
-                        <div className="relative aspect-video bg-background/50 backdrop-blur-sm rounded-xl border border-border/30 overflow-hidden">
-                          <Image
-                            src="/landing.png"
-                            alt="Sheet2Bill Dashboard Preview - Client Project Alpha Invoice Paid"
-
-                            width={400}
-                            height={250}
-                            className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <p className="text-center mt-6 text-sm font-medium text-muted-foreground">
-                      Your new command center awaits
-                    </p>
-                  </div>
-                </div>
+                <Image
+                  src="https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+                  alt="Hero Image"
+                  width={800}
+                  height={600}
+                  className="rounded-lg shadow-lg"
+                />
               </div>
             </div>
           </div>
@@ -270,33 +227,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* --- Testimonial --- */}
-        <section className="py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.02)_1px,transparent_1px)] bg-[size:72px_72px]" />
-
-          <div className="container mx-auto px-6 text-center relative z-10">
-            <div className="max-w-4xl mx-auto p-12 bg-gradient-to-br from-card/90 to-card/50 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl">
-              <div className="mb-8">
-                <div className="flex justify-center space-x-1 mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-6 h-6 text-yellow-500 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
-                  ))}
-                </div>
-              </div>
-
-              <blockquote>
-                <p className="text-2xl md:text-3xl font-semibold leading-relaxed mb-8">
-                  "The approval workflow is a game-changer. I've saved hours on back-and-forth emails and my clients love the professional briefs."
-                </p>
-                <footer>
-                  <div className="font-bold text-xl">Priya S.</div>
-                  <div className="text-muted-foreground mt-2">Digital Marketer · Jaipur, Rajasthan</div>
-                </footer>
-              </blockquote>
-            </div>
-          </div>
+        <section>
+          <Testimonials />
         </section>
 
         <section>
