@@ -5,6 +5,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import Head from "next/head";
 
 const faqs = [
     {
@@ -27,11 +28,33 @@ const faqs = [
         q: "Can I customize my invoices?",
         a: "Yes! You can add your company logo, choose a brand color, and include personalized notes on both your briefs and invoices to maintain a professional and consistent brand image."
     },
+    {
+        q: "Who is this platform for",
+        a: "Sheet2Bill is built for freelancers, consultants, and small agencies who want to streamline their client billing process. If you're tired of messy spreadsheets and endless email chains for invoice approvals, this tool is for you."
+    }
 ];
 
 export function FaqSection() {
+    const ldJson = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.a
+            }
+        }))
+    };
     return (
         <section className="py-24 sm:py-32 bg-secondary ">
+            <Head>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+                />
+            </Head>
             <div className="container mx-auto px-6">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight">

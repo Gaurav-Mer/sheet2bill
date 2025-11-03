@@ -170,8 +170,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!session) return res.status(401).json({ message: 'Unauthorized' });
 
         const { error } = await supabase.from('briefs').delete().eq('id', id);
+        console.log("delete ", error)
         if (error) return res.status(500).json({ message: 'Error deleting brief', error });
-        return res.status(204).end();
+        return res.status(204).json({ message: 'Brief deleted successfully' });
     }
 
     res.setHeader('Allow', ['PUT', 'PATCH', 'DELETE']);

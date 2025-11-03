@@ -6,13 +6,9 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ReactElement } from 'react';
 import { BarChart, Check, CheckCheck, Clock, FileDown, FilePlus, FileText, Settings, Users, Zap, ArrowRight, Sparkles } from 'lucide-react';
-import { Logo } from '@/components/Logo';
-import { CurrentTemplate } from '@/components/templates/CurrentTemplate';
-import { sampleInvoiceData } from '@/lib/sample-data';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { FaqSection } from '@/components/landing/FaqSection';
 import { Footer } from '@/components/landing/Footer';
-import Laptop from '@/components/SVG/Laptop';
 import Image from 'next/image';
 import { BetaBanner } from '@/components/BetaBanner';
 import Head from 'next/head';
@@ -25,8 +21,35 @@ const benefits = [
 ];
 
 export default function LandingPage() {
+  const ldJson = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Sheet2Bill",
+        "url": "https://sheet2bill.com",
+        "logo": "https://sheet2bill.com/logo.png",
+        "sameAs": [
+          // Add links to your social media profiles here
+          // "https://twitter.com/sheet2bill",
+          // "https://www.linkedin.com/company/sheet2bill"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "name": "Sheet2Bill",
+        "url": "https://sheet2bill.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://sheet2bill.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  };
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
+
       <Head>
         <title>Sheet2Bill - Effortless Billing for Freelancers</title>
         <meta name="description" content="Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining." />
@@ -146,7 +169,8 @@ export default function LandingPage() {
                         <div className="relative aspect-video bg-background/50 backdrop-blur-sm rounded-xl border border-border/30 overflow-hidden">
                           <Image
                             src="/landing.png"
-                            alt="Dashboard Preview"
+                            alt="Sheet2Bill Dashboard Preview - Client Project Alpha Invoice Paid"
+
                             width={400}
                             height={250}
                             className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
