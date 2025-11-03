@@ -59,7 +59,12 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
 
     async function handleDeleteBrief() {
         if (!selectedBrief) return;
-        await fetch(`/api/briefs/${selectedBrief.id}/`, { method: 'DELETE' });
+        const res = await fetch(`/api/briefs/${selectedBrief.id}`, { method: 'DELETE' });
+        if (res.status !== 204) {
+            const errorData = await res.json();
+            toast.error(`Error deleting brief: ${errorData.message}`);
+            return;
+        }
         toast.success('Brief deleted successfully.');
         setDeleteAlertOpen(false);
         refreshData();
