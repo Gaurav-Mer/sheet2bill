@@ -57,7 +57,6 @@ const BriefContent = ({ brief }: { brief: BriefDetails }) => {
     const [isRejectModalOpen, setRejectModalOpen] = useState(false);
     const [rejectionReason, setRejectionReason] = useState('');
     const [formattedIssueDate, setFormattedIssueDate] = useState(brief.issue_date);
-    console.log("brief", brief)
     useEffect(() => {
         setFormattedIssueDate(new Date(brief.issue_date).toLocaleDateString());
     }, [brief.issue_date]);

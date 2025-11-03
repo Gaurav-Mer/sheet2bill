@@ -15,7 +15,6 @@ type EditPageProps = {
 };
 
 export default function Index({ clients, brief }: EditPageProps) {
-    console.log("brief", brief)
     const router = useRouter();
 
     const editBriefMutation = useMutation({
