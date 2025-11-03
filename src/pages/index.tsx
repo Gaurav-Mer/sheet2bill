@@ -90,7 +90,7 @@ export default function LandingPage() {
                   <span className="text-sm font-medium text-primary">The Future of Freelance Invoicing</span>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-extrabold leading-tight">
+                <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
                   Effortless Billing,
                   <br />
                   <span className="relative inline-block mt-2">
@@ -245,6 +245,14 @@ export default function LandingPage() {
         {/* --- Benefits Section --- */}
         <section className="py-32 bg-gradient-to-b from-secondary/5 to-background">
           <div className="container mx-auto px-6">
+            <div className="text-center mb-12 ">
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+                Why Choose Us
+              </h2>
+              <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
+                Experience excellence with every interaction
+              </p>
+            </div>
             <div className="grid md:grid-cols-3 gap-8">
               {benefits.map((item, index) => (
                 <div
@@ -271,7 +279,7 @@ export default function LandingPage() {
         </section>
 
         {/* --- Testimonial --- */}
-        <section className="py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
+        {/* <section className="py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5 relative overflow-hidden">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.02)_1px,transparent_1px)] bg-[size:72px_72px]" />
 
           <div className="container mx-auto px-6 text-center relative z-10">
@@ -297,7 +305,123 @@ export default function LandingPage() {
               </blockquote>
             </div>
           </div>
+        </section> */}
+        <section className="relative py-32 bg-white overflow-hidden">
+          {/* Mathematical grid background */}
+          <div className="absolute inset-0 opacity-[0.03]">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `
+        linear-gradient(to right, rgb(148 163 184) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(148 163 184) 1px, transparent 1px)
+      `,
+              backgroundSize: '60px 60px'
+            }} />
+          </div>
+
+          {/* Geometric accent lines */}
+          <div className="absolute top-20 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+          <div className="absolute bottom-20 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+          <div className="container mx-auto px-6 max-w-4xl relative">
+            {/* Elegant header with refined typography */}
+            <div className="text-center mb-20">
+              <div className="inline-block mb-6">
+                {/* Mathematical angle brackets */}
+                <div className="flex items-center justify-center gap-4 mb-8">
+                  <div className="w-8 h-px bg-gradient-to-r from-transparent to-primary/30" />
+                  <div className="w-8 h-px bg-gradient-to-l from-transparent to-primary/30" />
+                </div>
+
+                <h2 className="text-4xl md:text-5xl font-light text-slate-900 tracking-tight">
+                  The Story Behind <span className="font-semibold">Sheet2Bill</span>
+                </h2>
+              </div>
+              <p className="text-slate-500 text-lg font-light max-w-2xl mx-auto mt-6">
+                Bringing clarity and structure to professional billing
+              </p>
+            </div>
+
+            {/* Premium content card with geometric elements */}
+            <div className="relative">
+              {/* Corner brackets */}
+              <div className="absolute -top-4 -left-4 w-12 h-12 border-t-2 border-l-2 border-primary/20 rounded-tl-lg" />
+              <div className="absolute -top-4 -right-4 w-12 h-12 border-t-2 border-r-2 border-primary/20 rounded-tr-lg" />
+              <div className="absolute -bottom-4 -left-4 w-12 h-12 border-b-2 border-l-2 border-primary/20 rounded-bl-lg" />
+              <div className="absolute -bottom-4 -right-4 w-12 h-12 border-b-2 border-r-2 border-primary/20 rounded-br-lg" />
+
+              {/* Subtle shadow and border treatment */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl blur-2xl" />
+
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-xl shadow-slate-200/50 p-10 md:p-14">
+                {/* Coordinate system indicator */}
+                <div className="space-y-8 text-slate-700">
+                  {/* Mathematical divider with dot */}
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-2 h-2 rounded-full bg-primary/40" />
+                    <div className="flex-1 h-px bg-gradient-to-r from-primary/20 to-transparent" />
+                  </div>
+
+                  <p className="text-xl md:text-2xl font-light leading-relaxed">
+                    For many professionals, billing feels <span className="font-medium text-slate-900">chaotic</span> — client details scattered everywhere, project notes lost, and countless hours spent just trying to stay organized.
+                  </p>
+
+                  {/* Mathematical equation-style divider */}
+                  <div className="flex items-center justify-center gap-4 py-4">
+                    <div className="w-16 h-px bg-gradient-to-r from-transparent to-primary/30" />
+                    <span className="text-primary/30 font-mono text-sm">≈</span>
+                    <div className="w-16 h-px bg-gradient-to-l from-transparent to-primary/30" />
+                  </div>
+
+                  <p className="text-xl md:text-2xl font-light leading-relaxed">
+                    Sheet2Bill was created to <span className="font-medium text-slate-900">simplify everything</span>. One elegant platform to create structured briefs, streamline client approvals, and generate invoices — all seamlessly connected.
+                  </p>
+
+                  {/* Mathematical divider with multiple dots */}
+                  <div className="flex items-center justify-center gap-4 py-4">
+                    <div className="w-16 h-px bg-gradient-to-r from-transparent to-primary/30" />
+                    <div className="flex gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                    </div>
+                    <div className="w-16 h-px bg-gradient-to-l from-transparent to-primary/30" />
+                  </div>
+
+                  <p className="text-xl md:text-2xl font-light leading-relaxed">
+                    Designed to eliminate chaos and help you work <span className="font-medium text-slate-900">smarter, faster, and with complete confidence</span>.
+                  </p>
+
+                  {/* Function notation divider */}
+                  <div className="flex items-center gap-3 mt-8">
+                    <div className="flex-1 h-px bg-gradient-to-l from-primary/20 to-transparent" />
+                    <div className="w-2 h-2 rounded-full bg-primary/40" />
+                  </div>
+
+                  {/* Signature with mathematical styling */}
+                  <div className="pt-8 mt-12 border-t border-slate-200/50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-slate-900 text-lg">Sheet2Bill Team</div>
+                      </div>
+                      <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
+                        {/* Mathematical cross symbol */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-6 h-px bg-primary/20" />
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-px h-6 bg-primary/20" />
+                        </div>
+                        <div className="w-6 h-6 rounded-full bg-primary/20" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
+
+        {/* --- FAQ Section --- */}
 
         <section>
           <FaqSection />
