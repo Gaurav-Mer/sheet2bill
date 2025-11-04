@@ -15,9 +15,9 @@ import Head from 'next/head';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 
 const benefits = [
-  { icon: Clock, title: 'Save Hours Every Month', description: 'Automate your entire billing process and get back to the work that matters.' },
-  { icon: FileText, title: 'Look Professional', description: 'Impress your clients with beautiful, branded invoices from premium templates.' },
-  { icon: Check, title: 'Get Paid Faster', description: 'Prevent disputes with our pre-invoice approval workflow, ensuring every invoice is correct.' },
+  { icon: Clock, title: 'Save Hours Every Month', description: 'Effortless billing automation gets you back to the work that matters. Automate your entire process with just a few clicks.' },
+  { icon: FileText, title: 'Look Professional', description: 'Deliver professional results every time. Impress your clients with beautiful, branded invoices from premium templates.' },
+  { icon: Check, title: 'Get Paid Faster', description: 'Prevent disputes with our pre-invoice approval workflow, ensuring every invoice is correct and delivers professional results.' },
 ];
 
 export default function LandingPage() {
@@ -52,15 +52,15 @@ export default function LandingPage() {
 
       <Head>
         <title>Sheet2Bill - Effortless Billing for Freelancers</title>
-        <meta name="description" content="Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining." />
-        <meta name="keywords" content="freelance billing, invoicing software, client management, online invoicing, freelance tools" />
+        <meta name="description" content="Effortless billing for freelancers with professional results. Manage clients, create professional briefs, get approvals, and track invoices—all in one place." />
+        <meta name="keywords" content="freelance billing, invoicing software, client management, online invoicing, freelance tools, effortless billing, professional invoicing" />
         <meta property="og:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
-        <meta property="og:description" content="The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
+        <meta property="og:description" content="Experience effortless billing with professional results. The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
         <meta property="og:image" content="https://sheet2bill.com/landing.png" />
         <meta property="og:url" content="https://sheet2bill.com" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
-        <meta name="twitter:description" content="Streamline your freelance business with Sheet2Bill. Effortless client management and invoicing." />
+        <meta name="twitter:description" content="Streamline your freelance business with effortless billing and professional results." />
         <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
       </Head>
       {/* --- Header --- */}
@@ -101,7 +101,7 @@ export default function LandingPage() {
                 </h1>
 
                 <p className="text-xl text-muted-foreground max-w-xl mx-auto md:mx-0 leading-relaxed">
-                  Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Stop the chaos, start streamlining.
+                  Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Experience effortless billing with professional results that impress your clients.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
@@ -201,7 +201,7 @@ export default function LandingPage() {
                 Your Complete Billing Command Center
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Packed with powerful features to save you time and make you look like a pro.
+                Everything you need for effortless billing and professional results. Packed with powerful features to save you time and make you look like a pro.
               </p>
             </div>
 
@@ -250,7 +250,7 @@ export default function LandingPage() {
                 Why Choose Us
               </h2>
               <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
-                Experience excellence with every interaction
+                Effortless billing meets professional results in every interaction
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
@@ -373,7 +373,7 @@ export default function LandingPage() {
                   </div>
 
                   <p className="text-xl md:text-2xl font-light leading-relaxed">
-                    Sheet2Bill was created to <span className="font-medium text-slate-900">simplify everything</span>. One elegant platform to create structured briefs, streamline client approvals, and generate invoices — all seamlessly connected.
+                    Sheet2Bill was created to deliver <span className="font-medium text-slate-900">effortless billing</span>. One elegant platform to create structured briefs, streamline client approvals, and generate invoices—all designed to deliver <span className="font-medium text-slate-900">professional results</span> seamlessly.
                   </p>
 
                   {/* Mathematical divider with multiple dots */}
@@ -438,7 +438,7 @@ export default function LandingPage() {
                 Ready to transform your billing?
               </h2>
               <p className="text-xl text-muted-foreground">
-                Join thousands of freelancers who've streamlined their invoicing process
+                Join thousands of freelancers experiencing effortless billing with professional results
               </p>
               <div className="pt-4">
                 <Link href="/signup" passHref>
