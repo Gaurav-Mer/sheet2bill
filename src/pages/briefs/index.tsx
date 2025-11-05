@@ -135,7 +135,7 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
 
             <div className="flex justify-between items-center mb-8">
                 <form className="w-full max-w-sm flex items-center gap-0">
-                    <Input type="search" name="q" placeholder="Search by title or client name..." className='rounded-r-none' defaultValue={searchQuery} />
+                    <Input type="search" name="q" placeholder="Search by title or brief name..." className='rounded-r-none' defaultValue={searchQuery} />
                     <Button className='rounded-l-none'> Search</Button>
                 </form>
             </div>

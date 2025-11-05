@@ -4,6 +4,7 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { renderToStaticMarkup } from 'react-dom/server';
 import playwright from 'playwright-core';
+import chromium from '@sparticuz/chromium';
 
 // Import our template definitions
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
@@ -64,9 +65,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         //     executablePath: executablePath || undefined,
         //     headless: chromium.headless,
         // });
+        // const browser = await playwright.chromium.launch({
+        //     headless: true,
+        //     executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        // });
+
+        // const page = await browser.newPage();
+        // await page.setContent(html, { waitUntil: 'networkidle' });
+        // const pdf = await page.pdf({ format: 'A4', printBackground: true });
+        // await browser.close();
+
         const browser = await playwright.chromium.launch({
+            args: chromium.args,
+            executablePath: await chromium.executablePath(),
             headless: true,
-            executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
         });
 
         const page = await browser.newPage();
