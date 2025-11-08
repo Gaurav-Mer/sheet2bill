@@ -101,7 +101,7 @@ const BlogPost = () => {
                     {/* Problem */}
                     <section className="border border-red-100 bg-red-50 rounded-2xl p-8">
                         <div className="flex items-center gap-3 mb-5">
-                            <AlertCircle className="w-6 h-6 text-red-600" />
+                            <AlertCircle className="w-6 h-6 text-red-600 shrink-0" />
                             <h2 className="text-2xl font-bold text-gray-900">
                                 The Problem: “Invoice Ambush”
                             </h2>
@@ -129,7 +129,7 @@ const BlogPost = () => {
                     {/* Solution */}
                     <section className="border border-green-100 bg-green-50 rounded-2xl p-8">
                         <div className="flex items-center gap-3 mb-5">
-                            <CheckCircle2 className="w-6 h-6 text-green-600" />
+                            <CheckCircle2 className="w-6 h-6 text-green-600 shrink-0" />
                             <h2 className="text-2xl font-bold text-gray-900">
                                 The Solution: Separate “Review” from “Pay”
                             </h2>
@@ -143,7 +143,7 @@ const BlogPost = () => {
                     {/* Step 1 */}
                     <section className="bg-blue-50 rounded-2xl p-8">
                         <div className="flex items-start gap-4 mb-4">
-                            <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
+                            <div className="w-10 h-10 shrink-0 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
                                 1
                             </div>
                             <div>
@@ -159,7 +159,7 @@ const BlogPost = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="ml-14 border border-blue-100 bg-white rounded-xl p-6">
+                        <div className="md:ml-14 border border-blue-100 w-full bg-white rounded-xl p-4 md:p-6 ">
                             <div className="flex items-start gap-3 mb-3">
                                 <FileText className="w-5 h-5 text-blue-600 mt-1" />
                                 <div>
@@ -181,7 +181,7 @@ const BlogPost = () => {
                     {/* Step 2 */}
                     <section className="bg-purple-50 rounded-2xl p-8">
                         <div className="flex items-start gap-4 mb-4">
-                            <div className="w-10 h-10 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">
+                            <div className="w-10 h-10 shrink-0 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">
                                 2
                             </div>
                             <div>
@@ -192,7 +192,7 @@ const BlogPost = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="ml-14 space-y-3">
+                        <div className="md:ml-14 space-y-3">
                             <div className="border border-green-100 bg-white rounded-lg p-4">
                                 <p className="font-semibold text-green-700">✓ “Looks great!”</p>
                                 <p>Approved with a single click.</p>
@@ -213,7 +213,7 @@ const BlogPost = () => {
                     {/* Step 3 */}
                     <section className="bg-green-50 rounded-2xl p-8">
                         <div className="flex items-start gap-4">
-                            <div className="w-10 shrink-0 h-10 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">
+                            <div className="w-10  shrink-0 h-10 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">
                                 3
                             </div>
                             <div>

@@ -15,7 +15,8 @@ const STATIC_PAGES = [
     'terms-of-service',
     'login',
     'signup',
-    'forgot-password'
+    'forgot-password',
+    'blog'
 ];
 
 // --- End of Configuration ---

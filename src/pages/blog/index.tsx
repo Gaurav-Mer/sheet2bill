@@ -65,7 +65,7 @@ const BlogListingPage = () => {
                 </div>
 
                 {/* Category Filter */}
-                <div className="border-b border-gray-100">
+                <div className="border-b border-gray-100 overflow-auto hidden md:block">
                     <div className="max-w-full  px-12 py-6">
                         <div className="flex gap-3">
                             {categories.map((category) => (
@@ -85,8 +85,8 @@ const BlogListingPage = () => {
                 </div>
 
                 {/* Blog Posts */}
-                <div className="max-w-full  p-12">
-                    <div className="space-y-12">
+                <div className="max-w-full  p-4 md:p-12">
+                    <div className="space-y-12 mx-auto max-w-5xl">
                         {filteredPosts.map((post) => (
                             <article
                                 key={post.id}
@@ -99,7 +99,7 @@ const BlogListingPage = () => {
                                     <div className="flex items-center gap-1">
                                         <Calendar className="w-4 h-4" />
                                         {new Date(post.date).toLocaleDateString('en-US', {
-                                            month: 'long',
+                                            month: 'short',
                                             day: 'numeric',
                                             year: 'numeric'
                                         })}

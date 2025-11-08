@@ -40,7 +40,7 @@ const BlogPost = () => {
                 </header>
 
                 {/* Article */}
-                <article className="max-w-4xl mx-auto px-6">
+                <article className="md:max-w-4xl mx-auto px-6">
                     <div className="py-12 border-b border-gray-100">
                         <div className="flex items-center gap-3 text-sm text-gray-500 mb-6">
                             <div className="flex items-center gap-1.5">
@@ -146,13 +146,13 @@ const BlogPost = () => {
                                         </h3>
                                     </div>
 
-                                    <p className="text-lg text-gray-700 leading-relaxed ml-14">
+                                    <p className="text-lg text-gray-700 leading-relaxed md:ml-14">
                                         Before creating <code className="bg-white px-2 py-1 rounded text-sm border">INV-0042.pdf</code>,
                                         send your client a “Brief”. It's a professional, simple
                                         summary of all completed work — not a legal invoice.
                                     </p>
 
-                                    <div className="bg-white border border-blue-200 rounded-lg p-5 mt-4 ml-14 flex items-start gap-3">
+                                    <div className="bg-white border border-blue-200 rounded-lg p-5 mt-4 md:ml-14 flex items-start gap-3">
                                         <FileText className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                                         <p className="text-gray-700 leading-relaxed">
                                             “Hey, here’s everything we completed this month. Please
@@ -160,7 +160,7 @@ const BlogPost = () => {
                                         </p>
                                     </div>
 
-                                    <p className="text-lg text-gray-700 mt-4 ml-14">
+                                    <p className="text-lg text-gray-700 mt-4 md:ml-14">
                                         It includes all line items and totals, but with a different
                                         tone — it’s a request for collaboration, not a payment demand.
                                     </p>
@@ -177,12 +177,12 @@ const BlogPost = () => {
                                         </h3>
                                     </div>
 
-                                    <p className="text-lg text-gray-700 leading-relaxed ml-14 mb-4">
+                                    <p className="text-lg text-gray-700 leading-relaxed md:ml-14 mb-4">
                                         Your client can now review your work calmly — without the
                                         pressure of an unpaid bill hanging over them.
                                     </p>
 
-                                    <div className="ml-14 space-y-4">
+                                    <div className="md:ml-14 space-y-4">
                                         <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
                                             <ThumbsUp className="w-6 h-6 text-green-600 mt-1" />
                                             <p className="text-gray-800">
@@ -212,13 +212,13 @@ const BlogPost = () => {
                                         </h3>
                                     </div>
 
-                                    <p className="text-lg text-gray-700 leading-relaxed ml-14">
+                                    <p className="text-lg text-gray-700 leading-relaxed md:ml-14">
                                         Once the Brief is approved, create the final invoice. At this
                                         point, every detail is confirmed — the invoice becomes a
                                         smooth, automatic step.
                                     </p>
 
-                                    <div className="bg-indigo-100 rounded-lg p-4 mt-4 ml-14 flex items-center gap-3">
+                                    <div className="bg-indigo-100 rounded-lg p-4 mt-4 md:ml-14 flex items-center gap-3">
                                         <CheckCircle2 className="w-6 h-6 text-indigo-700" />
                                         <p className="text-indigo-900 font-semibold">
                                             No surprises. No disputes. Just quick payments.

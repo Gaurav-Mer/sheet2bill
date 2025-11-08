@@ -9,7 +9,7 @@ const NonLoginNavbar = () => {
             <div className="container mx-auto h-16 flex items-center justify-between px-6">
                 <Link href="/" className="flex items-center space-x-2 group">
                     <Logo className="h-5 w-5 transition-transform group-hover:scale-110" />
-                    <span className="font-bold md:text-xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent text-xs">Sheet2Bill</span>
+                    <span className="font-bold md:text-xl hidden md:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent text-xs">Sheet2Bill</span>
                 </Link>
                 <nav className="flex items-center md:space-x-2">
                     <Link href="/blog" passHref>

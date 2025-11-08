@@ -36,7 +36,7 @@ const BlogPost = () => {
 
                 {/* Hero Section */}
                 <div className="bg-gradient-to-r from-primary/5 to-primary/10 text-black">
-                    <div className="max-w-4xl mx-auto px-6 py-16 md:py-24">
+                    <div className="md:max-w-4xl mx-auto px-6 py-16 md:py-24">
                         <div className="flex flex-wrap gap-3 mb-6">
                             {post.keywords.map((keyword, idx) => (
                                 <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
@@ -68,7 +68,7 @@ const BlogPost = () => {
                 </div>
 
                 {/* Main Content */}
-                <div className="max-w-4xl mx-auto px-6 py-12 md:py-8">
+                <div className="md:max-w-4xl mx-auto md:px-6 py-12 md:py-8">
                     <article className="bg-white rounded-2xl  p-8 md:p-0" >
                         {/* Introduction */}
                         <div className="prose prose-lg max-w-none mb-12">
@@ -87,8 +87,8 @@ const BlogPost = () => {
                         </div>
 
                         {/* Section 1 */}
-                        <div className="mb-20 border-l-4 border-blue-500 pl-6 py-2 ">
-                            <div className="flex items-start gap-4 mb-4">
+                        <div className="mb-20 border-l-4 border-blue-500 pl-4 md:pl-6 py-2 w-full">
+                            <div className="flex items-start gap-4 mb-4 w-full">
                                 <div className="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">
                                     1
                                 </div>
@@ -99,7 +99,7 @@ const BlogPost = () => {
                             <p className="text-gray-600 text-lg mb-4">
                                 This sounds basic, but it's the most critical part for legal and accounting purposes.
                             </p>
-                            <div className="space-y-4 ml-16">
+                            <div className="space-y-4 md:ml-16">
                                 <div className="bg-white p-4 rounded-lg border border-gray-200">
                                     <p className="font-semibold text-gray-900 mb-2">You (The "From"):</p>
                                     <p className="text-gray-700">Your full name or company name, your full address, your email, and your phone number.</p>
@@ -128,7 +128,7 @@ const BlogPost = () => {
                             <p className="text-gray-600 text-lg mb-4">
                                 Never, ever send an invoice with a title like <code className="bg-gray-200 px-2 py-1 rounded text-red-600">invoice_final.pdf</code>. This is a recipe for chaos in your client's accounting department (and your own).
                             </p>
-                            <div className="space-y-4 ml-16">
+                            <div className="space-y-4 md:ml-16">
                                 <div className="flex items-start gap-3">
                                     <CheckCircle2 className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
                                     <div>
@@ -154,7 +154,7 @@ const BlogPost = () => {
                         </div>
 
                         {/* Section 3 */}
-                        <div className="mb-20 border-l-4 border-purple-500 pl-6 py-2 ">
+                        <div className="mb-20 border-l-4 border-purple-500 pl-4 md:pl-6 py-2 ">
                             <div className="flex items-start gap-4 mb-4">
                                 <div className="flex-shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
                                     3
@@ -166,7 +166,7 @@ const BlogPost = () => {
                             <p className="text-gray-600 text-lg mb-4">
                                 Don't just write "Marketing Services... ₹50,000." This is a huge red flag for clients. You must break down your work into clear, understandable line items.
                             </p>
-                            <div className="ml-16">
+                            <div className="md:ml-16">
                                 <p className="font-semibold text-gray-900 mb-3">A good line item includes:</p>
                                 <div className="bg-gray-50 p-5 rounded-lg border border-gray-200 mb-4 font-mono text-sm">
                                     <div className="grid grid-cols-4 gap-4 mb-2 font-bold text-gray-700">
@@ -198,7 +198,7 @@ const BlogPost = () => {
                         </div>
 
                         {/* Section 4 */}
-                        <div className="mb-20 border-l-4 border-green-500 pl-6 py-2 ">
+                        <div className="mb-20 border-l-4 border-green-500 pl-4 md:pl-6 py-2 ">
                             <div className="flex items-start gap-4 mb-4">
                                 <div className="flex-shrink-0 w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
                                     4
@@ -210,7 +210,7 @@ const BlogPost = () => {
                             <p className="text-gray-600 text-lg mb-4">
                                 This is the money part. Make it impossible to misread. Your invoice should have a clean breakdown at the bottom:
                             </p>
-                            <div className="ml-16 bg-white border-2 border-green-200 rounded-lg p-6 space-y-3">
+                            <div className="md:ml-16 bg-white border-2 border-green-200 rounded-lg p-6 space-y-3">
                                 <div className="flex justify-between text-gray-700">
                                     <span className="font-semibold">Subtotal:</span>
                                     <span>The total for all your line items.</span>
@@ -227,7 +227,7 @@ const BlogPost = () => {
                         </div>
 
                         {/* Section 5 */}
-                        <div className="mb-20 border-l-4 border-pink-500 pl-6 py-2">
+                        <div className="mb-20 border-l-4 border-pink-500 pl-4 md:pl-6 py-2">
                             <div className="flex items-start gap-4 mb-4">
                                 <div className="flex-shrink-0 w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
                                     5
@@ -239,7 +239,7 @@ const BlogPost = () => {
                             <p className="text-gray-600 text-lg mb-4">
                                 You've done the work, you've shown the math. Now, tell your client exactly how to pay you. Don't make them email you to ask for your bank details.
                             </p>
-                            <div className="ml-16">
+                            <div className="md:ml-16">
                                 <p className="font-semibold text-gray-900 mb-3">Include a section at the bottom for:</p>
                                 <div className="space-y-3">
                                     <div className="flex items-start gap-3">
