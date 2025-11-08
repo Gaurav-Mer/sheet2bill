@@ -247,9 +247,11 @@ const BlogPost = () => {
                     <p className="text-gray-600 mb-6">
                         Start using the Approval-First method today and get paid faster.
                     </p>
-                    <button className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors">
-                        Get Started <ArrowRight className="w-4 h-4" />
-                    </button>
+                    <Link href="/signup">
+                        <button className="inline-flex items-center gap-2 bg-gray-900 cursor-pointer text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors">
+                            Get Started <ArrowRight className="w-4 h-4" />
+                        </button>
+                    </Link>
                 </div>
             </article>
 

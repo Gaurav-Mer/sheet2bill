@@ -84,7 +84,7 @@ export function PremiumHeroSection() {
                                             <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors" />
                                         </div>
                                         <div className="text-xs font-medium text-muted-foreground bg-background/50 px-3 py-1 rounded-full">
-                                            Dashboard
+                                            sheet2bill.com
                                         </div>
                                         <div className="w-16" />
                                     </div>

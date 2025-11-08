@@ -47,6 +47,19 @@ export default function Index({ clients, brief }: EditPageProps) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
+    const {
+        data: { session },
+    } = await supabase.auth.getSession();
+
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/login', // or your login page route
+                permanent: false,
+            },
+        };
+    }
     const { id } = ctx.params as { id: string };
     // Fetch the specific brief to edit
     const { data: brief } = await supabase

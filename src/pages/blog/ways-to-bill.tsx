@@ -266,7 +266,7 @@ const BlogPost = () => {
                                 Use Sheet2Bill to send pre-invoice Briefs, get approvals faster, and
                                 never chase payments again.
                             </p>
-                            <Button onClick={() => router.push("/login")} className="  transition-all transform hover:scale-105 shadow-lg inline-flex items-center gap-2">
+                            <Button onClick={() => router.push("/signup")} className="  transition-all transform hover:scale-105 shadow-lg inline-flex items-center gap-2">
                                 Try Sheet2Bill Free
                                 <ArrowRight className="w-5 h-5" />
                             </Button>
