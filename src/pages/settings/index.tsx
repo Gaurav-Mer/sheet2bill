@@ -123,7 +123,7 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                             <Label>Company Logo</Label>
                             <div className="flex items-center space-x-4">
                                 {logoPreview ? (
-                                    <Image src={logoPreview} alt="Logo Preview" width={64} height={64} className="rounded-md object-contain h-16 w-16 border" />
+                                    <Image fetchPriority='low' src={logoPreview} alt="Logo Preview" width={64} height={64} className="rounded-md object-contain h-16 w-16 border" />
                                 ) : (
                                     <div className="h-16 w-16 rounded-md border bg-muted flex items-center justify-center text-muted-foreground text-xs">No Logo</div>
                                 )}

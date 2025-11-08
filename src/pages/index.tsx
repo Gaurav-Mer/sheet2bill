@@ -170,7 +170,7 @@ export default function LandingPage() {
                           <Image
                             src="/landing.png"
                             alt="Sheet2Bill Dashboard Preview - Client Project Alpha Invoice Paid"
-
+                            fetchPriority='high'
                             width={400}
                             height={250}
                             className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"

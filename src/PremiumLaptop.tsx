@@ -33,6 +33,7 @@ const PremiumLaptop = ({ imgSrc, imgAlt }: any) => {
                             layout="fill"
                             objectFit="cover"
                             className="opacity-90"
+                            fetchPriority='high'
                         />
                     </div>
                 </div>

@@ -16,6 +16,7 @@ const Laptop = () => {
                     alt="Laptop Screen"
                     fill
                     className="object-cover z-10"
+                    fetchPriority='high'
                 />
             </div>
 
