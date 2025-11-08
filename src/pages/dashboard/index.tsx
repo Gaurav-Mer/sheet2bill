@@ -7,8 +7,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { DollarSign, Users, FileText, WalletCards } from 'lucide-react';
+import { Users, FileText, WalletCards } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RevenueChart } from '@/components/dashboard/RevenueChart';
+import { RevenuePieChart } from '@/components/dashboard/RevenuePieChart';
 
 // Define the shape of our data, including the new activeCurrency prop
 type DashboardProps = {
@@ -27,11 +29,11 @@ type DashboardProps = {
     clients: { name: string } | null;
   }[];
   activeCurrency: string; // e.g., 'all', 'INR', 'USD'
+  monthlyRevenue?: any; // Data for the revenue chart
 };
 
-export default function Dashboard({ user, stats, recentBriefs, activeCurrency = "USD" }: DashboardProps) {
+export default function Dashboard({ user, stats, recentBriefs, activeCurrency = "USD", monthlyRevenue }: DashboardProps) {
   const router = useRouter();
-
   // Helper to format currency professionally
   const formatCurrency = (amount: number | null, currency: string) => {
     // If 'all' is selected, don't show a currency symbol as it's a mixed total
@@ -123,6 +125,12 @@ export default function Dashboard({ user, stats, recentBriefs, activeCurrency = 
         </Card>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-6">
+        <RevenueChart data={monthlyRevenue} />
+        <RevenuePieChart data={monthlyRevenue} />
+      </div>
+
+
       {/* --- PREMIUM Recent Briefs Table --- */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold mb-4">Recent Activity {activeCurrency !== 'all' && `(${activeCurrency})`}</h2>
@@ -172,34 +180,39 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   const userId = session.user.id;
 
-  const [statsQuery, recentBriefsQuery] = await Promise.all([
-    supabase.rpc('get_dashboard_stats', { currency_filter: currencyFilter }).single(),
+  // Run queries in parallel
+  const [analyticsQuery, recentBriefsQuery] = await Promise.all([
+    // 5. CALL THE NEW SQL FUNCTION
+    supabase.rpc('get_dashboard_analytics', {
+      currency_filter: currencyFilter === 'all' ? null : currencyFilter
+    }).single(),
+
     (() => {
       let query = supabase.from('briefs')
         .select('id, title, status, total, currency, clients(name)')
         .eq('user_id', userId);
-
-      if (currencyFilter) {
+      console.log("query", query)
+      if (currencyFilter && currencyFilter !== 'all') {
         query = query.eq('currency', currencyFilter);
       }
-
       return query.order('created_at', { ascending: false }).limit(5);
     })()
   ]);
 
-  const { data: stats, error: statsError } = statsQuery;
+
+  const { data: analytics, error: analyticsError } = analyticsQuery as any;
   const { data: recentBriefs, error: briefsError } = recentBriefsQuery;
 
-  if (statsError || briefsError) {
-    console.error("Dashboard Fetch Error:", statsError || briefsError);
+  if (analyticsError || briefsError) {
+    console.error("Dashboard Fetch Error:", analyticsError || briefsError);
   }
-
   return {
     props: {
       user: session.user,
-      stats: stats || { total_revenue: 0, outstanding_amount: 0, client_count: 0 },
+      stats: analytics || { total_revenue: 0, outstanding_amount: 0, client_count: 0 },
+      monthlyRevenue: analytics?.monthly_revenue || [], // Pass the new chart data
       recentBriefs: recentBriefs || [],
-      activeCurrency: currencyFilter || 'all',
+      activeCurrency: currencyFilter,
     },
   };
 };
