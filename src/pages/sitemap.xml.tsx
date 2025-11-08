@@ -37,8 +37,19 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
         <loc>https://sheet2bill.com/blog</loc>
         <lastmod>${new Date().toISOString()}</lastmod>
       </url>
+
         <url>
-        <loc>https://sheet2bill.com/blog</loc>
+        <loc>https://sheet2bill.com/blog/freelance-invoice-essentials</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+      </url>
+
+         <url>
+        <loc>https://sheet2bill.com/blog/stop-sending-invoice</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+      </url>
+
+        <url>
+        <loc>https://sheet2bill.com/blog/ways-to-bill</loc>
         <lastmod>${new Date().toISOString()}</lastmod>
       </url>
     </urlset>
