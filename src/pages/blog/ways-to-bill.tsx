@@ -228,14 +228,14 @@ const BlogPost = () => {
                         </section>
 
                         {/* Summary */}
-                        <section className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border-2 border-blue-200">
+                        <section className=" rounded-2xl p-8 border border-primary">
                             <p className="text-gray-700 text-lg leading-relaxed">
                                 The Approval-First method isn’t just about organization — it’s about
                                 building <strong>trust and predictability</strong> with your clients.
                                 It keeps your workflow calm, your cash flow steady, and your
                                 reputation professional.
                             </p>
-                            <p className="text-blue-700 font-semibold mt-6 text-center text-xl">
+                            <p className="text-primary font-semibold mt-6 text-center text-xl">
                                 Stop the chaos. Send Briefs, not surprises.
                             </p>
                         </section>

@@ -35,8 +35,8 @@ const BlogListingPage = () => {
             title: '3 Ways Your Billing Spreadsheet is Costing You Money',
             excerpt: 'Still using Excel or Google Sheets for invoicing? Discover the 3 hidden costs and why upgrading to a professional billing hub is a smarter, more profitable move.',
             category: 'Finance',
-            date: '2025-11-02',
-            readTime: '5 min read',
+            date: '2025-11-10',
+            readTime: '6 min read',
             featured: false,
             link: "ways-to-bill"
         },
@@ -54,7 +54,7 @@ const BlogListingPage = () => {
 
                 {/* Hero */}
                 <div className="border-b border-gray-100 mt-16">
-                    <div className="max-w-6xl mx-auto px-6 py-16">
+                    <div className="max-w-full px-auto px-12 py-24 bg-primary/5">
                         <h2 className="text-5xl font-bold text-gray-900 mb-4">
                             Insights for Freelancers
                         </h2>
@@ -66,7 +66,7 @@ const BlogListingPage = () => {
 
                 {/* Category Filter */}
                 <div className="border-b border-gray-100">
-                    <div className="max-w-6xl mx-auto px-6 py-6">
+                    <div className="max-w-full  px-12 py-6">
                         <div className="flex gap-3">
                             {categories.map((category) => (
                                 <button
@@ -85,12 +85,12 @@ const BlogListingPage = () => {
                 </div>
 
                 {/* Blog Posts */}
-                <div className="max-w-6xl mx-auto px-6 py-12">
+                <div className="max-w-full  p-12">
                     <div className="space-y-12">
                         {filteredPosts.map((post) => (
                             <article
                                 key={post.id}
-                                className="group border-b border-gray-100 pb-12 last:border-0"
+                                className="group border-b border-black pb-12 last:border-0"
                                 onClick={() => router.push(`/blog/${post?.link}`)}
                             >
                                 <div className="flex items-start gap-3 text-sm text-gray-500 mb-4">
