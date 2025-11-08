@@ -53,7 +53,7 @@ export default function LandingPage() {
       <Head>
         <title>Sheet2Bill - Effortless Billing for Freelancers</title>
         <meta name="description" content="Effortless billing for freelancers with professional results. Manage clients, create professional briefs, get approvals, and track invoices—all in one place." />
-        <meta name="keywords" content="freelance billing, invoicing software, client management, online invoicing, freelance tools, effortless billing, professional invoicing" />
+        <meta name="keywords" content="freelance billing, invoicing software, client management, online invoicing, freelance tools, effortless billing, professional invoicing,freelance invoice software,how to bill a client,client management and invoicing" />
         <meta property="og:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
         <meta property="og:description" content="Experience effortless billing with professional results. The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
         <meta property="og:image" content="https://sheet2bill.com/landing.png" />
