@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import NonLoginNavbar from "@/components/landing/NonLoginNavbar";
 import { Footer } from "@/components/landing/Footer";
+import Link from "next/link";
 
 const BlogPost = () => {
     const post = {
@@ -33,12 +34,12 @@ const BlogPost = () => {
             {/* Header */}
             <header className="border-b border-gray-100 mt-16">
                 <div className="max-w-4xl mx-auto px-6 py-5">
-                    <a
+                    <Link
                         href="/blog"
                         className="text-gray-500 hover:text-gray-800 font-medium transition-colors"
                     >
                         ← Back to Blog
-                    </a>
+                    </Link>
                 </div>
             </header>
 

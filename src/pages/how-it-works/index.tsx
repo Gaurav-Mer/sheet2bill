@@ -70,7 +70,7 @@ export default function HowItWorksPage() {
                 </div>
 
                 <div className="space-y-12">
-                    {sections.map((section, index) => (
+                    {sections.map((section) => (
                         <section key={section.title} className="p-8 border rounded-lg bg-card">
                             <h2 className="text-2xl font-semibold mb-3">{section.title}</h2>
                             <p className="text-muted-foreground mb-6">{section.description}</p>

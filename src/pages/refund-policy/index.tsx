@@ -2,7 +2,6 @@
 import { ReactElement } from 'react';
 // import Link from 'next/link'; // Replaced with <a> tag
 import { Info } from 'lucide-react';
-import { Layout } from '@/components/Layout';
 import Link from 'next/link';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 

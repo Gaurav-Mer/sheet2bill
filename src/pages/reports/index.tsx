@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { Client, Profile } from '@/types';
+import { Client } from '@/types';
 
 type ReportStats = {
     total_revenue: number;
@@ -48,7 +48,7 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
     const router = useRouter();
 
     const handleFilterChange = (key: string, value: string) => {
-        const { page, ...rest } = router.query;
+        const { _, ...rest } = router.query;
         const query = { ...rest, [key]: value };
         router.push({ pathname: '/reports', query });
     };

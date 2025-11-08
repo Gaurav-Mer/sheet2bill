@@ -23,7 +23,7 @@ const STATIC_PAGES = [
 /**
  * Generates the sitemap.xml content.
  */
-const generateSitemapXml = (staticPages: string[], blogPosts: any[]) => {
+const generateSitemapXml = (staticPages: string[]) => {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 `;
@@ -65,10 +65,10 @@ export const getServerSideProps = async ({ res }: GetServerSidePropsContext) => 
     // const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
     // const { data: blogPosts } = await supabase.from('blog').select('slug, updated_at');
 
-    const allBlogPosts: any[] = []; // Placeholder
+    // const allBlogPosts: any[] = []; // Placeholder
 
     // Generate the sitemap XML string
-    const sitemap = generateSitemapXml(STATIC_PAGES, allBlogPosts);
+    const sitemap = generateSitemapXml(STATIC_PAGES);
 
     // Set the response headers to tell the browser it's an XML file.
     res.setHeader('Content-Type', 'text/xml');
