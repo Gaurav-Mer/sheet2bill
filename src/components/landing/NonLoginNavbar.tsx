@@ -12,6 +12,9 @@ const NonLoginNavbar = () => {
                     <span className="font-bold md:text-xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent text-xs">Sheet2Bill</span>
                 </Link>
                 <nav className="flex items-center md:space-x-2">
+                    <Link href="/blog" passHref>
+                        <Button variant="ghost" className="hover:bg-primary/5">Blogs</Button>
+                    </Link>
                     <Link href="/login" passHref>
                         <Button variant="ghost" className="hover:bg-primary/5">Login</Button>
                     </Link>
