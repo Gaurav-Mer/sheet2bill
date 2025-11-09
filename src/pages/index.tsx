@@ -48,18 +48,18 @@ export default function LandingPage() {
     ]
   };
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-dvh bg-background text-foreground">
 
       <Head>
-        <title>Sheet2Bill - Effortless Billing for Freelancers</title>
+        <title>Sheet2Bill | Invoice & Client Management for Freelancers</title>
         <meta name="description" content="Effortless billing for freelancers with professional results. Manage clients, create professional briefs, get approvals, and track invoices—all in one place." />
         <meta name="keywords" content="freelance billing,invoicing software for freelancers, freelance billing software, invoicing software, client management, online invoicing, freelance tools, effortless billing, professional invoicing,freelance invoice software,how to bill a client,client management and invoicing" />
-        <meta property="og:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
+        <meta property="og:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
         <meta property="og:description" content="Experience effortless billing with professional results. The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
         <meta property="og:image" content="https://sheet2bill.com/landing.png" />
         <meta property="og:url" content="https://sheet2bill.com" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sheet2Bill - Effortless Billing for Freelancers" />
+        <meta name="twitter:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
         <meta name="twitter:description" content="Streamline your freelance business with effortless billing and professional results." />
         <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
       </Head>
