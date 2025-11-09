@@ -36,7 +36,13 @@ export function ClientTable({ clients, onEdit, onDelete, searchQuery }: ClientTa
                     )) : (
                         <tr>
                             <td colSpan={4} className="px-6 py-10 text-center text-muted-foreground">
-                                {searchQuery ? `No clients found for "${searchQuery}"` : "You haven't added any clients yet."}
+                                <div className='flex items-center justify-center gap-3 h-full flex-col'>
+                                    <div className='h-20 w-20 p-4 rounded-full bg-primary/10'>
+                                        <SearchDocumentIcon size={60} color="black" />
+                                    </div>
+                                    <p className="text-xs text-center text-black/50 mt-1">   {searchQuery ? `No clients found for "${searchQuery}"` : "You haven't added any clients yet."}</p>
+
+                                </div>
                             </td>
                         </tr>
                     )}
@@ -45,3 +51,29 @@ export function ClientTable({ clients, onEdit, onDelete, searchQuery }: ClientTa
         </div>
     );
 }
+
+
+export const SearchDocumentIcon = ({
+    size = 48,
+    color = "#000000",
+    ...props
+}: React.SVGProps<SVGSVGElement> & { size?: number; color?: string }) => (
+    <svg
+        width={size}
+        height={size}
+        viewBox="0 0 48 48"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+    >
+        <path d="M31.5642,17.3199V7.1278c0-1.4453-1.1825-2.6278-2.6278-2.6278H11.8432c-1.4453,0-2.6278,1.1825-2.6278,2.6278v33.7443c0,1.4453,1.1825,2.6278,2.6278,2.6278h17.0932c1.4453,0,2.6278-1.1825,2.6278-2.6278v-1.6946" />
+        <circle cx="30.0366" cy="28.3614" r="8.4729" />
+        <line x1="38.7846" y1="39.4232" x2="35.1324" y2="35.1268" />
+        <line x1="18.0567" y1="8.0365" x2="22.7229" y2="8.0365" />
+        <polyline points="11.966 18.1058 15.1096 18.1058 16.7305 21.102 18.8426 14.2254 20.1196 18.1058 22.9685 18.1058" />
+        <circle cx="20.3898" cy="39.7179" r="1.1738" />
+    </svg>
+);

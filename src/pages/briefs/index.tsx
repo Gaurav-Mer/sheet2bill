@@ -200,7 +200,16 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
                                 </td>
                             </tr>
                         )) : (<tr>
-                            <td colSpan={6} className="px-6 py-10 text-center text-muted-foreground">You haven't created any briefs yet.</td>
+                            <td colSpan={6} className="px-6 py-10 text-center text-muted-foreground">
+                                <div className='flex items-center justify-center gap-3 h-full flex-col'>
+                                    <div className='h-20 w-20 p-0 rounded-full bg-primary/10'>
+                                        <svg width="full" height="full" viewBox="-20 0 190 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M85.026 147.824L38.993 139.907L48.192 61.333L113.247 70.443L106.255 132.11L85.026 147.824ZM52.773 67.716L45.444 135.191L80.261 141.573L83.01 124.249L101.335 126.064L106.832 75.002L52.773 67.716ZM58.177 85.479L58.702 79.019L99.806 85.163L98.652 90.666L58.177 85.479ZM95.821 104.161L57.127 98.377L57.583 92.763L97.148 97.833L95.821 104.161ZM78.416 113.773L56.011 112.107L56.532 105.703L80.25 108.253L78.416 113.773Z" fill="#000000" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-xs text-center text-black/50 mt-1">  You haven't created any briefs yet.</p>
+                                </div>
+                            </td>
                         </tr>
                         )}
                     </tbody>
