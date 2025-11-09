@@ -26,22 +26,18 @@ export default function LandingPage() {
       {
         "@type": "Organization",
         "name": "Sheet2Bill",
-        "url": "https://sheet2bill.com",
-        "logo": "https://sheet2bill.com/logo.png",
-        "sameAs": [
-          // Add links to your social media profiles here
-          // "https://twitter.com/sheet2bill",
-          // "https://www.linkedin.com/company/sheet2bill"
-        ]
+        "url": "https://www.sheet2bill.com",
+        "logo": "https://www.sheet2bill.com/logo_512.png", // You must add this logo to your /public folder
+        // "sameAs": []
       },
       {
         "@type": "WebSite",
         "name": "Sheet2Bill",
-        "url": "https://sheet2bill.com",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://sheet2bill.com/search?q={search_term_string}",
-          "query-input": "required name=search_term_string"
+        "url": "https://www.sheet2bill.com",
+        "description": "Effortless billing for freelancers. Manage clients, create professional briefs, get approvals, and track invoices—all in one place.",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Sheet2Bill"
         }
       }
     ]
@@ -61,6 +57,10 @@ export default function LandingPage() {
         <meta name="twitter:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
         <meta name="twitter:description" content="Streamline your freelance business with effortless billing and professional results." />
         <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* --- Header --- */}

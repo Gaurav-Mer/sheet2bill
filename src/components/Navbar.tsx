@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { NotificationBell } from './NotificationBell';
 import { useProfile } from '@/hooks/useProfile';
+import { Logo } from './Logo';
 
 type NavbarProps = {
     onMenuClick: () => void;
@@ -95,13 +96,13 @@ export function Navbar({ onMenuClick }: NavbarProps) {
     };
 
     return (
-        <header className="sticky top-0 z-30 flex h-[3.8rem] items-center gap-4 border-b bg-background px-4 sm:px-6">
+        <header className="sticky top-0 z-30 flex h-[3.8rem] items-center  gap-2 md:gap-4 border-b bg-background px-4 sm:px-6">
             {/* --- Mobile Menu Button --- */}
             <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle Menu</span>
             </Button>
-
+            <Logo className='md:hidden' />
             {/* --- PREMIUM: Dynamic Breadcrumbs for Desktop --- */}
             <nav className="hidden md:flex items-center gap-2 text-sm font-medium">
                 {breadcrumbs.map((crumb, index) => (

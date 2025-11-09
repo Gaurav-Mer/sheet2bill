@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Logo = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => {
     return (
-        <svg width="30" height="30" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={className} width="30" height="30" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_102_117)">
                 <path d="M104 0H24C10.7452 0 0 10.7452 0 24V104C0 117.255 10.7452 128 24 128H104C117.255 128 128 117.255 128 104V24C128 10.7452 117.255 0 104 0Z" fill="#61ac0c" />
                 <path d="M64.0001 98.5H56.3334C41.8779 98.5 34.6482 98.5 30.1594 94.0073C25.6706 89.5147 25.6667 82.2888 25.6667 67.8333V60.1667C25.6667 45.7112 25.6667 38.4815 30.1594 33.9927C34.6521 29.5038 41.8779 29.5 56.3334 29.5H71.6667C86.1222 29.5 93.3519 29.5 97.8407 33.9927C102.33 38.4853 102.333 45.7112 102.333 60.1667V65.9167M25.6667 52.5H102.333M25.6667 75.5H64.0001" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
