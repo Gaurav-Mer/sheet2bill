@@ -20,7 +20,7 @@ export function FeedbackLink() {
             href={mailtoLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
+            className="fixed bottom-16 md:bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110"
             title="Provide Feedback"
         >
             <MessageSquare className="h-6 w-6" />

@@ -105,82 +105,48 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
     };
 
     return (
-        <div className="container mx-auto max-w-7xl">
-            <form onSubmit={handleSubmit}>
-                {/* Header */}
-                <div className="flex justify-between items-center mb-8">
-                    <div>
-                        <h1 className="text-3xl font-bold">Create New Brief</h1>
-                        <p className="text-muted-foreground mt-2">Brief # will be auto-generated upon saving.</p>
+        <div className="flex flex-col min-h-dvh">
+            {/* Main Content */}
+            <div className="flex-1 container mx-auto max-w-7xl pb-16 md:pb-8">
+                <form onSubmit={handleSubmit}>
+                    {/* Header */}
+                    <div className="flex flex-row w-full justify-between items-center  gap-3 mb-6 md:mb-8 pt-4 md:pt-0">
+                        <div>
+                            <h1 className="text-2xl sm:text-3xl font-bold">Create New Brief</h1>
+                            <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+                                Brief # will be auto-generated upon saving.
+                            </p>
+                        </div>
+                        {/* Desktop Save Button */}
+                        <div className="hidden md:block">
+                            <Button
+                                type="submit"
+                                size="lg"
+                                disabled={createBriefMutation.isPending}
+                                isLoading={createBriefMutation.isPending}
+                            >
+                                Save Draft Brief
+                            </Button>
+                        </div>
                     </div>
-                    <Button
-                        type="submit"
-                        size="lg"
-                        disabled={createBriefMutation.isPending}
-                        isLoading={createBriefMutation.isPending}
-                    >
-                        Save Draft Brief
-                    </Button>
-                </div>
 
-                {/* Main Layout */}
-                <div className="flex flex-col md:flex-row gap-8">
-                    {/* Left: Line Items */}
-                    <div className="flex-grow">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Line Items</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <table className="w-full text-sm">
-                                    <thead className="text-muted-foreground">
-                                        <tr>
-                                            <th className="text-left pb-2">Description</th>
-                                            <th className="pb-2">Qty</th>
-                                            <th className="pb-2">Unit Price</th>
-                                            <th className="text-right pb-2">Amount</th>
-                                            <th className="w-10"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                    {/* Main Layout */}
+                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+                        {/* Line Items Section */}
+                        <div className="flex-1 w-full">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-lg sm:text-xl">Line Items</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    {/* Mobile: Stacked Cards */}
+                                    <div className="md:hidden space-y-4">
                                         {lineItems.map((item, index) => (
-                                            <tr key={index} className="border-b">
-                                                <td className="py-2">
-                                                    <Input
-                                                        placeholder="Description..."
-                                                        value={item.description}
-                                                        onChange={(e) =>
-                                                            handleLineItemChange(index, 'description', e.target.value)
-                                                        }
-                                                        required
-                                                    />
-                                                </td>
-                                                <td className="py-2 px-2 w-20">
-                                                    <Input
-                                                        type="number"
-                                                        value={item.quantity}
-                                                        onChange={(e) =>
-                                                            handleLineItemChange(index, 'quantity', parseFloat(e.target.value) || 0)
-                                                        }
-                                                    />
-                                                </td>
-                                                <td className="py-2 px-2 w-24">
-                                                    <Input
-                                                        type="number"
-                                                        value={item.unit_price}
-                                                        onChange={(e) =>
-                                                            handleLineItemChange(
-                                                                index,
-                                                                'unit_price',
-                                                                parseFloat(e.target.value) || 0
-                                                            )
-                                                        }
-                                                    />
-                                                </td>
-                                                <td className="py-2 text-right text-muted-foreground">
-                                                    {(item.quantity * item.unit_price).toFixed(2)}
-                                                </td>
-                                                <td className="py-2 text-right">
+                                            <div key={index} className="border rounded-lg p-3 space-y-3">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm font-medium text-muted-foreground">
+                                                        Item {index + 1}
+                                                    </span>
                                                     <Button
                                                         type="button"
                                                         variant="ghost"
@@ -189,140 +155,283 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                                     >
                                                         ✕
                                                     </Button>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                                <div>
+                                                    <Label className="text-xs">Description</Label>
+                                                    <Input
+                                                        placeholder="Description..."
+                                                        value={item.description}
+                                                        onChange={(e) =>
+                                                            handleLineItemChange(index, 'description', e.target.value)
+                                                        }
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <div>
+                                                        <Label className="text-xs">Quantity</Label>
+                                                        <Input
+                                                            type="number"
+                                                            value={item.quantity}
+                                                            onChange={(e) =>
+                                                                handleLineItemChange(index, 'quantity', parseFloat(e.target.value) || 0)
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <Label className="text-xs">Unit Price</Label>
+                                                        <Input
+                                                            type="number"
+                                                            value={item.unit_price}
+                                                            onChange={(e) =>
+                                                                handleLineItemChange(
+                                                                    index,
+                                                                    'unit_price',
+                                                                    parseFloat(e.target.value) || 0
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-between items-center pt-2 border-t">
+                                                    <span className="text-sm font-medium">Amount</span>
+                                                    <span className="text-sm font-semibold">
+                                                        {(item.quantity * item.unit_price).toFixed(2)}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         ))}
-                                    </tbody>
-                                </table>
-                                <Button type="button" variant="outline" onClick={addLineItem} className="mt-4">
-                                    + Add Item
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Right: Details */}
-                    <aside className="w-full md:w-80 lg:w-96 flex-shrink-0">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Brief Details</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div>
-                                    <Label>Brief Title*</Label>
-                                    <Input value={title} onChange={(e) => setTitle(e.target.value)} required />
-                                </div>
-
-                                <div>
-                                    <Label>Client*</Label>
-                                    <Select onValueChange={setClientId} required>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Choose a client..." />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {clients.map((c) => (
-                                                <SelectItem key={c.id} value={c.id.toString()}>
-                                                    {c.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <Label>Issue Date</Label>
-                                        <Input
-                                            type="date"
-                                            value={issueDate}
-                                            onChange={(e) => setIssueDate(e.target.value)}
-                                        />
                                     </div>
-                                    <div>
-                                        <Label>Due Date</Label>
-                                        <Input
-                                            type="date"
-                                            value={dueDate}
-                                            onChange={(e) => setDueDate(e.target.value)}
-                                        />
+
+                                    {/* Desktop: Table View */}
+                                    <div className="hidden md:block overflow-x-auto">
+                                        <table className="w-full text-sm">
+                                            <thead className="text-muted-foreground">
+                                                <tr>
+                                                    <th className="text-left pb-2">Description</th>
+                                                    <th className="pb-2">Qty</th>
+                                                    <th className="pb-2">Unit Price</th>
+                                                    <th className="text-right pb-2">Amount</th>
+                                                    <th className="w-10"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {lineItems.map((item, index) => (
+                                                    <tr key={index} className="border-b">
+                                                        <td className="py-2">
+                                                            <Input
+                                                                placeholder="Description..."
+                                                                value={item.description}
+                                                                onChange={(e) =>
+                                                                    handleLineItemChange(index, 'description', e.target.value)
+                                                                }
+                                                                required
+                                                            />
+                                                        </td>
+                                                        <td className="py-2 px-2 w-20">
+                                                            <Input
+                                                                type="number"
+                                                                value={item.quantity}
+                                                                onChange={(e) =>
+                                                                    handleLineItemChange(index, 'quantity', parseFloat(e.target.value) || 0)
+                                                                }
+                                                            />
+                                                        </td>
+                                                        <td className="py-2 px-2 w-24">
+                                                            <Input
+                                                                type="number"
+                                                                value={item.unit_price}
+                                                                onChange={(e) =>
+                                                                    handleLineItemChange(
+                                                                        index,
+                                                                        'unit_price',
+                                                                        parseFloat(e.target.value) || 0
+                                                                    )
+                                                                }
+                                                            />
+                                                        </td>
+                                                        <td className="py-2 text-right text-muted-foreground">
+                                                            {(item.quantity * item.unit_price).toFixed(2)}
+                                                        </td>
+                                                        <td className="py-2 text-right">
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => removeLineItem(index)}
+                                                            >
+                                                                ✕
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </div>
 
-                                <div>
-                                    <Label>Currency</Label>
-                                    <Select onValueChange={setCurrency} defaultValue={currency}>
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="INR">INR</SelectItem>
-                                            <SelectItem value="USD">USD</SelectItem>
-                                            <SelectItem value="EUR">EUR</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={addLineItem}
+                                        className="mt-4 w-full sm:w-auto"
+                                    >
+                                        + Add Item
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </div>
 
-                                <div>
-                                    <Label>Template</Label>
-                                    <FeatureGate>
-                                        <Select onValueChange={setTemplateId} defaultValue={templateId}>
-                                            <SelectTrigger>
-                                                <SelectValue />
+                        {/* Brief Details Section */}
+                        <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-lg sm:text-xl">Brief Details</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div>
+                                        <Label>Brief Title*</Label>
+                                        <Input value={title} onChange={(e) => setTitle(e.target.value)} required />
+                                    </div>
+
+                                    <div>
+                                        <Label>Client*</Label>
+                                        <Select onValueChange={setClientId} required>
+                                            <SelectTrigger className='w-full'>
+                                                <SelectValue placeholder="Choose a client..." />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {AVAILABLE_TEMPLATES.map((t) => (
-                                                    <SelectItem key={t.id} value={t.id}>
-                                                        {t.name}
+                                                {clients.map((c) => (
+                                                    <SelectItem key={c.id} value={c.id.toString()}>
+                                                        {c.name}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                    </FeatureGate>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </aside>
-                </div>
+                                    </div>
 
-                {/* Footer: Notes & Totals */}
-                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    <div>
-                        <Label>Notes / Terms</Label>
-                        <Textarea
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                            placeholder="e.g., Payment due within 14 days."
-                        />
+                                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                                        <div>
+                                            <Label className="text-xs sm:text-sm">Issue Date</Label>
+                                            <Input
+                                                type="date"
+                                                value={issueDate}
+                                                onChange={(e) => setIssueDate(e.target.value)}
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label className="text-xs sm:text-sm">Due Date</Label>
+                                            <Input
+                                                type="date"
+                                                value={dueDate}
+                                                onChange={(e) => setDueDate(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <Label>Currency</Label>
+                                        <Select onValueChange={setCurrency} defaultValue={currency}>
+                                            <SelectTrigger className='w-full'>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="INR">INR</SelectItem>
+                                                <SelectItem value="USD">USD</SelectItem>
+                                                <SelectItem value="EUR">EUR</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <div>
+                                        <Label>Template</Label>
+                                        <FeatureGate>
+                                            <Select onValueChange={setTemplateId} defaultValue={templateId}>
+                                                <SelectTrigger className='w-full'>
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {AVAILABLE_TEMPLATES.map((t) => (
+                                                        <SelectItem key={t.id} value={t.id}>
+                                                            {t.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FeatureGate>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </aside>
                     </div>
 
-                    <div className="space-y-3 border rounded-lg p-4 self-start">
-                        <div className="flex justify-between text-muted-foreground">
-                            <span>Subtotal</span>
-                            <span>{totals.subtotal.toFixed(2)}</span>
+                    {/* Notes & Totals Section */}
+                    <div className="mt-6 lg:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                        <div>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-base sm:text-lg">Notes / Terms</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <Textarea
+                                        value={notes}
+                                        onChange={(e) => setNotes(e.target.value)}
+                                        placeholder="e.g., Payment due within 14 days."
+                                        rows={4}
+                                    />
+                                </CardContent>
+                            </Card>
                         </div>
-                        <div className="flex justify-between">
-                            <Label className="text-muted-foreground">Tax Rate (%)</Label>
-                            <Input
-                                type="number"
-                                value={taxRate}
-                                onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
-                                className="w-24 h-8"
-                            />
-                        </div>
-                        <div className="flex justify-between text-muted-foreground">
-                            <span>Tax</span>
-                            <span>{totals.taxAmount.toFixed(2)}</span>
-                        </div>
-                        <div className="border-t my-2"></div>
-                        <div className="flex justify-between font-semibold text-lg">
-                            <span>Total</span>
-                            <span>
-                                {currency} {totals.grandTotal.toFixed(2)}
-                            </span>
+
+                        <div>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-base sm:text-lg">Summary</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    <div className="flex justify-between text-sm sm:text-base text-muted-foreground">
+                                        <span>Subtotal</span>
+                                        <span>{totals.subtotal.toFixed(2)}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <Label className="text-muted-foreground text-sm sm:text-base">Tax Rate (%)</Label>
+                                        <Input
+                                            type="number"
+                                            value={taxRate}
+                                            onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
+                                            className="w-20 sm:w-24 h-8"
+                                        />
+                                    </div>
+                                    <div className="flex justify-between text-sm sm:text-base text-muted-foreground">
+                                        <span>Tax</span>
+                                        <span>{totals.taxAmount.toFixed(2)}</span>
+                                    </div>
+                                    <div className="border-t my-2"></div>
+                                    <div className="flex justify-between font-semibold text-base sm:text-lg">
+                                        <span>Total</span>
+                                        <span>
+                                            {currency} {totals.grandTotal.toFixed(2)}
+                                        </span>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
+
+            {/* Mobile: Fixed Bottom Save Button */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t p-4 shadow-lg z-10">
+                <Button
+                    type="submit"
+                    size="lg"
+                    disabled={createBriefMutation.isPending}
+                    isLoading={createBriefMutation.isPending}
+                    onClick={handleSubmit}
+                    className="w-full"
+                >
+                    Save Draft Brief
+                </Button>
+            </div>
         </div>
     );
 }

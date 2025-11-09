@@ -96,8 +96,15 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
-                <form className="w-full sm:max-w-sm">
-                    <Input type="search" name="q" placeholder="Search by invoice #..." defaultValue={searchQuery} />
+                <form className="w-full sm:max-w-sm flex">
+                    <Input
+                        className="rounded-r-none flex-1"
+                        type="search" name="q"
+                        placeholder="Search by invoice #..."
+                        defaultValue={searchQuery} />
+                    <Button type="submit" className="rounded-l-none whitespace-nowrap">
+                        Search
+                    </Button>
                 </form>
             </div>
 
@@ -272,7 +279,48 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
                         </div>
                     ))
                 ) : (
-                    <p className="text-center text-muted-foreground py-6 text-sm">You haven't generated any invoices yet.</p>
+                    <div className='flex items-center flex-1 mt-4 justify-center gap-3 h-full flex-col'>
+                        <div className='h-20 w-20 p-4 rounded-full bg-primary/10'>
+                            <svg fill="#000000" height="full" width="full" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 511.997 511.997" xmlSpace="preserve">
+                                <g>
+                                    <g>
+                                        <path d="M506.747,0.662c-3.191-1.323-6.869-0.614-9.318,1.843l-28.1,28.1l-28.1-28.1c-3.336-3.336-8.729-3.336-12.066,0
+			l-28.1,28.1l-28.1-28.1c-3.336-3.336-8.729-3.336-12.066,0l-28.1,28.1l-28.1-28.1c-3.336-3.336-8.729-3.336-12.066,0l-28.1,28.1
+			l-28.1-28.1c-2.449-2.44-6.118-3.183-9.301-1.852c-3.183,1.314-5.265,4.429-5.265,7.885c0,185.187-15.112,291.374-46.165,324.261
+			H8.537c-2.466,0-4.813,1.067-6.434,2.927c-1.621,1.869-2.355,4.335-2.022,6.775c11.477,82.866,33.604,167.805,110.855,169.495
+			h273.062c0.026,0,0.06,0,0.094,0c116.785-0.905,127.426-385.555,127.904-503.424C512.012,5.108,509.938,1.985,506.747,0.662z
+			 M111.123,494.93c-49.552-1.075-77.516-44.603-92.73-145.064h160.782c0.009-0.009,0.034-0.009,0.051,0h94.966
+			c8.584,58.649,23.159,117.067,59.485,145.064H111.123z M384.185,494.93c-0.009,0-0.017,0-0.026,0
+			c-51.097-1.126-79.239-47.419-94.104-154.766c-0.589-4.224-4.19-7.364-8.456-7.364h-84.598
+			c27.4-43.511,40.84-141.506,41.872-303.73l19.626,19.635c3.336,3.336,8.729,3.336,12.066,0l28.1-28.1l28.1,28.1
+			c3.336,3.336,8.729,3.336,12.066,0l28.1-28.1l28.1,28.1c3.336,3.336,8.729,3.336,12.066,0l28.1-28.1l28.1,28.1
+			c3.336,3.336,8.729,3.336,12.066,0l19.396-19.396C491.925,264.031,457.092,494.393,384.185,494.93z"/>
+                                    </g>
+                                </g>
+                                <g>
+                                    <g>
+                                        <path d="M452.263,85.337H273.066c-4.71,0-8.533,3.823-8.533,8.533s3.823,8.533,8.533,8.533h179.197
+			c4.71,0,8.533-3.823,8.533-8.533S456.973,85.337,452.263,85.337z"/>
+                                    </g>
+                                </g>
+                                <g>
+                                    <g>
+                                        <path d="M452.263,128.003H273.066c-4.71,0-8.533,3.823-8.533,8.533s3.823,8.533,8.533,8.533h179.197
+			c4.71,0,8.533-3.823,8.533-8.533S456.973,128.003,452.263,128.003z"/>
+                                    </g>
+                                </g>
+                                <g>
+                                    <g>
+                                        <path d="M452.263,170.669H273.066c-4.71,0-8.533,3.823-8.533,8.533s3.823,8.533,8.533,8.533h179.197
+			c4.71,0,8.533-3.823,8.533-8.533S456.973,170.669,452.263,170.669z"/>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                        <p className="text-xs text-center text-black/50 mt-1">   You haven't generated any invoices yet.</p>
+
+                    </div>
                 )}
             </div>
 

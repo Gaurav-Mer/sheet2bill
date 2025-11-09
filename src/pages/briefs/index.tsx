@@ -11,10 +11,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Pagination } from '@/components/clients/Pagination';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
-import { MoreHorizontal } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { BriefsList } from '@/components/briefs/BriefsList';
+import { Search } from 'lucide-react';
 
 type Brief = {
     id: number;
@@ -40,13 +40,11 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
     const router = useRouter();
     const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const [selectedBrief, setSelectedBrief] = useState<Brief | null>(null);
-    const queryClient = useQueryClient(); // NEW: Initialize query client for cache invalidation
-
+    const queryClient = useQueryClient();
 
     const refreshData = () => router.replace(router.asPath);
 
     const copyLink = (token: string) => {
-        // CORRECTED: The path should be /brief/, not /briefs/
         const url = `${window.location.origin}/brief/${token}`;
         navigator.clipboard.writeText(url);
         toast.success('Approval link copied to clipboard!');
@@ -70,16 +68,7 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
         refreshData();
     }
 
-    const getStatusClass = (status: string) => {
-        switch (status) {
-            case 'approved': return 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300';
-            case 'rejected': return 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300';
-            case 'sent': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300';
-            default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'; // for 'draft'
-        }
-    }
-
-    // NEW: Mutation for converting a brief to an invoice
+    // Mutation for converting a brief to an invoice
     const convertToInvoiceMutation = useMutation({
         mutationFn: async (brief_id: number) => {
             const response = await fetch('/api/invoices/convert', {
@@ -92,7 +81,6 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
         },
         onSuccess: (newInvoice: any) => {
             toast.success(`Invoice #${newInvoice.invoice_number} generated!`);
-            // Invalidate briefs data and redirect to the new invoices page
             queryClient.invalidateQueries({ queryKey: ['briefs'] });
             router.push('/invoices');
         },
@@ -101,7 +89,7 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
         }
     });
 
-    // --- NEW: Mutation for duplicating a brief ---
+    // Mutation for duplicating a brief
     const duplicateBriefMutation = useMutation({
         mutationFn: async (brief_id: number) => {
             const response = await fetch(`/api/briefs/${brief_id}/duplicate`, {
@@ -112,135 +100,105 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
         },
         onSuccess: (data) => {
             toast.success('Brief duplicated successfully!');
-            // Redirect to the edit page of the NEW brief
             router.push(`/briefs/${data.newBriefId}/edit`);
         },
         onError: (error: Error) => toast.error(`Error duplicating brief: ${error.message}`),
     });
 
+    const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
 
-    const totalPages = Math.ceil(count / ITEMS_PER_PAGE)
     return (
-        <div className="container mx-auto  max-w-7xl">
-            {/* ... Header and Search sections are the same ... */}
-            <div className="flex justify-between items-center mb-4">
+        <div className="container mx-auto max-w-7xl">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold">Briefs</h1>
-                    <p className="text-muted-foreground mt-2">Manage all your briefs and track their status.</p>
+                    <h1 className="text-2xl md:text-3xl font-bold">Briefs</h1>
+                    <p className="text-sm md:text-base text-muted-foreground mt-1 md:mt-2">
+                        Manage all your briefs and track their status.
+                    </p>
                 </div>
-                <Link href="/briefs/new" passHref>
-                    <Button>+ Create New Brief</Button>
+                <Link className='hidden md:block' href="/briefs/new" passHref>
+                    <Button className="w-full md:w-auto">+ Create New Brief</Button>
                 </Link>
             </div>
 
-            <div className="flex justify-between items-center mb-8">
-                <form className="w-full max-w-sm flex items-center gap-0">
-                    <Input type="search" name="q" placeholder="Search by title or brief name..." className='rounded-r-none' defaultValue={searchQuery} />
-                    <Button className='rounded-l-none'> Search</Button>
+            {/* Search Bar */}
+            <div className="mb-6 md:mb-8">
+                <form className="flex items-center gap-0 max-w-full md:max-w-md">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            type="search"
+                            name="q"
+                            placeholder="Search briefs..."
+                            className="rounded-r-none pl-9"
+                            defaultValue={searchQuery}
+                        />
+                    </div>
+                    <Button type="submit" className="rounded-l-none">
+                        Search
+                    </Button>
                 </form>
             </div>
 
-
-            {/* Briefs Table */}
-            <div className="border border-border rounded-lg overflow-x-auto">
-                <table className="min-w-full divide-y divide-border text-sm">
-                    <thead className="bg-muted/50"><tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Brief #</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Title</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Client</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Status</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Total</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Actions</th>
-                    </tr></thead>
-                    <tbody className="bg-card divide-y divide-border">
-                        {briefs.length > 0 ? briefs.map(brief => (
-                            <tr key={brief.id}>
-                                <td className="px-6 py-4 font-medium text-primary hover:underline"><Link href={`/briefs/${brief.id}/edit`}>{brief.brief_number}</Link></td>
-                                <td className="px-6 py-4 text-muted-foreground">{brief.title}</td>
-                                <td className="px-6 py-4 text-muted-foreground">{brief.clients?.name || 'N/A'}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`text-xs font-semibold capitalize px-2 py-0.5 rounded-full ${getStatusClass(brief.status)}`}>
-                                        {brief.status === 'rejected' ? 'Changes Requested' : brief.status}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-right font-medium text-foreground">{brief.currency} {brief.total?.toFixed(2)}</td>
-                                <td className="px-6 py-4 text-right text-sm font-medium">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            {brief.status === 'approved' && (
-                                                <DropdownMenuItem
-                                                    onSelect={() => convertToInvoiceMutation.mutate(brief.id)}
-                                                    disabled={convertToInvoiceMutation.isPending}
-                                                    className="font-semibold text-primary focus:text-primary"
-                                                >
-                                                    {convertToInvoiceMutation.isPending ? 'Generating...' : 'Generate Invoice'}
-                                                </DropdownMenuItem>
-                                            )}
-                                            <DropdownMenuItem onSelect={() => {
-                                                router.push(`/brief/${brief.brief_token}`)
-                                            }}>View Public Page</DropdownMenuItem>
-                                            <DropdownMenuItem onSelect={() => copyLink(brief.brief_token)}>Copy Approval Link</DropdownMenuItem>
-                                            {(brief.status === 'draft' || brief.status === 'rejected') && (
-                                                <DropdownMenuItem onSelect={() => router.push(`/briefs/${brief.id}/edit`)}>Edit</DropdownMenuItem>
-                                            )}
-
-                                            {/* --- THIS IS THE NEW DUPLICATE BUTTON --- */}
-                                            <DropdownMenuItem onSelect={() => duplicateBriefMutation.mutate(brief.id)} disabled={duplicateBriefMutation.isPending}>
-                                                {duplicateBriefMutation.isPending ? 'Duplicating...' : 'Duplicate'}
-                                            </DropdownMenuItem>
-
-                                            {brief.status === 'draft' && (
-                                                <DropdownMenuItem onSelect={() => handleOpenDelete(brief)} className="text-destructive">Delete</DropdownMenuItem>
-                                            )}
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </td>
-                            </tr>
-                        )) : (<tr>
-                            <td colSpan={6} className="px-6 py-10 text-center text-muted-foreground">
-                                <div className='flex items-center justify-center gap-3 h-full flex-col'>
-                                    <div className='h-20 w-20 p-0 rounded-full bg-primary/10'>
-                                        <svg width="full" height="full" viewBox="-20 0 190 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M85.026 147.824L38.993 139.907L48.192 61.333L113.247 70.443L106.255 132.11L85.026 147.824ZM52.773 67.716L45.444 135.191L80.261 141.573L83.01 124.249L101.335 126.064L106.832 75.002L52.773 67.716ZM58.177 85.479L58.702 79.019L99.806 85.163L98.652 90.666L58.177 85.479ZM95.821 104.161L57.127 98.377L57.583 92.763L97.148 97.833L95.821 104.161ZM78.416 113.773L56.011 112.107L56.532 105.703L80.25 108.253L78.416 113.773Z" fill="#000000" />
-                                        </svg>
-                                    </div>
-                                    <p className="text-xs text-center text-black/50 mt-1">  You haven't created any briefs yet.</p>
-                                </div>
-                            </td>
-                        </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* <Pagination currentPage={page} totalPages={Math.ceil(count / ITEMS_PER_PAGE)} totalCount={count} searchQuery={searchQuery} /> */}
-            <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                totalCount={count}
+            {/* Briefs List Component */}
+            <BriefsList
+                briefs={briefs}
                 searchQuery={searchQuery}
-                basePath="/briefs"
-                itemPerPage={ITEMS_PER_PAGE}
+                onCopyLink={copyLink}
+                onDelete={handleOpenDelete}
+                onConvertToInvoice={(id) => convertToInvoiceMutation.mutate(id)}
+                onDuplicate={(id) => duplicateBriefMutation.mutate(id)}
+                isConverting={convertToInvoiceMutation.isPending}
+                isDuplicating={duplicateBriefMutation.isPending}
+                isDeleteAlertOpen={isDeleteAlertOpen}
             />
+
+            {/* Pagination */}
+            {briefs.length > 0 && (
+                <div className="mt-6">
+                    <Pagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        totalCount={count}
+                        searchQuery={searchQuery}
+                        basePath="/briefs"
+                        itemPerPage={ITEMS_PER_PAGE}
+                    />
+                </div>
+            )}
+
             {/* Delete Confirmation Dialog */}
             <Dialog open={isDeleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
                 <DialogContent>
-                    <DialogHeader><DialogTitle>Are you sure?</DialogTitle></DialogHeader>
-                    <DialogDescription>This action cannot be undone. This will permanently delete brief "{selectedBrief?.brief_number}".</DialogDescription>
+                    <DialogHeader>
+                        <DialogTitle>Are you sure?</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete brief "
+                        {selectedBrief?.brief_number}".
+                    </DialogDescription>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setDeleteAlertOpen(false)}>Cancel</Button>
-                        <Button variant="destructive" onClick={handleDeleteBrief}>Yes, Delete</Button>
+                        <Button variant="outline" onClick={() => setDeleteAlertOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button variant="destructive" onClick={handleDeleteBrief}>
+                            Yes, Delete
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+
+            <div className=' fixed bottom-0 left-0 md:hidden w-full p-4  bg-background border-t'>
+                <Link href="/briefs/new" passHref>
+                    <Button className="w-full md:w-auto">+ Create New Brief</Button>
+                </Link>
+            </div>
         </div>
     );
 }
 
-// getServerSideProps remains the same
+// getServerSideProps
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
     const { data: { session } } = await supabase.auth.getSession();

@@ -120,7 +120,7 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
             Manage all your clients in one place.
           </p>
         </div>
-        <Button onClick={() => setAddModalOpen(true)} className="w-full sm:w-auto">
+        <Button onClick={() => setAddModalOpen(true)} className="w-full sm:w-auto hidden md:block">
           + Add New Client
         </Button>
       </div>
@@ -142,7 +142,7 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
       </div>
 
       {/* Client Table */}
-      <div className="overflow-x-auto rounded-lg border border-border shadow-sm bg-background">
+      <div className="overflow-x-auto rounded-lg  ">
         <ClientTable
           clients={clients}
           onEdit={handleOpenEdit}
@@ -161,6 +161,11 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
           basePath="/clients"
           itemPerPage={ITEMS_PER_PAGE}
         />
+        <div className=' fixed bottom-0 left-0 md:hidden w-full p-4  bg-background border-t'>
+          <Button onClick={() => setAddModalOpen(true)} className="w-full sm:w-auto  ">
+            + Add New Client
+          </Button>
+        </div>
       </div>
 
       {/* Modals */}

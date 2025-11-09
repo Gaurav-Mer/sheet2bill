@@ -15,6 +15,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { createClient } from '@supabase/supabase-js';
 import qs from 'qs';
+import { Calendar, CheckCircle, Mail, XCircle } from 'lucide-react';
 
 // --- Type Definition ---
 type BriefDetails = {
@@ -92,33 +93,70 @@ const BriefContent = ({ brief }: { brief: BriefDetails }) => {
         updateStatusMutation.mutate({ status: 'rejected', reason: rejectionReason });
     };
 
+    const getStatusBadge = () => {
+        const baseClasses = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs md:text-sm font-semibold capitalize";
+
+        if (currentStatus === 'approved') {
+            return (
+                <span className={`${baseClasses} bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300`}>
+                    <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
+                    Approved
+                </span>
+            );
+        } else if (currentStatus === 'rejected') {
+            return (
+                <span className={`${baseClasses} bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300`}>
+                    <XCircle className="w-3 h-3 md:w-4 md:h-4" />
+                    Changes Requested
+                </span>
+            );
+        } else {
+            return (
+                <span className={`${baseClasses} bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300`}>
+                    {currentStatus}
+                </span>
+            );
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-            <div className="w-full max-w-4xl bg-card rounded-lg shadow-lg p-8 md:p-12">
+        <div className="min-h-screen bg-muted flex items-center justify-center p-3 md:p-4 lg:p-6">
+            <div className="w-full max-w-4xl bg-card rounded-lg shadow-lg p-4 md:p-8 lg:p-12">
                 {/* Header */}
-                <div className="flex justify-between items-start border-b pb-6">
-                    <div>
-                        <h1 className="text-3xl font-bold text-foreground">{brief.brief_number}</h1>
-                        <p className="text-muted-foreground">Issued on: {formattedIssueDate}</p>
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 border-b pb-4 md:pb-6">
+                    <div className="flex-1 min-w-0">
+                        <h1 className="text-2xl md:text-3xl font-bold text-foreground truncate">
+                            {brief.brief_number}
+                        </h1>
+                        <div className="flex items-center gap-1.5 mt-1 md:mt-2 text-sm md:text-base text-muted-foreground">
+                            <Calendar className="w-4 h-4 flex-shrink-0" />
+                            <span>Issued on: {formattedIssueDate}</span>
+                        </div>
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-sm font-semibold capitalize ${currentStatus === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300' :
-                        currentStatus === 'rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300' :
-                            'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'}`}
-                    >
-                        {currentStatus === 'rejected' ? 'Changes Requested' : currentStatus}
+                    <div className="flex-shrink-0">
+                        {getStatusBadge()}
                     </div>
                 </div>
 
                 {/* Client Info */}
-                <div className="mt-6">
-                    <h2 className="text-sm font-semibold text-muted-foreground uppercase">Billed To</h2>
-                    <p className="text-lg font-bold text-foreground">{brief.clients.name}</p>
-                    <p className="text-muted-foreground">{brief.clients.email}</p>
+                <div className="mt-4 md:mt-6 p-4 bg-muted/50 rounded-lg border border-border">
+                    <h2 className="text-xs md:text-sm font-semibold text-muted-foreground uppercase mb-2">
+                        Billed To
+                    </h2>
+                    <p className="text-base md:text-lg font-bold text-foreground">
+                        {brief.clients.name}
+                    </p>
+                    {brief.clients.email && (
+                        <div className="flex items-center gap-1.5 mt-1 text-sm text-muted-foreground">
+                            <Mail className="w-3 h-3 flex-shrink-0" />
+                            <span className="truncate">{brief.clients.email}</span>
+                        </div>
+                    )}
                 </div>
 
-                {/* Line Items Table */}
-                <div className="mt-8">
-                    <table className="w-full text-left">
+                {/* Line Items - Desktop Table */}
+                <div className="mt-6 md:mt-8 hidden md:block overflow-x-auto">
+                    <table className="w-full text-left text-sm">
                         <thead>
                             <tr className="border-b">
                                 <th className="py-2 font-semibold text-muted-foreground w-1/2">Description</th>
@@ -133,59 +171,146 @@ const BriefContent = ({ brief }: { brief: BriefDetails }) => {
                                     <td className="py-3">{item.description}</td>
                                     <td className="py-3 text-center">{item.quantity}</td>
                                     <td className="py-3 text-right">{item.unit_price.toFixed(2)}</td>
-                                    <td className="py-3 text-right">{(item.quantity * item.unit_price).toFixed(2)}</td>
+                                    <td className="py-3 text-right font-medium">
+                                        {(item.quantity * item.unit_price).toFixed(2)}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
 
+                {/* Line Items - Mobile Cards */}
+                <div className="mt-6 md:hidden space-y-3">
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase">Line Items</h3>
+                    {brief.line_items.map((item, index) => (
+                        <Card key={index} className="border-border">
+                            <CardContent className="p-4 space-y-2">
+                                <div className="flex justify-between items-start gap-2">
+                                    <span className="text-xs font-semibold text-muted-foreground">Item {index + 1}</span>
+                                </div>
+                                <p className="text-sm font-medium text-foreground">{item.description}</p>
+                                <div className="grid grid-cols-3 gap-2 pt-2 border-t text-sm">
+                                    <div>
+                                        <span className="text-xs text-muted-foreground block">Qty</span>
+                                        <span className="font-medium">{item.quantity}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-muted-foreground block">Unit Price</span>
+                                        <span className="font-medium">{item.unit_price.toFixed(2)}</span>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-xs text-muted-foreground block">Amount</span>
+                                        <span className="font-semibold text-foreground">
+                                            {(item.quantity * item.unit_price).toFixed(2)}
+                                        </span>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+
                 {/* Totals Section */}
-                <div className="mt-6 flex justify-end">
-                    <div className="w-full max-w-xs space-y-2">
-                        <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>{brief.currency} {brief.subtotal.toFixed(2)}</span></div>
-                        <div className="flex justify-between text-muted-foreground"><span>Tax ({brief.tax_rate}%)</span><span>{brief.currency} {brief.tax_amount.toFixed(2)}</span></div>
-                        <div className="flex justify-between text-lg font-bold border-t pt-2"><span>Total</span><span>{brief.currency} {brief.total.toFixed(2)}</span></div>
-                    </div>
+                <div className="mt-6 md:mt-8">
+                    <Card className="border-border bg-muted/30">
+                        <CardContent className="p-4 md:p-6">
+                            <div className="space-y-2 md:space-y-3">
+                                <div className="flex justify-between text-sm md:text-base text-muted-foreground">
+                                    <span>Subtotal</span>
+                                    <span>{brief.currency} {brief.subtotal.toFixed(2)}</span>
+                                </div>
+                                <div className="flex justify-between text-sm md:text-base text-muted-foreground">
+                                    <span>Tax ({brief.tax_rate}%)</span>
+                                    <span>{brief.currency} {brief.tax_amount.toFixed(2)}</span>
+                                </div>
+                                <div className="border-t pt-2 md:pt-3"></div>
+                                <div className="flex justify-between text-base md:text-lg font-bold text-foreground">
+                                    <span>Total</span>
+                                    <span>{brief.currency} {brief.total.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 {/* Notes */}
                 {brief.notes && (
-                    <div className="mt-8 border-t pt-6">
-                        <h3 className="font-semibold text-muted-foreground">Notes</h3>
-                        <p className="text-sm text-muted-foreground">{brief.notes}</p>
+                    <div className="mt-6 md:mt-8 border-t pt-4 md:pt-6">
+                        <h3 className="font-semibold text-sm md:text-base text-muted-foreground mb-2">Notes</h3>
+                        <p className="text-xs md:text-sm text-muted-foreground whitespace-pre-wrap">
+                            {brief.notes}
+                        </p>
                     </div>
                 )}
 
                 {/* Action Buttons */}
-                <div className="mt-10 text-center">
+                <div className="mt-8 md:mt-10">
                     {(currentStatus === 'sent' || currentStatus === 'draft') ? (
-                        <div className="space-x-4">
-                            <Button size="lg" className="bg-primary hover:bg-primary/90" onClick={() => updateStatusMutation.mutate({ status: 'approved' })} disabled={updateStatusMutation.isPending}>
+                        <div className="flex flex-col md:flex-row gap-3 md:gap-4 md:justify-center">
+                            <Button
+                                size="lg"
+                                className="bg-primary hover:bg-primary/90 w-full md:w-auto"
+                                onClick={() => updateStatusMutation.mutate({ status: 'approved' })}
+                                disabled={updateStatusMutation.isPending}
+                            >
+                                <CheckCircle className="w-4 h-4 mr-2" />
                                 {updateStatusMutation.isPending ? 'Processing...' : 'Approve Brief'}
                             </Button>
-                            <Button size="lg" variant="outline" onClick={() => setRejectModalOpen(true)}>Request Changes</Button>
+                            <Button
+                                size="lg"
+                                variant="outline"
+                                onClick={() => setRejectModalOpen(true)}
+                                className="w-full md:w-auto"
+                            >
+                                <XCircle className="w-4 h-4 mr-2" />
+                                Request Changes
+                            </Button>
                         </div>
                     ) : (
-                        <p className={`text-lg font-semibold ${currentStatus === 'approved' ? 'text-green-600' : 'text-destructive'}`}>
-                            This brief has been {currentStatus}.
-                        </p>
+                        <div className="text-center p-4 rounded-lg bg-muted">
+                            <p className={`text-base md:text-lg font-semibold ${currentStatus === 'approved' ? 'text-green-600 dark:text-green-400' : 'text-destructive'
+                                }`}>
+                                This brief has been {currentStatus === 'rejected' ? 'marked for changes' : currentStatus}.
+                            </p>
+                        </div>
                     )}
                 </div>
             </div>
 
             {/* "Request Changes" Modal */}
             <Dialog open={isRejectModalOpen} onOpenChange={setRejectModalOpen}>
-                <DialogContent>
-                    <DialogHeader><DialogTitle>Request Changes</DialogTitle></DialogHeader>
-                    <DialogDescription>Please provide a brief explanation of the changes you’d like to request.</DialogDescription>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Request Changes</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription className="text-sm">
+                        Please provide a brief explanation of the changes you&apos;d like to request.
+                    </DialogDescription>
                     <div className="py-4">
-                        <Label htmlFor="reason" className="sr-only">Your Comments</Label>
-                        <Textarea id="reason" value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)} placeholder="e.g., Please update the quantity for the first line item." />
+                        <Label htmlFor="reason" className="text-sm">Your Comments</Label>
+                        <Textarea
+                            id="reason"
+                            value={rejectionReason}
+                            onChange={(e) => setRejectionReason(e.target.value)}
+                            placeholder="e.g., Please update the quantity for the first line item."
+                            className="mt-2 min-h-[100px]"
+                        />
                     </div>
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setRejectModalOpen(false)}>Cancel</Button>
-                        <Button variant="destructive" onClick={handleRejectSubmit} disabled={updateStatusMutation.isPending}>
+                    <DialogFooter className="flex-col sm:flex-row gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => setRejectModalOpen(false)}
+                            className="w-full sm:w-auto"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleRejectSubmit}
+                            disabled={updateStatusMutation.isPending}
+                            className="w-full sm:w-auto"
+                        >
                             {updateStatusMutation.isPending ? 'Submitting...' : 'Submit Request'}
                         </Button>
                     </DialogFooter>
