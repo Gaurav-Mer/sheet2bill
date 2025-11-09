@@ -16,7 +16,6 @@ import { Analytics } from "@vercel/analytics/next"
 import { useRouter } from 'next/router'
 import { pageview } from "@/lib/gtag"
 
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

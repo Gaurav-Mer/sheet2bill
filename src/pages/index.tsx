@@ -62,6 +62,7 @@ export default function LandingPage() {
         <meta name="twitter:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
         <meta name="twitter:description" content="Streamline your freelance business with effortless billing and professional results." />
         <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* --- Header --- */}
       <NonLoginNavbar />

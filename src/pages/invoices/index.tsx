@@ -87,7 +87,7 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
     };
 
     return (
-        <div className="container mx-auto max-w-7xl px-2 sm:px-4">
+        <div className="container mx-auto max-w-7xl">
             <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-2 sm:gap-0">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold">Invoices</h1>
