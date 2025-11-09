@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { normalizeCountry } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
 
 type TemplateData = any & {
@@ -80,14 +81,14 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
                             <h2>From</h2>
                             <p><b>{data.profile.company_name || data.profile.full_name}</b></p>
                             <p>{data.profile.address_line_1}</p>
-                            <p>{data.profile.city}{data.profile.city && data?.profile?.country && ","} {data.profile.country}</p>
+                            <p>{data.profile.city}{data.profile.city && data?.profile?.country && ","} {normalizeCountry(data.profile.country)}</p>
                             <p>{data.profile.email}</p>
                         </div>
                         <div className="bill-to">
                             <h2>Bill To</h2>
                             <p><b>{data.client?.name}</b></p>
                             <p>{data.client.address_line_1}</p>
-                            <p>{data.client.city}{data?.client?.city && data?.client?.country && ","} {data.client.country}</p>
+                            <p>{data.client.city}{data?.client?.city && data?.client?.country && ","} {normalizeCountry(data.client.country)}</p>
                             <p>{data.client.email}</p>
                         </div>
                     </section>

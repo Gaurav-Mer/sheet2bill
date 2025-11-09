@@ -2,7 +2,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { countryList } from '@/lib/countryList';
 import type { Client } from '@/pages/clients';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { FormEvent } from 'react';
 
 type ClientFormProps = {
@@ -24,7 +26,21 @@ export function ClientForm({ client, onSubmit, submitButtonText }: ClientFormPro
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div><Label htmlFor="city">City</Label><Input id="city" name="city" defaultValue={client?.city ?? ''} /></div>
-                <div><Label htmlFor="country">Country</Label><Input id="country" name="country" defaultValue={client?.country ?? ''} /></div>
+                <div>
+                    <Label htmlFor="country">Country</Label>
+                    <Select name='country' defaultValue={client?.country ?? ""}>
+                        <SelectTrigger className='w-full' name='country' id="country">
+                            <SelectValue placeholder="Select your country..." /></SelectTrigger>
+                        <SelectContent>
+                            {countryList.map((country) => (
+                                <SelectItem key={country.code} value={country.code}>
+                                    {country.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {/* <Input id="country" name="country" defaultValue={client?.country ?? ''} /> */}
+                </div>
             </div>
             <div><Label htmlFor="tax_id">Tax ID (e.g., GSTIN, VAT ID)</Label><Input id="tax_id" name="tax_id" defaultValue={client?.tax_id ?? ''} /></div>
             <div><Label htmlFor="notes">Notes</Label><Textarea id="notes" name="notes" placeholder="Private notes about this client..." defaultValue={client?.notes ?? ''} /></div>

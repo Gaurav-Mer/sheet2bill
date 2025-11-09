@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/invoices/InvoiceTemplate.tsx
 
+import { normalizeCountry } from "@/lib/normalizeCountry";
 import { Client, Profile } from "@/types";
 
 // The full data structure required by the template
@@ -81,14 +82,14 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                             <p style={{ color: '#6b7280', fontWeight: 'bold' }}>FROM</p>
                             <p><b>{data.profile.company_name || data.profile.full_name}</b></p>
                             <p>{data.profile.address_line_1}</p>
-                            <p>{data.profile.city}{data.profile.country && data.profile.city && ","} {data.profile.country}</p>
+                            <p>{data.profile.city}{data.profile.country && data.profile.city && ","} {normalizeCountry(data.profile.country)}</p>
                             <p>{data.profile.email}</p>
                         </div>
                         <div className="bill-to" style={{ textAlign: 'right' }}>
                             <p style={{ color: '#6b7280', fontWeight: 'bold' }}>BILL TO</p>
                             <p><b>{data.client.name}</b></p>
                             <p>{data.client.address_line_1}</p>
-                            <p>{data.client.city}{data.client.country && data.client.city && ","} {data.client.country}</p>
+                            <p>{data.client.city}{data.client.country && data.client.city && ","} {normalizeCountry(data.client.country)}</p>
                             <p>{data.client.email}</p>
                         </div>
                     </section>

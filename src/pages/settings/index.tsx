@@ -18,6 +18,7 @@ import { uploadLogo } from '@/lib/supabase/storage';
 import { Textarea } from '@/components/ui/textarea';
 import { FeatureGate } from '@/components/FeatureGate';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { countryList } from '@/lib/countryList';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -151,22 +152,24 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                 <Card>
                     <CardHeader><CardTitle>Billing Address & Tax Info</CardTitle></CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="space-y-2"><Label htmlFor="address1">Address</Label><Input id="address1" value={address1} onChange={(e) => setAddress1(e.target.value)} /></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" value={city} onChange={(e) => setCity(e.target.value)} /></div>
                             <div className="space-y-2">
                                 <Label htmlFor="country">Country</Label>
                                 <Select onValueChange={setCountry} defaultValue={country}>
-                                    <SelectTrigger id="country"><SelectValue placeholder="Select your country..." /></SelectTrigger>
+                                    <SelectTrigger className='w-full' id="country"><SelectValue placeholder="Select your country..." /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="IN">India</SelectItem>
-                                        <SelectItem value="US">United States</SelectItem>
-                                        <SelectItem value="GB">United Kingdom</SelectItem>
+                                        {countryList.map((country) => (
+                                            <SelectItem key={country.code} value={country.code}>
+                                                {country.name}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
-                        </div>
+                            <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" value={city} onChange={(e) => setCity(e.target.value)} /></div>
 
+                        </div>
+                        <div className="space-y-2"><Label htmlFor="address1">Address</Label><Input id="address1" value={address1} onChange={(e) => setAddress1(e.target.value)} /></div>
                         <div className="space-y-2">
                             <Label htmlFor="defaultCurrency">Default Currency</Label>
                             <Select onValueChange={setDefaultCurrency} defaultValue={defaultCurrency}>
