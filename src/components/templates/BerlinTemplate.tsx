@@ -30,20 +30,17 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
           color: #111827; 
           margin: 0;
           padding: 0;
-          /* --- Subtle dot grid background --- */
-          background-color: #f9fafb;
-          background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0);
-          background-size: 20px 20px;
         }
         .page { 
           max-width: 800px; 
-          margin: 40px auto; 
-          padding: 60px; 
-          background: #fff;
-          /* --- Elevated card effect --- */
-          border-radius: 8px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.07);
-        }
+          margin: auto; 
+          background: #fff; 
+          padding: 40px; 
+          border: 1px solid #eee; 
+          border-radius: 8px; 
+          border-top:0;
+          border:1px solid #e5e7eb;
+\        }
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 60px; }
         .logo { max-width: 100px; max-height: 50px; object-fit: contain; }
         .header-right { text-align: right; }
