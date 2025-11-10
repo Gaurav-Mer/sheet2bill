@@ -24,8 +24,8 @@ export function PremiumHeroSection() {
                             <Sparkles className="h-4 w-4 text-primary" />
                             <span className="text-sm font-medium text-primary">The Future of Freelance Invoicing</span>
                         </div>
-
-                        <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
+                        <h1 className='font-bold text-primary text-lg'>Invoice & Client Management for Freelancers</h1>
+                        <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
                             Effortless Billing,
                             <br />
                             <span className="relative inline-block mt-2">
@@ -33,7 +33,7 @@ export function PremiumHeroSection() {
                                 <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 transform -rotate-1 rounded-lg" />
                             </span>
                             {' '}Results.
-                        </h1>
+                        </h2>
 
                         <p className="text-xl text-muted-foreground max-w-xl mx-auto md:mx-0 leading-relaxed">
                             Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Experience effortless billing with professional results that impress your clients.
