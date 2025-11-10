@@ -16,8 +16,13 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
     // Use the user's brand color, with a fallback
     const primaryColor = data.profile?.brand_color || '#3B82F6'; // Default to a strong blue
     const css = `
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    }
+    
     body { 
-     font-family: 'Montserrat', sans-serif; 
       font-size: 14px; 
       color: #374151; 
       background-color: #f9fafb; 
@@ -81,7 +86,8 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
     return (
         <html>
             <head>
-                <meta charSet="utf-8" />
+                <meta charSet="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>

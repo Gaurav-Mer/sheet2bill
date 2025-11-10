@@ -16,8 +16,13 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
     const accentColor = data?.profile?.brand_color ?? '#00000'; // Deep, sophisticated blue
     const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
     const css = `
+     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    }
+    
     body { 
-      font-family: 'Montserrat', sans-serif; 
       font-size: 14px; 
       color: #333; 
       margin: 0;
@@ -86,8 +91,8 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
     return (
         <html>
             <head>
-                <meta charSet="utf-8" />
-                {/* <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" /> */}
+                <meta charSet="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>

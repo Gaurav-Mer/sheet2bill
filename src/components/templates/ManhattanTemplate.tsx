@@ -18,8 +18,13 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
     const thank_u_note = data.profile?.thank_u_note || "Thank you for your business!";
 
     const css = `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', 'Helvetica Neue', 'Helvetica', -apple-system, BlinkMacSystemFont, 'Arial', sans-serif;
+    }
+    
     body { 
-      font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; 
       font-size: 14px; 
       color: #212121; 
       background-color: #fff;
@@ -54,8 +59,8 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
     return (
         <html>
             <head>
-                <meta charSet="utf-8" />
-                {/* Using common system fonts, so no Google Font import is needed for this template */}
+                <meta charSet="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>

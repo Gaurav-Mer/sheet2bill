@@ -22,7 +22,20 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
     const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
     // Self-contained CSS for perfect PDF rendering
     const css = `
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; color: #374151; margin: 0; padding: 0; background-color: #fff; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+        }
+        
+        body { 
+            -webkit-font-smoothing: antialiased; 
+            font-size: 14px; 
+            color: #374151; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #fff; 
+        }
         .invoice-container { max-width: 800px; margin: auto; padding: 40px; border:1px solid #e5e7eb; border-radius: 8px; }
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
         .logo { max-width: 150px; max-height: 70px; object-fit: contain; }
@@ -112,8 +125,8 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                                     <tr key={index}>
                                         <td>{item.description}</td>
                                         <td className="text-center">{item.quantity}</td>
-                                        <td className="text-right">{item.unit_price.toFixed(2)}</td>
-                                        <td className="text-right">{(item.quantity * item.unit_price).toFixed(2)}</td>
+                                        <td className="text-right">{currencySymbol}{item.unit_price.toFixed(2)}</td>
+                                        <td className="text-right">{currencySymbol}{(item.quantity * item.unit_price).toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -123,8 +136,8 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                     <section className="totals">
                         <table>
                             <tbody>
-                                <tr><td>Subtotal</td><td>{data.subtotal.toFixed(2)}</td></tr>
-                                <tr><td>Tax ({data.tax_rate}%)</td><td>{data.tax_amount.toFixed(2)}</td></tr>
+                                <tr><td>Subtotal</td><td>{currencySymbol}{data.subtotal.toFixed(2)}</td></tr>
+                                <tr><td>Tax ({data.tax_rate}%)</td><td>{currencySymbol}{data.tax_amount.toFixed(2)}</td></tr>
                                 <tr className="total-amount"><td>Total</td><td>{currencySymbol}{data.total.toFixed(2)}</td></tr>
                             </tbody>
                         </table>

@@ -16,8 +16,12 @@ export const JaipurTemplate = ({ data }: TemplateProps) => {
     const accentColor = data.profile?.brand_color || '#D95B43'; // Terracotta/Rust
 
     const css = `
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    }
     body { 
-      font-family: 'Lato', sans-serif; 
       font-size: 14px; 
       color: #4A3C31; /* Dark Brown */
       background-color: #FDFBF7; /* Cream */
@@ -64,7 +68,8 @@ export const JaipurTemplate = ({ data }: TemplateProps) => {
     return (
         <html>
             <head>
-                <meta charSet="utf-8" />
+                <meta charSet="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>

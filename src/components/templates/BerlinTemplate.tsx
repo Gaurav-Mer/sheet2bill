@@ -16,18 +16,21 @@ type TemplateProps = {
 export const BerlinTemplate = ({ data }: TemplateProps) => {
     // Dynamically use the user's brand color, with OrangeRed as the fallback
     const accentColor = data.profile?.brand_color || '#FF4500';
-    const headingFont = "'Poppins', sans-serif";
-    const bodyFont = "'Inter', sans-serif";
 
     // Self-contained CSS for perfect PDF rendering
     const css = `
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap');
+        
+        * {
+          font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+        }
+        
         body { 
-          font-family: ${bodyFont}; 
           font-size: 14px; 
           color: #111827; 
           margin: 0;
           padding: 0;
-          /* --- NEW: Subtle dot grid background --- */
+          /* --- Subtle dot grid background --- */
           background-color: #f9fafb;
           background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0);
           background-size: 20px 20px;
@@ -37,17 +40,32 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
           margin: 40px auto; 
           padding: 60px; 
           background: #fff;
-          /* --- NEW: Elevated card effect --- */
+          /* --- Elevated card effect --- */
           border-radius: 8px;
           box-shadow: 0 10px 30px rgba(0,0,0,0.07);
         }
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 60px; }
         .logo { max-width: 100px; max-height: 50px; object-fit: contain; }
         .header-right { text-align: right; }
-        .header-right h1 { font-family: ${headingFont}; font-size: 60px; font-weight: 700; color: ${accentColor}; margin: 0; line-height: 1; }
+        .header-right h1 { 
+          font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; 
+          font-size: 60px; 
+          font-weight: 700; 
+          color: ${accentColor}; 
+          margin: 0; 
+          line-height: 1; 
+        }
         .header-right p { margin: 2px 0 0 0; font-size: 15px; color: #4b5563; }
         .parties { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 50px; }
-        .parties h2 { font-family: ${headingFont}; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #6b7280; margin: 0 0 10px 0; }
+        .parties h2 { 
+          font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; 
+          font-weight: 700; 
+          font-size: 12px; 
+          text-transform: uppercase; 
+          letter-spacing: 1.5px; 
+          color: #6b7280; 
+          margin: 0 0 10px 0; 
+        }
         .parties p { margin: 0; line-height: 1.6; }
         .line-items-table { width: 100%; border-collapse: collapse; }
         .line-items-table thead th { 
@@ -65,6 +83,10 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
         .totals-table .value { text-align: right; font-weight: bold; font-size: 16px; }
         .totals-table .total-amount { font-size: 24px; font-weight: bold; color: ${accentColor}; }
         .footer { margin-top: 60px; border-top: 1px solid #e5e7eb; padding-top: 30px; text-align: center; color: #9ca3af; font-size: 12px; }
+        
+        .company-name {
+          font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
     `;
 
     const formatDate = (dateString: string | null) => {
@@ -78,8 +100,6 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
         <html>
             <head>
                 <meta charSet="utf-8" />
-                {/* Import both fonts */}
-                {/* <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@700&display=swap" rel="stylesheet" /> */}
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>
@@ -89,7 +109,7 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
                             {data.profile.avatar_url ? (
                                 <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
-                                <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827', margin: 0, fontFamily: headingFont }}>
+                                <h2 className="company-name" style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
                                     {data.profile.company_name || data.profile.full_name}
                                 </h2>
                             )}
