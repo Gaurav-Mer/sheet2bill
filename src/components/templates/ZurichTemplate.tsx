@@ -16,8 +16,13 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
     const primaryColor = data.profile?.brand_color || 'hsl(243, 75%, 59%)';
     const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
     const css = `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    }
+    
     body { 
-      font-family: 'Inter', sans-serif; 
       -webkit-font-smoothing: antialiased; 
       font-size: 14px; 
       color: #374151; /* Gray-700 */
@@ -56,7 +61,8 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
     return (
         <html>
             <head>
-                <meta charSet="utf-8" />
+                <meta charSet="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>
