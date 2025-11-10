@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/invoices/InvoiceTemplate.tsx
 
-import { normalizeCountry } from "@/lib/normalizeCountry";
+import { normalizeCountry, normalizeCurrency } from "@/lib/normalizeCountry";
 import { Client, Profile } from "@/types";
 
 // The full data structure required by the template
@@ -49,6 +49,9 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
         if (!dateString) return 'N/A';
         return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     };
+
+    const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
+
 
     return (
         <html>
@@ -122,7 +125,7 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                             <tbody>
                                 <tr><td>Subtotal</td><td>{data.subtotal.toFixed(2)}</td></tr>
                                 <tr><td>Tax ({data.tax_rate}%)</td><td>{data.tax_amount.toFixed(2)}</td></tr>
-                                <tr className="total-amount"><td>Total</td><td>{data.currency} {data.total.toFixed(2)}</td></tr>
+                                <tr className="total-amount"><td>Total</td><td>{currencySymbol}{data.total.toFixed(2)}</td></tr>
                             </tbody>
                         </table>
                     </section>

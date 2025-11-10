@@ -1,79 +1,80 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// components/invoices/templates/ManhattanTemplate.tsx
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
-import { Client, Profile } from '@/types';
+import { Client, Profile, } from '@/types';
 
 type TemplateData = any & {
     client: Client;
     invoice_line_items: any[];
-    profile: Profile & { email?: string };
+    profile: Profile & { email?: string; brand_color?: string };
 };
 
 type TemplateProps = {
     data: TemplateData;
 };
 
-export const ManhattanTemplate = ({ data }: TemplateProps) => {
-    const primaryColor = data.profile?.brand_color || '#1A237E';
-    const thank_u_note = data.profile?.thank_u_note || "Thank you for your business!";
+export const JaipurTemplate = ({ data }: TemplateProps) => {
+    const accentColor = data.profile?.brand_color || '#D95B43'; // Terracotta/Rust
 
     const css = `
     body { 
-      font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; 
+      font-family: 'Lato', sans-serif; 
       font-size: 14px; 
-      color: #212121; 
-      background-color: #fff;
+      color: #4A3C31; /* Dark Brown */
+      background-color: #FDFBF7; /* Cream */
       margin: 0;
     }
-    .page { max-width: 800px; margin: auto; padding: 50px;border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 3px solid ${primaryColor}; padding-bottom: 20px; }
-    .logo { max-width: 140px; max-height: 60px; object-fit: contain; }
-    .header-right { text-align: right; }
-    .header-right h1 { font-family: 'Georgia', serif; font-size: 44px; font-weight: bold; color: ${primaryColor}; margin: 0; }
-    .header-right p { margin: 2px 0 0 0; color: #424242; font-size: 15px; }
-    .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-    .parties h2 { font-family: 'Georgia', serif; font-size: 16px; letter-spacing: 1px; color: #616161; margin: 0 0 10px 0; }
+    .page { max-width: 800px; margin: 40px auto; padding: 50px; background: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.07); }
+    .header { text-align: center; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center; }
+    .logo { max-width: 120px; max-height: 60px; object-fit: contain; margin-bottom: 15px; border-radius:4px}
+    .header h1 { 
+       font-family: 'Montserrat', sans-serif; 
+      font-size: 40px; 
+      font-weight: 700; 
+      color: #333; 
+      margin: 0 0 10px 0;
+    }
+    .header p { margin: 2px 0 0 0; color: #6b7280; font-size: 15px; }
+    .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 50px; }
+    .parties h2 { font-family: 'Montserrat', sans-serif; 
+; font-size: 18px; color: ${accentColor}; margin: 0 0 10px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
     .parties p { margin: 0; line-height: 1.7; }
     .line-items-table { width: 100%; border-collapse: collapse; }
-    .line-items-table thead th { text-align: left; font-size: 12px; letter-spacing: 1px; color: #fff; background-color: ${primaryColor}; padding: 12px; }
-    .line-items-table tbody td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
+    .line-items-table thead th { 
+      text-align: left; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; 
+      color: ${accentColor}; 
+      padding: 10px; border-bottom: 2px solid ${accentColor}; 
+    }
+    .line-items-table tbody td { padding: 15px 10px; border-bottom: 1px solid #f3f3f3; }
     .line-items-table .text-right { text-align: right; }
-    .line-items-table .text-center { text-align: center; }
     .totals { margin-top: 30px; display: flex; justify-content: flex-end; }
-    .totals-table { width: 100%; max-width: 320px; }
-    .totals-table td { padding: 12px; }
-    .totals-table .label { text-align: left; color: #424242; }
-    .totals-table .value { text-align: right; font-weight: bold; }
-    .totals-table .total-amount { font-size: 22px; font-weight: bold; color: ${primaryColor}; border-top: 3px solid ${primaryColor}; }
-    .footer { margin-top: 50px; border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center; color: #757575; font-size: 12px; }
+    .totals-table { width: 100%; max-width: 300px; }
+    .totals-table td { padding: 10px; }
+    .totals-table .label { text-align: left; color: #555; }
+    .totals-table .value { text-align: right; font-weight: bold; color: #000; }
+    .totals-table .total-amount { font-size: 22px; font-weight: bold; color: ${accentColor}; }
+    .footer { margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; color: #aaa; font-size: 12px; }
   `;
 
+    const formatDate = (dateString: string | null) => {
+        if (!dateString) return 'N/A';
+        return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
     const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
-
 
     return (
         <html>
             <head>
                 <meta charSet="utf-8" />
-                {/* Using common system fonts, so no Google Font import is needed for this template */}
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>
                 <div className="page">
                     <header className="header">
-                        <div>
-                            {data.profile.avatar_url ? (
-                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
-                            ) : (
-                                <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: primaryColor, margin: 0, fontFamily: "'Georgia', serif" }}>
-                                    {data.profile.company_name || data.profile.full_name}
-                                </h2>
-                            )}
-                        </div>
-                        <div className="header-right">
-                            <h1 style={{ color: primaryColor }}>INVOICE</h1>
-                            <p><b>Invoice #:</b> {data.invoice_number}</p>
-                        </div>
+                        {data.profile.avatar_url && (
+                            <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                        )}
+                        <h1>{data.profile.company_name || data.profile.full_name}</h1>
+                        <p>Invoice #: {data.invoice_number}</p>
                     </header>
 
                     <section className="parties">
@@ -81,7 +82,7 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
                             <h2>From</h2>
                             <p><b>{data.profile.company_name || data.profile.full_name}</b></p>
                             <p>{data.profile.address_line_1}</p>
-                            <p>{data.profile.city}{data.profile.city && data.profile.country && ","} {normalizeCountry(data.profile.country)}</p>
+                            <p>{data.profile.city}{data.client.city && data.client.country && ","} {normalizeCountry(data.profile.country)}</p>
                             <p>{data.profile.email}</p>
                         </div>
                         <div className="bill-to">
@@ -90,6 +91,10 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
                             <p>{data.client.address_line_1}</p>
                             <p>{data.client.city}{data.client.city && data.client.country && ","} {normalizeCountry(data.client.country)}</p>
                             <p>{data.client.email}</p>
+                        </div>
+                        <div className="due-date">
+                            <h2>Payment Due</h2>
+                            <p><b>{formatDate(data.due_date)}</b></p>
                         </div>
                     </section>
 
@@ -119,10 +124,9 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
                         </table>
                     </section>
 
-                    {data.notes && <div style={{ marginTop: '50px' }}><h2 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#616161' }}>Notes</h2><p>{data.notes}</p></div>}
 
                     <footer className="footer">
-                        <p>{thank_u_note}</p>
+                        <p>{data.notes || 'Thank you for your business!'}</p>
                     </footer>
                 </div>
             </body>

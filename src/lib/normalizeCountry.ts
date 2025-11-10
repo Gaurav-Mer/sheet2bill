@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { countryList } from "@/lib/countryList";
 
 /**
@@ -13,4 +14,13 @@ export function normalizeCountry(code?: string): string {
         (c) => c.code.toLowerCase() === code.toLowerCase()
     );
     return country ? country.name : code;
+}
+
+
+export function normalizeCurrency(code?: string): any {
+    if (!code) return "";
+    const country = countryList.find(
+        (c) => c.currency?.code.toLowerCase() === code.toLowerCase()
+    );
+    return country ? country : code;
 }

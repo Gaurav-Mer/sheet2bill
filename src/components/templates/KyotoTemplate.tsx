@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { normalizeCountry } from '@/lib/normalizeCountry';
+import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile } from '@/types';
 
 type TemplateData = any & {
@@ -77,7 +77,11 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
     .footer { margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; color: #aaa; font-size: 12px; }
   `;
 
-    const formatDate = (dateString: string | null) => { /* ... date formatting ... */ };
+    const formatDate = (dateString: string | null) => {
+        if (!dateString) return 'N/A';
+        return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    }; const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
 
     return (
         <html>
@@ -143,7 +147,7 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
                             <tbody>
                                 <tr><td className="label">Subtotal</td><td className="value">{data.subtotal.toFixed(2)}</td></tr>
                                 <tr><td className="label">Tax ({data.tax_rate}%)</td><td className="value">{data.tax_amount.toFixed(2)}</td></tr>
-                                <tr className="total-amount"><td className="label">Total</td><td className="value">{data.currency} {data.total.toFixed(2)}</td></tr>
+                                <tr className="total-amount"><td className="label">Total</td><td className="value">{currencySymbol}{data.total.toFixed(2)}</td></tr>
                             </tbody>
                         </table>
                     </section>
