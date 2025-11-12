@@ -40,7 +40,7 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
           border-radius: 8px; 
           border-top:0;
           border:1px solid #e5e7eb;
-\        }
+        }
         .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 60px; }
         .logo { max-width: 100px; max-height: 50px; object-fit: contain; }
         .header-right { text-align: right; }
