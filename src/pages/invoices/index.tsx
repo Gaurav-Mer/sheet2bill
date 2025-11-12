@@ -92,6 +92,8 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold">Invoices</h1>
                     <p className="text-muted-foreground mt-1 text-sm sm:text-base">Manage all your final invoices.</p>
+                    <p className='text-[10px] bg-secondary p-2 rounded-md font-semibold mt-2'>⚠️ Sometimes downloads can fail if too many invoices are generated at the same time.
+                        Don’t worry — just wait a bit and try again.</p>
                 </div>
             </div>
 
