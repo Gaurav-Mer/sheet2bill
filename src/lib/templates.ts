@@ -1,16 +1,18 @@
 export const AVAILABLE_TEMPLATES = [
-    { id: "default", name: "Default", description: "The default template", settings: {} },
+    { id: "default", name: "Default", description: "The default template", settings: {}, img: "/invoice/one.png" },
     {
         id: 'zurich',
         name: 'Zurich',
         description: 'A clean, minimalist, and modern design.',
-        settings: {}
+        settings: {},
+        img: "/invoice/two.png"
     },
     {
         id: 'manhattan',
         name: 'Manhattan',
         description: 'A timeless, classic, and corporate design.',
-        settings: {}
+        settings: {},
+        img: "/invoice/three.png"
     },
     { // NEW TEMPLATE
         id: 'kyoto',
@@ -31,6 +33,7 @@ export const AVAILABLE_TEMPLATES = [
                 headerAlignment: 'right',
             },
         },
+        img: "/invoice/four.png"
     },
 
     { // NEW TEMPLATE
@@ -52,7 +55,7 @@ export const AVAILABLE_TEMPLATES = [
                 headerAlignment: 'left', // This setting is for the *main* content, not the sidebar
             },
         },
-
+        img: "/invoice/five.png"
     },
 
     {
@@ -74,6 +77,7 @@ export const AVAILABLE_TEMPLATES = [
                 headerAlignment: 'left',
             },
         },
+        img: "/invoice/six.png"
     },
     {
         id: 'jaipur',
@@ -94,6 +98,7 @@ export const AVAILABLE_TEMPLATES = [
                 headerAlignment: 'center',
             },
         },
+        img: "/invoice/seven.png"
     },
     // We can add more templates here in the future
 ];

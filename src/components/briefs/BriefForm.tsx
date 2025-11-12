@@ -11,10 +11,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 // Import your central types
 import { Client, Brief, LineItem } from '@/types';
-import { AlertCircle, X } from 'lucide-react';
+import { AlertCircle, X, Check } from 'lucide-react';
 import { Switch } from '../ui/switch';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '../FeatureGate';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 type BriefFormProps = {
     clients: Client[];
@@ -175,37 +177,18 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                     <Input id="due-date-mobile" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label htmlFor="currency-mobile">Currency</Label>
-                                    <Select onValueChange={setCurrency} defaultValue={currency}>
-                                        <SelectTrigger id="currency-mobile" className="w-full">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="INR">INR</SelectItem>
-                                            <SelectItem value="USD">USD</SelectItem>
-                                            <SelectItem value="EUR">EUR</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div>
-                                    <Label htmlFor="template-mobile">Template</Label>
-                                    <FeatureGate>
-                                        <Select onValueChange={setTemplateId} defaultValue={templateId}>
-                                            <SelectTrigger className='w-full' id="template-mobile">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent className='w-full'>
-                                                {AVAILABLE_TEMPLATES.map(template => (
-                                                    <SelectItem key={template.id} value={template.id as string}>
-                                                        {template.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FeatureGate>
-                                </div>
+                            <div>
+                                <Label htmlFor="currency-mobile">Currency</Label>
+                                <Select onValueChange={setCurrency} defaultValue={currency}>
+                                    <SelectTrigger id="currency-mobile" className="w-full">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="INR">INR</SelectItem>
+                                        <SelectItem value="USD">USD</SelectItem>
+                                        <SelectItem value="EUR">EUR</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </CardContent>
                     </Card>
@@ -317,7 +300,7 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                     <div>
                                         <Label htmlFor="client">Client*</Label>
                                         <Select onValueChange={setClientId} required defaultValue={clientId}>
-                                            <SelectTrigger id="client">
+                                            <SelectTrigger className='w-full' id="client">
                                                 <SelectValue placeholder="Choose a client..." />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -339,10 +322,10 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                             <Input id="due-date" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
                                         </div>
                                     </div>
-                                    <div>
+                                    <div className='w-full'>
                                         <Label htmlFor="currency">Currency</Label>
                                         <Select onValueChange={setCurrency} defaultValue={currency}>
-                                            <SelectTrigger id="currency">
+                                            <SelectTrigger className='w-full' id="currency">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -351,23 +334,6 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                                 <SelectItem value="EUR">EUR</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="template">Template</Label>
-                                        <FeatureGate>
-                                            <Select onValueChange={setTemplateId} defaultValue={templateId}>
-                                                <SelectTrigger className='w-full' id="template">
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent className='w-full'>
-                                                    {AVAILABLE_TEMPLATES.map(template => (
-                                                        <SelectItem key={template.id} value={template.id as string}>
-                                                            {template.name}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        </FeatureGate>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -464,6 +430,67 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                             </div>
                         </CardContent>
                     </Card>
+
+                    {/* --- Template Selection Grid (NEW) --- */}
+                    <FeatureGate>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Choose Template</CardTitle>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                    Select a template design for your brief
+                                </p>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                    {AVAILABLE_TEMPLATES.map((template) => (
+                                        <button
+                                            key={template.id}
+                                            type="button"
+                                            onClick={() => setTemplateId(template.id as string)}
+                                            className={cn(
+                                                "relative group overflow-hidden rounded-lg border-2 transition-all duration-200 hover:shadow-lg",
+                                                templateId === template.id
+                                                    ? "border-primary ring-2 ring-primary ring-offset-2"
+                                                    : "border-border hover:border-primary/50"
+                                            )}
+                                        >
+                                            {/* Template Preview Image */}
+                                            <div className="aspect-[3/4] relative bg-muted">
+                                                <Image
+                                                    src={template.img}
+                                                    alt={template.name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+
+                                                {/* Overlay on hover */}
+                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
+
+                                                {/* Selected Checkmark */}
+                                                {templateId === template.id && (
+                                                    <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-1.5 shadow-lg">
+                                                        <Check className="w-4 h-4" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Template Name */}
+                                            <div className="p-3 text-center bg-background border-t">
+                                                <p className={cn(
+                                                    "text-sm font-medium transition-colors",
+                                                    templateId === template.id
+                                                        ? "text-primary"
+                                                        : "text-foreground group-hover:text-primary"
+                                                )}>
+                                                    {template.name}
+                                                </p>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </FeatureGate>
 
                     {/* --- Footer: Notes and Totals --- */}
                     <div className="flex flex-col gap-6 md:gap-8">

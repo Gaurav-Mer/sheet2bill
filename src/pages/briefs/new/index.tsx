@@ -15,6 +15,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '@/components/FeatureGate';
+import Image from 'next/image';
+import { Check } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 type Client = { id: number; name: string };
 type LineItem = { description: string; quantity: number; unit_price: number };
@@ -342,7 +345,7 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                         </Select>
                                     </div>
 
-                                    <div>
+                                    {/* <div>
                                         <Label>Template</Label>
                                         <FeatureGate>
                                             <Select onValueChange={setTemplateId} defaultValue={templateId}>
@@ -357,12 +360,75 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                                     ))}
                                                 </SelectContent>
                                             </Select>
+                                            {currentTemplate && <Image src={currentTemplate?.img} className='mx-auto mt-4 border rounded-sm' width={200} height={200} alt='sdf' />}
                                         </FeatureGate>
-                                    </div>
+                                    </div> */}
+
                                 </CardContent>
                             </Card>
                         </aside>
                     </div>
+
+                    {/* --- Template Selection Grid (NEW) --- */}
+                    <FeatureGate>
+                        <Card className='mt-6'>
+                            <CardHeader>
+                                <CardTitle>Choose Template</CardTitle>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                    Select a template design for your brief
+                                </p>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                    {AVAILABLE_TEMPLATES.map((template) => (
+                                        <button
+                                            key={template.id}
+                                            type="button"
+                                            onClick={() => setTemplateId(template.id as string)}
+                                            className={twMerge(
+                                                "relative group overflow-hidden rounded-lg border-2 transition-all duration-200 hover:shadow-lg",
+                                                templateId === template.id
+                                                    ? "border-primary ring-2 ring-primary ring-offset-2"
+                                                    : "border-border hover:border-primary/50"
+                                            )}
+                                        >
+                                            {/* Template Preview Image */}
+                                            <div className="aspect-[3/4] relative bg-muted">
+                                                <Image
+                                                    src={template.img}
+                                                    alt={template.name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+
+                                                {/* Overlay on hover */}
+                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
+
+                                                {/* Selected Checkmark */}
+                                                {templateId === template.id && (
+                                                    <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-1.5 shadow-lg">
+                                                        <Check className="w-4 h-4" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Template Name */}
+                                            <div className="p-3 text-center bg-background border-t">
+                                                <p className={twMerge(
+                                                    "text-sm font-medium transition-colors",
+                                                    templateId === template.id
+                                                        ? "text-primary"
+                                                        : "text-foreground group-hover:text-primary"
+                                                )}>
+                                                    {template.name}
+                                                </p>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </FeatureGate>
 
                     {/* Notes & Totals Section */}
                     <div className="mt-6 lg:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">

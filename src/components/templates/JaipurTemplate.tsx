@@ -24,10 +24,9 @@ export const JaipurTemplate = ({ data }: TemplateProps) => {
     body { 
       font-size: 14px; 
       color: #4A3C31; /* Dark Brown */
-      background-color: #FDFBF7; /* Cream */
       margin: 0;
     }
-    .page { max-width: 800px; margin: 40px auto; padding: 50px; background: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.07); }
+    .page { max-width: 800px; margin: 40px auto; padding: 40px; background: #fff; border:1px solid #e5e7eb; border-radius: 8px;}
     .header { text-align: center; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center; }
     .logo { max-width: 120px; max-height: 60px; object-fit: contain; margin-bottom: 15px; border-radius:4px}
     .header h1 { 

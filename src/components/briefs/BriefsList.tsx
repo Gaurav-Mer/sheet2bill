@@ -98,7 +98,7 @@ export function BriefsList({
                             briefs.map((brief) => (
                                 <tr key={brief.id} className="hover:bg-muted/30 transition-colors">
                                     <td className="px-6 py-4 font-medium text-primary hover:underline">
-                                        <Link href={`/briefs/${brief.id}/edit`}>{brief.brief_number}</Link>
+                                        <Link href={(brief.status === 'draft' || brief.status === 'rejected') ? `/briefs/${brief.id}/edit` : "#"}>{brief.brief_number}</Link>
                                     </td>
                                     <td className="px-6 py-4 text-muted-foreground">{brief.title}</td>
                                     <td className="px-6 py-4 text-muted-foreground">
@@ -195,7 +195,11 @@ export function BriefsList({
                         <div
                             key={brief.id}
                             onClick={() => {
-                                if (!isDeleteAlertOpen) router.push(`/briefs/${brief.id}/edit`);
+                                if (!isDeleteAlertOpen) {
+                                    if ((brief.status === 'draft' || brief.status === 'rejected')) {
+                                        router.push(`/briefs/${brief.id}/edit`)
+                                    }
+                                };
                             }}
                             className="relative bg-card border border-border rounded-xl p-4 hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer"
                         >
