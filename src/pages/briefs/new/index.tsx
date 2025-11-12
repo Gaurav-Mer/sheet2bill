@@ -379,7 +379,7 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                 </p>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                                     {AVAILABLE_TEMPLATES.map((template) => (
                                         <button
                                             key={template.id}
