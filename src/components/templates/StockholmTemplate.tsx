@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
+import Head from 'next/head';
+import Image from 'next/image';
 
 type TemplateData = any & {
     client: Client;
@@ -85,11 +87,11 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
 
     return (
         <html>
-            <head>
+            <Head>
                 <meta charSet="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
-            </head>
+            </Head>
             <body>
                 <div className="page-container">
                     {/* --- Sidebar --- */}
@@ -97,7 +99,7 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
                         <div className="sidebar-header">
                             <p className='company_title'>{data.profile?.company_name}</p>
                             {data.profile.avatar_url ? (
-                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                                <Image width={142} height={142} src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
                                 <h2 style={{ color: '#fff' }}>
                                     {data.profile.company_name || data.profile.full_name}

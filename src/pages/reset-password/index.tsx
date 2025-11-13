@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import Link from 'next/link';
 
 export default function ResetPasswordPage() {
     const supabaseClient = useSupabaseClient();
@@ -20,7 +19,7 @@ export default function ResetPasswordPage() {
 
     // This effect listens for the special password recovery event from Supabase
     useEffect(() => {
-        const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((event, session) => {
+        const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((event) => {
             if (event === 'PASSWORD_RECOVERY') {
                 // The user is in the password recovery flow. You can add logic here if needed.
             }

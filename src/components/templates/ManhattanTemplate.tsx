@@ -2,6 +2,8 @@
 // components/invoices/templates/ManhattanTemplate.tsx
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile } from '@/types';
+import Head from 'next/head';
+import Image from 'next/image';
 
 type TemplateData = any & {
     client: Client;
@@ -58,17 +60,17 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
 
     return (
         <html>
-            <head>
+            <Head>
                 <meta charSet="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
-            </head>
+            </Head>
             <body>
                 <div className="page">
                     <header className="header">
                         <div>
                             {data.profile.avatar_url ? (
-                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                                <Image height={142} width={142} src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
                                 <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: primaryColor, margin: 0, fontFamily: "'Georgia', serif" }}>
                                     {data.profile.company_name || data.profile.full_name}

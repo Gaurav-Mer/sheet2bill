@@ -1,7 +1,7 @@
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { LayoutDashboard, Users, FileText, Settings, LogOut, BarChart3, Palette, CreditCard } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Settings, LogOut, BarChart3, CreditCard } from 'lucide-react';
 import { Logo } from './Logo';
 
 const navItems = [

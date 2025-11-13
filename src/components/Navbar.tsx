@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Menu, UserCircle, ChevronRight, Bell, Star } from 'lucide-react';
+import { Menu, UserCircle, ChevronRight, Star } from 'lucide-react';
 import { Button } from './ui/button';
 import {
     DropdownMenu,

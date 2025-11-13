@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // 2. Destructure the original brief to safely separate unwanted fields.
-        const { id, created_at, brief_number, brief_token, status, line_items, ...restOfBrief } = originalBrief;
+        const { line_items, ...restOfBrief } = originalBrief;
 
         // 3. Auto-generate a new brief number.
         const { count } = await supabase.from('briefs').select('*', { count: 'exact', head: true }).eq('user_id', session.user.id);

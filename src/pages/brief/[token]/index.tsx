@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/brief/[token].tsx
 import { GetServerSidePropsContext } from 'next';
 import { useMutation } from '@tanstack/react-query';

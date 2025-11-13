@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Logo = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => {
+export const Logo = ({ className }: React.SVGProps<SVGSVGElement>) => {
     return (
         <svg className={className} width="30" height="30" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_102_117)">

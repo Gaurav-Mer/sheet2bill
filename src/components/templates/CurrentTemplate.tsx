@@ -17,7 +17,6 @@ type InvoiceTemplateRouterProps = {
 
 // This component acts as a router, selecting the correct template based on the ID.
 export const CurrentTemplate = ({ templateId, data }: InvoiceTemplateRouterProps) => {
-    console.log("templateId", templateId)
     switch (templateId) {
         // case 'manhattan':
         //   return <ManhattanTemplate data={data} />;

@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // 2. Auto-generate the new invoice number.
-        const { data: lastInvoice, count } = await supabase.from('invoices').select('invoice_number', { count: 'exact', head: true }).eq('user_id', session.user.id);
+        const { count } = await supabase.from('invoices').select('invoice_number', { count: 'exact', head: true }).eq('user_id', session.user.id);
         const nextNumber = (count || 0) + 1;
         const newInvoiceNumber = `INV-${String(nextNumber).padStart(4, '0')}`;
 

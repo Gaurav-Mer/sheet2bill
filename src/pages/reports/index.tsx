@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
@@ -8,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Client } from '@/types';
-import { TrendingUp, DollarSign, FileText, Calculator, Download, Filter } from 'lucide-react';
+import { TrendingUp, DollarSign, FileText, Calculator, Filter } from 'lucide-react';
 
 type ReportStats = {
     total_revenue: number;

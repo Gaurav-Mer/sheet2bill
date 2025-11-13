@@ -3,6 +3,8 @@
 
 import { normalizeCountry, normalizeCurrency } from "@/lib/normalizeCountry";
 import { Client, Profile } from "@/types";
+import Head from "next/head";
+import Image from "next/image";
 
 // The full data structure required by the template
 type InvoiceTemplateData = any & {
@@ -68,17 +70,17 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
 
     return (
         <html>
-            <head>
+            <Head>
                 <meta charSet="utf-8" />
                 {/* Font link moved to pages/_document.tsx for global loading */}
                 <style dangerouslySetInnerHTML={{ __html: css }} />
-            </head>
+            </Head>
             <body>
                 <div className="invoice-container">
                     <header className="header">
                         <div>
                             {data.profile.avatar_url ? (
-                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                                <Image width={142} height={142} src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
                                 <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: primaryColor, margin: 0 }}>
                                     {data.profile.company_name || data.profile.full_name}

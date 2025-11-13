@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Profile } from '@/types';
-import { Star, PartyPopper } from 'lucide-react';
+import { PartyPopper } from 'lucide-react';
 import Link from 'next/link';
 
 type BillingPageProps = {

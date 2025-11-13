@@ -1,6 +1,5 @@
 // pages/signup.tsx
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/router';
 import { FormEvent, ReactElement, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,7 +12,6 @@ import { Logo } from '@/components/Logo';
 
 export default function SignUpPage() {
     const supabaseClient = useSupabaseClient();
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');

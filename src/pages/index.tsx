@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 // pages/index.tsx
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';

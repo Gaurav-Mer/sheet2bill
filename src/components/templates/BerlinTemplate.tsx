@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
+import Head from 'next/head';
+import Image from 'next/image';
 
 // The full data structure required by the template
 type TemplateData = any & {
@@ -95,16 +97,16 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
 
     return (
         <html>
-            <head>
+            <Head>
                 <meta charSet="utf-8" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
-            </head>
+            </Head>
             <body>
                 <div className="page">
                     <header className="header">
                         <div>
                             {data.profile.avatar_url ? (
-                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                                <Image width={142} height={142} src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
                                 <h2 className="company-name" style={{ fontSize: '20px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
                                     {data.profile.company_name || data.profile.full_name}
