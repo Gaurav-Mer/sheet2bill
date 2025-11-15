@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/api/profile.ts
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -40,8 +41,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // --- NEW: Step 2: If a new URL is provided and it's different, delete the old file ---
     if (new_avatar_url && old_avatar_url && new_avatar_url !== old_avatar_url) {
         try {
-            // *** IMPORTANT: Replace 'avatars' with your actual bucket name ***
-            const BUCKET_NAME = 'avatars';
+
+            // We use the "Manager's Key" (Admin Client) to delete the file.
+            // Our "Service role can delete logos" policy will allow this.
+            const supabaseAdmin = createClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.SUPABASE_SERVICE_ROLE_KEY!
+            );
+            const BUCKET_NAME = 'logos';
 
             // Parse the file path from the full URL
             const old_url = new URL(old_avatar_url);
@@ -51,10 +58,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             if (file_path) {
                 console.log(`Deleting old avatar: ${file_path}`);
-                const { error: deleteError } = await supabase.storage
+                const { error: deleteError } = await supabaseAdmin.storage
                     .from(BUCKET_NAME)
                     .remove([file_path]);
-
+                console.log("deleteError", deleteError)
                 if (deleteError) {
                     // Log the error but don't stop the profile update
                     console.error("Failed to delete old avatar:", deleteError.message);
