@@ -15,6 +15,7 @@ import { ProblemSolutionBanner } from '@/components/landing/ProblemSolutionBanne
 import FeatureList from '@/components/landing/FeatureList';
 import { WhyChooseUs } from '@/components/landing/WhyChooseUs';
 import { PremiumHeroSection } from '@/components/landing/PremiumHeroSection';
+import InvoiceTemplatesShowCase from '@/components/landing/InvoiceTemplateShowCase';
 
 
 
@@ -226,6 +227,9 @@ export default function LandingPage() {
         </section>
 
         {/* --- FAQ Section --- */}
+        <section>
+          <InvoiceTemplatesShowCase />
+        </section>
 
         <section>
           <FaqSection />

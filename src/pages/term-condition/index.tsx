@@ -57,7 +57,7 @@ export default function TermsOfServicePage() {
                         </p>
 
                         <h2>8. Contact Us</h2>
-                        <p>If you have any questions about these Terms, please contact us at <strong>[Your Contact Email, e.g., admin@sheet2bill.com]</strong>.</p>
+                        <p>If you have any questions about these Terms, please contact us at <strong>admin@sheet2bill.com</strong>.</p>
 
                         <p className="mt-8">
                             <Link href="/" className="no-underline hover:underline">← Back to Home</Link>
