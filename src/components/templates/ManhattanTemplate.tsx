@@ -60,17 +60,17 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
 
     return (
         <html>
-            <Head>
+            <head>
                 <meta charSet="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
-            </Head>
+            </head>
             <body>
                 <div className="page">
                     <header className="header">
                         <div>
                             {data.profile.avatar_url ? (
-                                <Image height={142} width={142} src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
                                 <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: primaryColor, margin: 0, fontFamily: "'Georgia', serif" }}>
                                     {data.profile.company_name || data.profile.full_name}
