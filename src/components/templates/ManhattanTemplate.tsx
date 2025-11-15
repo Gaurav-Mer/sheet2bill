@@ -2,8 +2,6 @@
 // components/invoices/templates/ManhattanTemplate.tsx
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile } from '@/types';
-import Head from 'next/head';
-import Image from 'next/image';
 
 type TemplateData = any & {
     client: Client;

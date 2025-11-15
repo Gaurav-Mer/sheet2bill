@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
-import Head from 'next/head';
-import Image from 'next/image';
+
 
 type TemplateData = any & {
     client: Client;
@@ -57,17 +56,17 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
     const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
     return (
         <html>
-            <Head>
+            <head>
                 <meta charSet="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <style dangerouslySetInnerHTML={{ __html: css }} />
-            </Head>
+            </head>
             <body>
                 <div className="page">
                     <header className="header">
                         <div>
                             {data.profile.avatar_url ? (
-                                <Image width={142} height={142} src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
                                 <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: primaryColor, margin: 0 }}>
                                     {data.profile.company_name || data.profile.full_name}
