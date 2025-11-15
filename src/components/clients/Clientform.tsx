@@ -25,7 +25,6 @@ export function ClientForm({ client, onSubmit, submitButtonText }: ClientFormPro
                 <div><Label htmlFor="phone_number">Phone</Label><Input id="phone_number" name="phone_number" defaultValue={client?.phone_number ?? ''} /></div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-                <div><Label htmlFor="city">City</Label><Input id="city" name="city" defaultValue={client?.city ?? ''} /></div>
                 <div>
                     <Label htmlFor="country">Country</Label>
                     <Select name='country' defaultValue={client?.country ?? ""}>
@@ -41,6 +40,8 @@ export function ClientForm({ client, onSubmit, submitButtonText }: ClientFormPro
                     </Select>
                     {/* <Input id="country" name="country" defaultValue={client?.country ?? ''} /> */}
                 </div>
+                <div><Label htmlFor="city">City</Label><Input id="city" name="city" defaultValue={client?.city ?? ''} /></div>
+
             </div>
             <div><Label htmlFor="tax_id">Tax ID (e.g., GSTIN, VAT ID)</Label><Input id="tax_id" name="tax_id" defaultValue={client?.tax_id ?? ''} /></div>
             <div><Label htmlFor="notes">Notes</Label><Textarea id="notes" name="notes" placeholder="Private notes about this client..." defaultValue={client?.notes ?? ''} /></div>

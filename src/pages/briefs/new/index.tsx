@@ -207,7 +207,7 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                     </div>
 
                                     {/* Desktop: Table View */}
-                                    <div className="hidden md:block overflow-x-auto">
+                                    <div className="hidden md:block overflow-x-auto px-1">
                                         <table className="w-full text-sm">
                                             <thead className="text-muted-foreground">
                                                 <tr>
