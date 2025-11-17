@@ -61,7 +61,7 @@ export default function LandingPage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico?v=3" />
       </Head>
       {/* --- Header --- */}
       <NonLoginNavbar />
