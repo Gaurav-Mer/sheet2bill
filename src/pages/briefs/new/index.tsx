@@ -16,8 +16,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '@/components/FeatureGate';
 import Image from 'next/image';
-import { Check } from 'lucide-react';
+import { Check, Plus, Search } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import Link from 'next/link';
 
 type Client = { id: number; name: string };
 type LineItem = { description: string; quantity: number; unit_price: number };
@@ -25,7 +27,7 @@ type LineItem = { description: string; quantity: number; unit_price: number };
 // Utility: Format date
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
-export default function NewBriefPage({ clients }: { clients: Client[] }) {
+export default function NewBriefPage({ clients, items }: { clients: Client[], items: any[] }) {
     const router = useRouter();
 
     // Form state
@@ -40,6 +42,20 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
     const [lineItems, setLineItems] = useState<LineItem[]>([
         { description: '', quantity: 1, unit_price: 0 },
     ]);
+    // --- NEW STATE FOR ITEM MODAL ---
+    const [isItemModalOpen, setItemModalOpen] = useState(false);
+    const [itemSearchQuery, setItemSearchQuery] = useState('');
+
+    // Function to add a saved item to the brief
+    const handleAddSavedItem = (item: any) => {
+        setLineItems([...lineItems, {
+            description: item.description || item.name,
+            quantity: 1,
+            unit_price: item.default_price
+        }]);
+        setItemModalOpen(false);
+        toast.success('Item added!');
+    };
 
     // Mutation to save brief
     const createBriefMutation = useMutation({
@@ -106,6 +122,11 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
             template_id: templateId,
         });
     };
+
+    // Filter items based on search
+    const filteredItems = items.filter(item =>
+        item.name.toLowerCase().includes(itemSearchQuery.toLowerCase())
+    );
 
     return (
         <div className="flex flex-col min-h-dvh">
@@ -481,6 +502,52 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
                                 </CardContent>
                             </Card>
                         </div>
+                        <Dialog open={isItemModalOpen} onOpenChange={setItemModalOpen}>
+                            <DialogContent className="sm:max-w-md">
+                                <DialogHeader>
+                                    <DialogTitle>Select Item from Library</DialogTitle>
+                                </DialogHeader>
+                                <div className="py-4">
+                                    <div className="relative mb-4">
+                                        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            placeholder="Search items..."
+                                            value={itemSearchQuery}
+                                            onChange={(e) => setItemSearchQuery(e.target.value)}
+                                            className="pl-8"
+                                        />
+                                    </div>
+                                    <div className="max-h-[300px] overflow-y-auto space-y-2">
+                                        {filteredItems.length > 0 ? (
+                                            filteredItems.map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    onClick={() => handleAddSavedItem(item)}
+                                                    className="flex items-center justify-between p-3 border rounded-md hover:bg-muted cursor-pointer transition-colors"
+                                                >
+                                                    <div>
+                                                        <p className="font-medium">{item.name}</p>
+                                                        <p className="text-xs text-muted-foreground truncate max-w-[200px]">{item.description}</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-semibold">₹{item.default_price}</span>
+                                                        <Plus className="h-4 w-4 text-primary" />
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className="text-center text-sm text-muted-foreground py-4">No items found.</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <DialogFooter>
+                                    <Button variant="outline" onClick={() => setItemModalOpen(false)}>Close</Button>
+                                    <Link href="/items" target="_blank">
+                                        <Button variant="link">Manage Library</Button>
+                                    </Link>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 </form>
             </div>
@@ -505,15 +572,26 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
 // --- Server Side ---
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-    const {
-        data: { session },
-    } = await supabase.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
     if (!session) return { redirect: { destination: '/login', permanent: false } };
 
+    // 1. Fetch Clients
     const { data: clients } = await supabase
         .from('clients')
         .select('id, name')
         .eq('user_id', session.user.id);
 
-    return { props: { clients: clients || [] } };
+    // 2. NEW: Fetch Items
+    const { data: items } = await supabase
+        .from('items')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('name');
+
+    return {
+        props: {
+            clients: clients || [],
+            items: items || [] // Pass items to the page
+        }
+    };
 };
