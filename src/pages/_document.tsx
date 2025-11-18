@@ -17,7 +17,7 @@ const svgString = `
 
 export default function Document() {
   const faviconDataUri = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const gaId = "G-QJG35SDZEW";
 
   return (
     <Html lang="en">
