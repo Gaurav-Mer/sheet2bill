@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/index.tsx
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { FaqSection } from '@/components/landing/FaqSection';
@@ -18,6 +19,13 @@ import { PremiumHeroSection } from '@/components/landing/PremiumHeroSection';
 import InvoiceTemplatesShowCase from '@/components/landing/InvoiceTemplateShowCase';
 
 
+declare global {
+  interface Window {
+    orufyBookings?: {
+      PopupWidget?: (options?: any) => void;
+    };
+  }
+}
 
 export default function LandingPage() {
   const ldJson = {
@@ -42,6 +50,32 @@ export default function LandingPage() {
       }
     ]
   };
+
+
+  useEffect(() => {
+    // Load external script
+    const script = document.createElement('script')
+    script.type = "module"
+    script.src = "https://orufybookings.beta.orufy.in/external/widget.js"
+    document.body.appendChild(script)
+
+    // Load external CSS
+    const link = document.createElement('link')
+    link.rel = "stylesheet"
+    link.href = "https://orufybookings.beta.orufy.in/external/widget.css"
+    document.head.appendChild(link)
+
+    script.onload = () => {
+      window?.orufyBookings?.PopupWidget?.({
+        AccessLink: "/testing-2/second-1?BrandColor=098666&hideLHS=false&BackgroundColor=transparent",
+        ButtonBackground: "098666",
+        ButtonText: "Book an event",
+        ButtonTextColor: "FFFFFF",
+      })
+    }
+  }, [])
+
+
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
 
@@ -63,6 +97,7 @@ export default function LandingPage() {
         />
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
       </Head>
+
       {/* --- Header --- */}
       <NonLoginNavbar />
 
