@@ -56,18 +56,18 @@ export default function LandingPage() {
     // Load external script
     const script = document.createElement('script')
     script.type = "module"
-    script.src = "https://orufybookings.com/external/widget.js"
+    script.src = "https://orufybookings.beta.orufy.in/external/widget.js"
     document.body.appendChild(script)
 
     // Load external CSS
     const link = document.createElement('link')
     link.rel = "stylesheet"
-    link.href = "https://orufybookings.com/external/widget.css"
+    link.href = "https://orufybookings.beta.orufy.in/external/widget.css"
     document.head.appendChild(link)
 
     script.onload = () => {
       window?.orufyBookings?.PopupWidget?.({
-        AccessLink: "/test123434/hey-first?BrandColor=098666&hideLHS=false&BackgroundColor=transparent",
+        AccessLink: "/testing-2/second-1?BrandColor=098666&hideLHS=false&BackgroundColor=transparent",
         ButtonBackground: "098666",
         ButtonText: "Book an event",
         ButtonTextColor: "FFFFFF",
