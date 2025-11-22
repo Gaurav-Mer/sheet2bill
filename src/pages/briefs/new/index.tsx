@@ -21,7 +21,7 @@ import { twMerge } from 'tailwind-merge';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 type Client = { id: number; name: string };
-type LineItem = { description: string; quantity: number; unit_price: number };
+type LineItem = { description: string; quantity: number; unit_price: number, item_id?: string | number };
 
 // Utility: Format date
 const getTodayDate = () => new Date().toISOString().split('T')[0];
@@ -39,12 +39,11 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
     const [dueDate, setDueDate] = useState('');
     const [templateId, setTemplateId] = useState('zurich');
     const [lineItems, setLineItems] = useState<LineItem[]>([
-        { description: '', quantity: 1, unit_price: 0 },
+        { description: '', quantity: 1, unit_price: 0, item_id: undefined },
     ]);
     // --- NEW STATE FOR ITEM MODAL ---
     const [isItemModalOpen, setItemModalOpen] = useState<null | number>(null);
     const [itemSearchQuery, setItemSearchQuery] = useState('');
-    console.log("lineItems", lineItems)
     // Mutation to save brief
     const createBriefMutation = useMutation({
         mutationFn: async (newBrief: any) => {
@@ -82,6 +81,15 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
         }
         if (!value || value === "add_new_sheet2bill") return
         const updated = [...lineItems];
+        if (field === "description") {
+            //check whether the current value in the items library 
+            const selected = items.find(it => String(it.id) === String(value))
+            console.log("selected", selected)
+            if (selected.id) {
+                updated[index] = { ...updated[index], description: selected.name, item_id: selected.id, unit_price: selected.default_price };
+                return setLineItems(updated);
+            }
+        }
         updated[index] = { ...updated[index], [field]: value };
         setLineItems(updated);
     };
@@ -189,14 +197,43 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                                 </div>
                                                 <div>
                                                     <Label className="text-xs">Description</Label>
-                                                    <Input
+                                                    {/* <Input
                                                         placeholder="Description..."
                                                         value={item.description}
                                                         onChange={(e) =>
                                                             handleLineItemChange(index, 'description', e.target.value)
                                                         }
                                                         required
-                                                    />
+                                                    /> */}
+
+                                                    {item?.description ?
+                                                        <div className='p-2 border items-center rounded-md justify-between flex w-full gap-2'>
+                                                            <p className='text-xs'> {isAddedItem(item.description)}</p>
+                                                            <CircleX className='cursor-pointer shrink-0' size={16} onClick={() => {
+                                                                setLineItems(it => {
+                                                                    const data = [...it]
+                                                                    data[index] = { ...data[index], description: "" }
+                                                                    return data
+                                                                })
+                                                            }} /></div>
+                                                        : <Select onValueChange={(value) => handleLineItemChange(index, 'description', value)} value={item.description}>
+                                                            <SelectTrigger className='w-full '>
+                                                                <SelectValue placeholder="Add from item library..." />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {items?.map((libItem) => (
+                                                                    <SelectItem
+                                                                        key={libItem.id}
+                                                                        value={libItem.id.toString()}
+                                                                    >
+                                                                        {libItem.name}
+                                                                    </SelectItem>
+                                                                ))}
+
+                                                                {items?.length === 0 && <SelectItem value='no' disabled>No items in library</SelectItem>}
+                                                                <SelectItem value='add_new_sheet2bill' className='text-sm font-semibold p-4! hover:underline cursor-pointer text-primary' >+ Add Custom</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>}
 
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-3">
@@ -260,9 +297,9 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                                                 required
                                                             /> */}
                                                             {item?.description ?
-                                                                <div className='p-2 border items-center rounded-md  justify-between grid grid-cols-9 gap-2'>
-                                                                    <p className='col-span-8'> {isAddedItem(item.description)}</p>
-                                                                    <CircleX className='cursor-pointer' size={16} onClick={() => {
+                                                                <div className='p-2 border items-center rounded-md justify-between flex w-full gap-2'>
+                                                                    <p className='col-span-7'> {isAddedItem(item.description)}</p>
+                                                                    <CircleX className='cursor-pointer shrink-0' size={16} onClick={() => {
                                                                         setLineItems(it => {
                                                                             const data = [...it]
                                                                             data[index] = { ...data[index], description: "" }
@@ -284,7 +321,7 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                                                         ))}
 
                                                                         {items?.length === 0 && <SelectItem value='no' disabled>No items in library</SelectItem>}
-                                                                        <SelectItem value='add_new_sheet2bill' className='text-sm font-semibold p-4! hover:underline cursor-pointer text-primary' >+ Add from library</SelectItem>
+                                                                        <SelectItem value='add_new_sheet2bill' className='text-sm font-semibold p-4! hover:underline cursor-pointer text-primary' >+ Add Custom</SelectItem>
                                                                     </SelectContent>
                                                                 </Select>}
                                                         </td>
@@ -541,13 +578,13 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                         <Dialog open={isItemModalOpen !== null} onOpenChange={() => setItemModalOpen(null)}>
                             <DialogContent className="sm:max-w-md">
                                 <DialogHeader>
-                                    <DialogTitle>Select Item from Library</DialogTitle>
+                                    <DialogTitle>Add Description</DialogTitle>
                                 </DialogHeader>
                                 <div className="py-4">
                                     <div className="relative mb-4">
                                         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                                         <Input
-                                            placeholder="Search items..."
+                                            placeholder="Enter description..."
                                             value={itemSearchQuery}
                                             onChange={(e) => setItemSearchQuery(e.target.value)}
                                             className="pl-8"
@@ -556,7 +593,7 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                 </div>
                                 <DialogFooter>
                                     <Button variant="outline" onClick={() => setItemModalOpen(null)}>Close</Button>
-                                    <Button onClick={() => addNewVal(itemSearchQuery, isItemModalOpen ?? -1)}>Add new item</Button>
+                                    <Button onClick={() => addNewVal(itemSearchQuery, isItemModalOpen ?? -1)}>Add new </Button>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
@@ -584,16 +621,11 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
 // --- Server Side ---
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-<<<<<<< HEAD
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return { redirect: { destination: '/login', permanent: false } };
-=======
     const {
         data: { user },
         error: authError
     } = await supabase.auth.getUser();
     if (!user || authError) return { redirect: { destination: '/login', permanent: false } };
->>>>>>> origin/main
 
     // 1. Fetch Clients
     const { data: clients } = await supabase
@@ -605,7 +637,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const { data: items } = await supabase
         .from('items')
         .select('*')
-        .eq('user_id', session.user.id)
+        .eq('user_id', user.id)
         .order('name');
 
     return {

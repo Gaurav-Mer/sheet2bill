@@ -15,6 +15,7 @@ export type LineItem = {
     notes?: string;
     tax_rate?: number;
     currency?: string;
+    item_id?: number | string
 };
 
 export type Brief = {

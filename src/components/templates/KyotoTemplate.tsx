@@ -86,7 +86,8 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
         if (!dateString) return 'N/A';
         return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
-    }; const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
+    };
+    const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
 
     return (
         <html>

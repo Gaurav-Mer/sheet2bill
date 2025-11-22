@@ -12,9 +12,10 @@ import { Client, Brief, LineItem } from '@/types';
 type EditPageProps = {
     clients: Client[];
     brief: Brief & { line_items: LineItem[] };
+    items?: any[];
 };
 
-export default function Index({ clients, brief }: EditPageProps) {
+export default function Index({ clients, brief, items }: EditPageProps) {
     const router = useRouter();
 
     const editBriefMutation = useMutation({
@@ -41,6 +42,7 @@ export default function Index({ clients, brief }: EditPageProps) {
             onSubmit={editBriefMutation.mutate}
             submitButtonText={editBriefMutation.isPending ? 'Saving...' : 'Save Changes'}
             isSubmitting={editBriefMutation.isPending}
+            items={items}
         />
     );
 }
@@ -69,6 +71,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         .eq('id', id)
         .single();
 
+    // 2.  Fetch Items
+    const { data: items } = await supabase
+        .from('items')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('name');
+
     // Also fetch all clients for the dropdown
     const { data: clients } = await supabase.from('clients').select('id, name');
     if (!brief) {
@@ -79,6 +88,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         props: {
             brief,
             clients: clients || [],
+            items: items || [],
         },
     };
 };

@@ -77,7 +77,8 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
     const handleDeleteItem = useMutation({
         mutationFn: async (itemId: number) => {
             const response = await fetch(`/api/items/${itemId}`, { method: 'DELETE' });
-            if (!response.ok) throw new Error('Failed to delete item');
+            const errorData = await response.json().catch(() => null);
+            if (!response.ok) throw new Error(errorData?.message ?? 'Failed to delete item');
         },
         onSuccess: () => {
             toast.success('Item deleted successfully.');
@@ -104,7 +105,11 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
                     <h1 className="text-3xl font-bold">Items & Services</h1>
                     <p className="text-muted-foreground mt-2">Manage your reusable line items.</p>
                 </div>
-                <Button onClick={() => setIsFormModalOpen(true)}>+ Add New Item</Button>
+                <Button onClick={() => {
+                    setIsFormModalOpen(true)
+                    setSelectedItem(null)
+                }
+                }>+ Add New Item</Button>
             </div>
 
             {/* --- Search Bar --- */}

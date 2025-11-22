@@ -30,7 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (error) {
             console.error("Error updating item:", error);
-            return res.status(500).json({ message: 'Error updating item', error });
+            const errorMsg = error.code === '23503' ? 'You cannot delete this item because it is used in existing Briefs.' : 'Error updating item';
+            return res.status(500).json({ message: errorMsg, error });
         }
         return res.status(200).json(data);
     }
@@ -45,7 +46,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (error) {
             console.error("Error deleting item:", error);
-            return res.status(500).json({ message: 'Error deleting item', error });
+            const errorMsg = error.code === '23503' ? 'You cannot delete this item because it is used in existing Briefs.' : 'Error deleting item';
+            return res.status(500).json({ message: errorMsg, error });
         }
         return res.status(204).end(); // 204 No Content (success)
     }

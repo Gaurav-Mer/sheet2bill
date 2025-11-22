@@ -11,12 +11,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 // Import your central types
 import { Client, Brief, LineItem } from '@/types';
-import { AlertCircle, X, Check } from 'lucide-react';
+import { AlertCircle, X, Check, CircleX, Search } from 'lucide-react';
 import { Switch } from '../ui/switch';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '../FeatureGate';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 
 type BriefFormProps = {
     clients: Client[];
@@ -24,6 +25,7 @@ type BriefFormProps = {
     onSubmit: (payload: any) => void;
     submitButtonText: string;
     isSubmitting: boolean;
+    items?: any[]
 };
 
 // Function to get today's date in YYYY-MM-DD format
@@ -35,7 +37,7 @@ const getFormattedDate = (date?: string | Date) => {
     return d.toISOString().split('T')[0];
 }
 
-export function BriefForm({ clients, initialData, onSubmit, submitButtonText, isSubmitting }: BriefFormProps) {
+export function BriefForm({ clients, initialData, onSubmit, submitButtonText, isSubmitting, items }: BriefFormProps) {
     // --- State Management ---
     const [title, setTitle] = useState(initialData?.title || '');
     const [clientId, setClientId] = useState(initialData?.client_id?.toString() || '');
@@ -44,11 +46,12 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
     const [currency, setCurrency] = useState(initialData?.currency || 'INR');
     const [issueDate, setIssueDate] = useState(getFormattedDate(initialData?.issue_date) || getFormattedDate(new Date()));
     const [dueDate, setDueDate] = useState(getFormattedDate(initialData?.due_date));
-    const [lineItems, setLineItems] = useState<LineItem[]>(initialData?.line_items.length ? initialData.line_items : [{ description: '', quantity: 1, unit_price: 0 }]);
+    const [lineItems, setLineItems] = useState<LineItem[]>(initialData?.line_items.length ? initialData.line_items : [{ description: '', quantity: 1, unit_price: 0, item_id: undefined }]);
     const [isPasswordProtected, setIsPasswordProtected] = useState(initialData?.is_password_protected || false);
     const [password, setPassword] = useState('');
     const [templateId, setTemplateId] = useState(initialData?.template_id ?? 'zurich');
-
+    const [isItemModalOpen, setItemModalOpen] = useState<null | number>(null);
+    const [itemSearchQuery, setItemSearchQuery] = useState('');
     // --- Calculations ---
     const totals = useMemo(() => {
         const subtotal = lineItems.reduce((total, item) => total + (item.quantity * item.unit_price), 0);
@@ -59,6 +62,22 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
 
     // --- Event Handlers ---
     const handleLineItemChange = (index: number, field: keyof LineItem, value: string | number) => {
+        //for the new one opening modal
+        if (value === "add_new_sheet2bill") {
+            return setItemModalOpen(index)
+        }
+        if (!value || value === "add_new_sheet2bill") return
+        const updated = [...lineItems];
+        if (field === "description") {
+            //check whether the current value in the items library 
+            const selected = items?.find(it => String(it.id) === String(value))
+            console.log("selected", selected)
+            if (selected.id) {
+                updated[index] = { ...updated[index], description: selected.name, item_id: selected.id, unit_price: selected.default_price };
+                return setLineItems(updated);
+            }
+        }
+
         const updatedLineItems = [...lineItems];
         const item = updatedLineItems[index];
         if (item) {
@@ -100,6 +119,27 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
 
         onSubmit(payload);
     }
+
+    const isAddedItem = (item: string) => {
+        const selected = items?.find(it => String(it.id) === String(item))
+        if (!selected) return item
+        return selected?.name
+    }
+
+
+    // Filter items based on search
+    const addNewVal = (name: string, index: number) => {
+        setLineItems(prev => {
+            const data = [...prev]
+            data[index] = { ...data[index], description: name }
+            console.log("update is ", data)
+            return data
+        })
+        //close dialog and reset search
+        setItemModalOpen(null);
+        setItemSearchQuery('');
+    }
+
 
     return (
         <div className="flex flex-col min-h-dvh">
@@ -217,12 +257,41 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                                 {lineItems.map((item, index) => (
                                                     <tr key={index} className="border-b last:border-b-0">
                                                         <td className="py-2">
-                                                            <Input
+                                                            {/* <Input
                                                                 placeholder="Description of work..."
                                                                 value={item.description}
                                                                 onChange={(e) => handleLineItemChange(index, 'description', e.target.value)}
                                                                 required
-                                                            />
+                                                            /> */}
+
+                                                            {item?.description ?
+                                                                <div className='p-2 border items-center rounded-md justify-between flex w-full gap-2'>
+                                                                    <p className='text-xs'> {isAddedItem(item.description)}</p>
+                                                                    <CircleX className='cursor-pointer shrink-0' size={16} onClick={() => {
+                                                                        setLineItems(it => {
+                                                                            const data = [...it]
+                                                                            data[index] = { ...data[index], description: "" }
+                                                                            return data
+                                                                        })
+                                                                    }} /></div>
+                                                                : <Select onValueChange={(value) => handleLineItemChange(index, 'description', value)} value={item.description}>
+                                                                    <SelectTrigger className='w-full '>
+                                                                        <SelectValue placeholder="Add from item library..." />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        {items?.map((libItem) => (
+                                                                            <SelectItem
+                                                                                key={libItem.id}
+                                                                                value={libItem.id.toString()}
+                                                                            >
+                                                                                {libItem.name}
+                                                                            </SelectItem>
+                                                                        ))}
+
+                                                                        {items?.length === 0 && <SelectItem value='no' disabled>No items in library</SelectItem>}
+                                                                        <SelectItem value='add_new_sheet2bill' className='text-sm font-semibold p-4! hover:underline cursor-pointer text-primary' >+ Add Custom</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>}
                                                         </td>
                                                         <td className="py-2 px-2">
                                                             <Input
@@ -362,12 +431,41 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                         </div>
                                         <div>
                                             <Label className="text-sm">Description</Label>
-                                            <Input
+                                            {/* <Input
                                                 placeholder="Description of work..."
                                                 value={item.description}
                                                 onChange={(e) => handleLineItemChange(index, 'description', e.target.value)}
                                                 required
-                                            />
+                                            /> */}
+
+                                            {item?.description ?
+                                                <div className='p-2 border items-center rounded-md justify-between flex w-full gap-2'>
+                                                    <p className='text-xs'> {isAddedItem(item.description)}</p>
+                                                    <CircleX className='cursor-pointer shrink-0' size={16} onClick={() => {
+                                                        setLineItems(it => {
+                                                            const data = [...it]
+                                                            data[index] = { ...data[index], description: "" }
+                                                            return data
+                                                        })
+                                                    }} /></div>
+                                                : <Select onValueChange={(value) => handleLineItemChange(index, 'description', value)} value={item.description}>
+                                                    <SelectTrigger className='w-full '>
+                                                        <SelectValue placeholder="Add from item library..." />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {items?.map((libItem) => (
+                                                            <SelectItem
+                                                                key={libItem.id}
+                                                                value={libItem.id.toString()}
+                                                            >
+                                                                {libItem.name}
+                                                            </SelectItem>
+                                                        ))}
+
+                                                        {items?.length === 0 && <SelectItem value='no' disabled>No items in library</SelectItem>}
+                                                        <SelectItem value='add_new_sheet2bill' className='text-sm font-semibold p-4! hover:underline cursor-pointer text-primary' >+ Add Custom</SelectItem>
+                                                    </SelectContent>
+                                                </Select>}
                                         </div>
                                         <div className="grid grid-cols-2 gap-3">
                                             <div>
@@ -535,6 +633,28 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                             </CardContent>
                         </Card>
                     </div>
+                    <Dialog open={isItemModalOpen !== null} onOpenChange={() => setItemModalOpen(null)}>
+                        <DialogContent className="sm:max-w-md">
+                            <DialogHeader>
+                                <DialogTitle>Add Description</DialogTitle>
+                            </DialogHeader>
+                            <div className="py-4">
+                                <div className="relative mb-4">
+                                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        placeholder="Enter description..."
+                                        value={itemSearchQuery}
+                                        onChange={(e) => setItemSearchQuery(e.target.value)}
+                                        className="pl-8"
+                                    />
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button variant="outline" onClick={() => setItemModalOpen(null)}>Close</Button>
+                                <Button onClick={() => addNewVal(itemSearchQuery, isItemModalOpen ?? -1)}>Add new </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </form>
 

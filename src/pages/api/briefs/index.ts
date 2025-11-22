@@ -86,6 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             description: item.description,
             quantity: item.quantity,
             unit_price: item.unit_price,
+            item_id: item.item_id || null,
         }));
 
         const { error: lineItemsError } = await supabase

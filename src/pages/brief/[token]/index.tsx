@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { createClient } from '@supabase/supabase-js';
 import qs from 'qs';
 import { Calendar, CheckCircle, Mail, XCircle } from 'lucide-react';
+import { normalizeCurrency } from '@/lib/normalizeCountry';
 
 // --- Type Definition ---
 type BriefDetails = {
@@ -117,6 +118,7 @@ const BriefContent = ({ brief }: { brief: BriefDetails }) => {
             );
         }
     };
+    const currencySymbol = normalizeCurrency(brief.currency)?.currency?.symbol ?? brief?.currency;
 
     return (
         <div className="min-h-screen bg-muted flex items-center justify-center p-3 md:p-4 lg:p-6">
@@ -217,16 +219,16 @@ const BriefContent = ({ brief }: { brief: BriefDetails }) => {
                             <div className="space-y-2 md:space-y-3">
                                 <div className="flex justify-between text-sm md:text-base text-muted-foreground">
                                     <span>Subtotal</span>
-                                    <span>{brief.currency} {brief.subtotal.toFixed(2)}</span>
+                                    <span>{currencySymbol} {brief.subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-sm md:text-base text-muted-foreground">
                                     <span>Tax ({brief.tax_rate}%)</span>
-                                    <span>{brief.currency} {brief.tax_amount.toFixed(2)}</span>
+                                    <span>{currencySymbol} {brief.tax_amount.toFixed(2)}</span>
                                 </div>
                                 <div className="border-t pt-2 md:pt-3"></div>
                                 <div className="flex justify-between text-base md:text-lg font-bold text-foreground">
                                     <span>Total</span>
-                                    <span>{brief.currency} {brief.total.toFixed(2)}</span>
+                                    <span>{currencySymbol} {brief.total.toFixed(2)}</span>
                                 </div>
                             </div>
                         </CardContent>
