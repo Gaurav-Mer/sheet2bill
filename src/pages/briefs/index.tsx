@@ -201,8 +201,12 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
 // getServerSideProps
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return { redirect: { destination: '/login', permanent: false } };
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+
+    if (!user || authError) return { redirect: { destination: '/login', permanent: false } };
 
     const searchQuery = ctx.query.q as string || '';
     const page = parseInt(ctx.query.page as string, 10) || 1;
@@ -213,7 +217,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     let query = supabase
         .from('briefs')
         .select('id, brief_number, title, status, total, currency, brief_token, clients(name)', { count: 'exact' })
-        .eq('user_id', session.user.id);
+        .eq('user_id', user.id);
 
     if (searchQuery) {
         // Note: Searching on a joined table (clients.name) is more complex.

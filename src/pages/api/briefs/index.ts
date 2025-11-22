@@ -12,9 +12,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -30,13 +32,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        await checkPlanLimits(supabase, session.user.id, 'CREATE_BRIEF');
+        await checkPlanLimits(supabase, user.id, 'CREATE_BRIEF');
 
         // --- Auto-generate the brief_number ---
         const { data: lastBrief } = await supabase
             .from('briefs')
             .select('brief_number')
-            .eq('user_id', session.user.id)
+            .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1)
             .single();
@@ -51,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Prepare the base brief data for insertion
         const briefToInsert: any = {
             client_id: clientId,
-            user_id: session.user.id,
+            user_id: user.id,
             status: 'draft',
             title, currency, notes, subtotal, tax_rate, tax_amount, total, due_date,
             brief_number: newBriefNumber,
@@ -80,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // 2. Prepare and insert the associated line items
         const preparedLineItems = lineItems.map((item: any) => ({
             brief_id: briefData.id,
-            user_id: session.user.id,
+            user_id: user.id,
             description: item.description,
             quantity: item.quantity,
             unit_price: item.unit_price,

@@ -506,14 +506,15 @@ export default function NewBriefPage({ clients }: { clients: Client[] }) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
     const {
-        data: { session },
-    } = await supabase.auth.getSession();
-    if (!session) return { redirect: { destination: '/login', permanent: false } };
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return { redirect: { destination: '/login', permanent: false } };
 
     const { data: clients } = await supabase
         .from('clients')
         .select('id, name')
-        .eq('user_id', session.user.id);
+        .eq('user_id', user.id);
 
     return { props: { clients: clients || [] } };
 };

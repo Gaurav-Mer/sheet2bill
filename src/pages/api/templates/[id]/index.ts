@@ -8,8 +8,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ message: 'Unauthorized' });
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+
+    if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
     const { id } = req.query;
     const { name, settings } = req.body;
@@ -22,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .from('invoice_templates')
         .update({ name, settings })
         .eq('id', id)
-        .eq('user_id', session.user.id) // Security check
+        .eq('user_id', user.id) // Security check
         .select()
         .single();
 

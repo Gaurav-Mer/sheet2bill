@@ -280,8 +280,12 @@ export default function LandingPage() {
 // Redirects logged-in users to their dashboard
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createPagesServerClient(ctx);
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session) return { redirect: { destination: '/dashboard', permanent: false } };
+  // This validates the token with Supabase Auth but lets Middleware handle the refreshing.
+  const {
+    data: { user },
+    error: authError
+  } = await supabase.auth.getUser();
+  if (user && !authError) return { redirect: { destination: '/dashboard', permanent: false } };
   return { props: {} };
 };
 LandingPage.getLayout = function getLayout(page: ReactElement) { return page; };

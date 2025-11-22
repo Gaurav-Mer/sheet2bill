@@ -8,8 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ message: 'Unauthorized' });
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
     const { name, settings } = req.body;
 
@@ -20,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data, error } = await supabase
         .from('invoice_templates')
         .insert({
-            user_id: session.user.id,
+            user_id: user.id,
             name,
             settings,
         })

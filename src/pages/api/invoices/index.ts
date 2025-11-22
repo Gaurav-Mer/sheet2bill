@@ -10,8 +10,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ message: 'Unauthorized' });
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || !authError) return res.status(401).json({ message: 'Unauthorized' });
 
     // --- Read Search & Pagination Parameters from URL ---
     const searchQuery = req.query.q as string || '';
@@ -23,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let query = supabase
         .from('invoices')
         .select('*, clients(name)', { count: 'exact' }) // Fetch the total count for pagination
-        .eq('user_id', session.user.id);
+        .eq('user_id', user.id);
 
     // Apply search filter if a query is provided
     if (searchQuery) {

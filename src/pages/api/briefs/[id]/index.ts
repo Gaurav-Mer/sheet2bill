@@ -15,8 +15,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // --- HANDLE A LOGGED-IN USER EDITING THE ENTIRE BRIEF ---
     if (req.method === 'PUT') {
         const supabase = createPagesServerClient({ req, res });
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return res.status(401).json({ message: 'Unauthorized' });
+        const {
+            data: { user },
+            error: authError
+        } = await supabase.auth.getUser();
+        if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
         const { lineItems, is_password_protected, access_password, ...briefData } = req.body;
 
@@ -45,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 const preparedLineItems = lineItems.map((item: any) => ({
                     brief_id: id,
-                    user_id: session.user.id,
+                    user_id: user.id,
                     description: item.description,
                     quantity: item.quantity,
                     unit_price: item.unit_price,
@@ -166,8 +169,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'DELETE') {
         // (This section remains the same)
         const supabase = createPagesServerClient({ req, res });
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return res.status(401).json({ message: 'Unauthorized' });
+        const {
+            data: { user },
+            error: authError
+        } = await supabase.auth.getUser();
+        if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
         const { error } = await supabase.from('briefs').delete().eq('id', id);
         if (error) return res.status(500).json({ message: 'Error deleting brief', error });

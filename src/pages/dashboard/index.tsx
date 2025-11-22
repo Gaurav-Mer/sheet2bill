@@ -182,15 +182,24 @@ export default function Dashboard({ user, stats, recentBriefs, activeCurrency = 
 // --- THIS IS THE UPDATED getServerSideProps FUNCTION ---
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createPagesServerClient(ctx);
-  const { data: { session } } = await supabase.auth.getSession();
 
-  if (!session) {
+  // 1. CHANGE: Use getUser() instead of getSession()
+  // This validates the token with Supabase Auth but lets Middleware handle the refreshing.
+  const {
+    data: { user },
+    error: authError
+  } = await supabase.auth.getUser();
+
+  // 2. CHANGE: Check for user or error
+  if (authError || !user) {
     return { redirect: { destination: '/login', permanent: false } };
   }
+
   const { data: profile } = await supabase.from('profiles').select('default_currency').single();
   const currencyFilter = (ctx.query.currency as string) || profile?.default_currency || 'USD';
 
-  const userId = session.user.id;
+  // 3. CHANGE: Access ID directly from user object
+  const userId = user.id;
 
   // Run queries in parallel
   const [analyticsQuery, recentBriefsQuery] = await Promise.all([
@@ -203,7 +212,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       let query = supabase.from('briefs')
         .select('id, title, status, total, currency, clients(name)')
         .eq('user_id', userId);
-      console.log("query", query)
+
+      // Removed console.log("query", query) for cleaner production code, add back if debugging
       if (currencyFilter && currencyFilter !== 'all') {
         query = query.eq('currency', currencyFilter);
       }
@@ -211,18 +221,19 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     })()
   ]);
 
-
   const { data: analytics, error: analyticsError } = analyticsQuery as any;
   const { data: recentBriefs, error: briefsError } = recentBriefsQuery;
 
   if (analyticsError || briefsError) {
     console.error("Dashboard Fetch Error:", analyticsError || briefsError);
   }
+
   return {
     props: {
-      user: session.user,
+      // 4. CHANGE: Pass user directly
+      user: user,
       stats: analytics || { total_revenue: 0, outstanding_amount: 0, client_count: 0 },
-      monthlyRevenue: analytics?.monthly_revenue || [], // Pass the new chart data
+      monthlyRevenue: analytics?.monthly_revenue || [],
       recentBriefs: recentBriefs || [],
       activeCurrency: currencyFilter,
     },

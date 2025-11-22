@@ -86,14 +86,17 @@ export default function TemplatesPage({ customTemplates }: PageProps) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return { redirect: { destination: '/login', permanent: false } };
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return { redirect: { destination: '/login', permanent: false } };
 
     // Fetch the user's own custom templates from the database
     const { data: customTemplates } = await supabase
         .from('invoice_templates')
         .select('*')
-        .eq('user_id', session.user.id);
+        .eq('user_id', user.id);
 
     return {
         props: {

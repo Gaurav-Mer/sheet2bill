@@ -255,8 +255,11 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
 // Server-side props remain the same
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return { redirect: { destination: '/login', permanent: false } };
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return { redirect: { destination: '/login', permanent: false } };
 
     const { data: profile } = await supabase.from('profiles').select('default_currency').single();
 

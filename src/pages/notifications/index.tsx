@@ -61,8 +61,11 @@ export default function NotificationsPage({ notifications, count, page, searchQu
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return { redirect: { destination: '/login', permanent: false } };
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return { redirect: { destination: '/login', permanent: false } };
 
     const page = parseInt(ctx.query.page as string, 10) || 1;
     const ITEMS_PER_PAGE = 20;
@@ -73,7 +76,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const { data: notifications, count, error } = await supabase
         .from('notifications')
         .select('*', { count: 'exact' })
-        .eq('user_id', session.user.id)
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .range(startIndex, startIndex + ITEMS_PER_PAGE - 1);
 
