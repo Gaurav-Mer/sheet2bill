@@ -207,9 +207,12 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createPagesServerClient(ctx);
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { user },
+    error: authError
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user || authError) {
     return { redirect: { destination: '/login', permanent: false } };
   }
 
@@ -221,7 +224,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let query = supabase
     .from('clients')
     .select('*', { count: 'exact' })
-    .eq('user_id', session.user.id);
+    .eq('user_id', user.id);
 
   if (searchQuery) {
     query = query.or(`name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
@@ -234,7 +237,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   return {
     props: {
-      user: session.user,
+      user: user,
       clients: clients || [],
       count: count || 0,
       page,

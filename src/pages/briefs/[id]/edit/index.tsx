@@ -48,11 +48,12 @@ export default function Index({ clients, brief }: EditPageProps) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
     const {
-        data: { session },
-    } = await supabase.auth.getSession();
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
 
 
-    if (!session) {
+    if (!user || authError) {
         return {
             redirect: {
                 destination: '/login', // or your login page route

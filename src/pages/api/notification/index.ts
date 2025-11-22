@@ -8,14 +8,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ message: 'Unauthorized' });
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+
+    if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
     // Fetch the 15 most recent notifications for the user
     const { data: notifications, error } = await supabase
         .from('notifications')
         .select('*')
-        .eq('user_id', session.user.id)
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(15);
 
@@ -23,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { count: unreadCount } = await supabase
         .from('notifications')
         .select('*', { count: 'exact', head: true })
-        .eq('user_id', session.user.id)
+        .eq('user_id', user.id)
         .eq('is_read', false);
 
     if (error) {

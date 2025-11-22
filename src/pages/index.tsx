@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/index.tsx
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
@@ -18,6 +19,13 @@ import { PremiumHeroSection } from '@/components/landing/PremiumHeroSection';
 import InvoiceTemplatesShowCase from '@/components/landing/InvoiceTemplateShowCase';
 
 
+declare global {
+  interface Window {
+    orufyBookings?: {
+      PopupWidget?: (options?: any) => void;
+    };
+  }
+}
 
 export default function LandingPage() {
   const ldJson = {
@@ -42,6 +50,7 @@ export default function LandingPage() {
       }
     ]
   };
+
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
 
@@ -63,6 +72,7 @@ export default function LandingPage() {
         />
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
       </Head>
+
       {/* --- Header --- */}
       <NonLoginNavbar />
 
@@ -270,8 +280,12 @@ export default function LandingPage() {
 // Redirects logged-in users to their dashboard
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createPagesServerClient(ctx);
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session) return { redirect: { destination: '/dashboard', permanent: false } };
+  // This validates the token with Supabase Auth but lets Middleware handle the refreshing.
+  const {
+    data: { user },
+    error: authError
+  } = await supabase.auth.getUser();
+  if (user && !authError) return { redirect: { destination: '/dashboard', permanent: false } };
   return { props: {} };
 };
 LandingPage.getLayout = function getLayout(page: ReactElement) { return page; };

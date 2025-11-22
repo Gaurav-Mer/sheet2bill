@@ -8,9 +8,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
 
-    if (!session) {
+    if (!user || authError) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -23,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 .from('notifications')
                 .update({ is_read: true })
                 .eq('id', notification_id)
-                .eq('user_id', session.user.id);
+                .eq('user_id', user.id);
 
             if (error) throw error;
 
@@ -33,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { error } = await supabase
                 .from('notifications')
                 .update({ is_read: true })
-                .eq('user_id', session.user.id);
+                .eq('user_id', user.id);
 
             if (error) throw error;
 

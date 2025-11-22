@@ -340,10 +340,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const currency = country === 'IN' ? 'inr' : 'usd';
 
     const supabase = createPagesServerClient(ctx);
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
 
     let profile = null;
-    if (session) {
+    if (user && !authError) {
         // Fetch the user's profile to get their subscription status
         const { data } = await supabase.from('profiles').select('*').single();
         profile = data;

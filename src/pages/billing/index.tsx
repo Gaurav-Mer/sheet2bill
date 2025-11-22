@@ -86,9 +86,12 @@ export default function BillingPage({ profile }: BillingPageProps) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const supabase = createPagesServerClient(ctx);
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
 
-    if (!session) {
+    if (!user || authError) {
         return { redirect: { destination: '/login', permanent: false } };
     }
 
@@ -98,7 +101,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         .select('subscription_status, subscription_ends_at')
         // --- THIS IS THE CRITICAL FIX ---
         // We must specify WHICH profile to get.
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         // --- END OF FIX ---
         .single();
 

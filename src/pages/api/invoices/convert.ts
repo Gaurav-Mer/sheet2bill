@@ -8,8 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ message: 'Unauthorized' });
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
     const { brief_id } = req.body;
     if (!brief_id) return res.status(400).json({ message: 'Brief ID is required.' });
@@ -21,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from('briefs')
             .select('*, line_items(*)')
             .eq('id', brief_id)
-            .eq('user_id', session.user.id)
+            .eq('user_id', user.id)
             .eq('status', 'approved')
             .single();
 
@@ -30,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // 2. Auto-generate the new invoice number.
-        const { count } = await supabase.from('invoices').select('invoice_number', { count: 'exact', head: true }).eq('user_id', session.user.id);
+        const { count } = await supabase.from('invoices').select('invoice_number', { count: 'exact', head: true }).eq('user_id', user.id);
         const nextNumber = (count || 0) + 1;
         const newInvoiceNumber = `INV-${String(nextNumber).padStart(4, '0')}`;
 
@@ -38,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { data: newInvoice, error: invoiceError } = await supabase
             .from('invoices')
             .insert({
-                user_id: session.user.id,
+                user_id: user.id,
                 client_id: brief.client_id,
                 brief_id: brief.id,
                 status: 'draft', // Invoices are always created as 'draft' first
@@ -61,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // 4. Copy the line items from the brief to the new invoice.
         const newInvoiceLineItems = brief.line_items.map((item: any) => ({
             invoice_id: newInvoice.id,
-            user_id: session.user.id,
+            user_id: user.id,
             description: item.description,
             quantity: item.quantity,
             unit_price: item.unit_price,

@@ -10,10 +10,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
 
     // 1. SECURITY: Ensure the user is logged in.
-    if (!session) {
+    if (!user || authError) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -22,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('subscription_status')
-            .eq('id', session.user.id)
+            .eq('id', user.id)
             .single();
 
         if (profileError) throw profileError;
@@ -44,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 subscription_status: 'trialing',
                 subscription_ends_at: trialEnds.toISOString(),
             })
-            .eq('id', session.user.id)
+            .eq('id', user.id)
             .select()
             .single();
 

@@ -8,8 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ message: 'Unauthorized' });
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
     const { id: originalBriefId } = req.query;
 
@@ -19,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from('briefs')
             .select('*, line_items(*)')
             .eq('id', originalBriefId)
-            .eq('user_id', session.user.id)
+            .eq('user_id', user.id)
             .single();
 
         if (fetchError || !originalBrief) {
@@ -30,13 +33,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { line_items, ...restOfBrief } = originalBrief;
 
         // 3. Auto-generate a new brief number.
-        const { count } = await supabase.from('briefs').select('*', { count: 'exact', head: true }).eq('user_id', session.user.id);
+        const { count } = await supabase.from('briefs').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
         const newBriefNumber = `BRIEF-${String((count || 0) + 1).padStart(4, '0')}`;
 
         // 4. Build a clean object for the new brief.
         const newBriefData = {
             ...restOfBrief, // This copies client_id, notes, tax_rate, total, etc.
-            user_id: session.user.id,
+            user_id: user.id,
             status: 'draft', // A duplicated brief always starts as a draft.
             title: `${originalBrief.title} (Copy)`,
             brief_number: newBriefNumber,
@@ -56,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (line_items && line_items.length > 0) {
             const new_line_items = line_items.map((item: any) => ({
                 brief_id: newBrief.id,
-                user_id: session.user.id,
+                user_id: user.id,
                 description: item.description,
                 quantity: item.quantity,
                 unit_price: item.unit_price,

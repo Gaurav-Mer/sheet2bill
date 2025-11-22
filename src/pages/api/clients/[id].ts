@@ -4,9 +4,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
 
-    if (!session) {
+    if (!user || authError) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -18,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from('clients')
             .update(req.body) // Update with the data sent from the form
             .eq('id', id)
-            .eq('user_id', session.user.id); // Security check
+            .eq('user_id', user.id); // Security check
 
         if (error) {
             return res.status(500).json({ message: 'Error updating client', error });
@@ -32,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from('clients')
             .delete()
             .eq('id', id)
-            .eq('user_id', session.user.id); // Security check
+            .eq('user_id', user.id); // Security check
 
         if (error) {
             return res.status(500).json({ message: 'Error deleting client', error });

@@ -9,16 +9,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
 
-    if (!session) {
+    if (!user || authError) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 
     try {
         // --- THIS IS THE GATEKEEPER ---
         // Before we do anything else, we check if the user is allowed to perform this action.
-        await checkPlanLimits(supabase, session.user.id, 'CREATE_CLIENT');
+        await checkPlanLimits(supabase, user.id, 'CREATE_CLIENT');
 
         // If checkPlanLimits succeeds (doesn't throw an error), we proceed.
         const { name, ...clientData } = req.body;
@@ -30,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { data, error } = await supabase
             .from('clients')
             .insert({
-                user_id: session.user.id,
+                user_id: user.id,
                 name,
                 ...clientData
             })

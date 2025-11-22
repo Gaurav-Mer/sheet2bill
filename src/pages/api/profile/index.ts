@@ -10,8 +10,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const supabase = createPagesServerClient({ req, res });
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return res.status(401).json({ message: 'Unauthorized' });
+    const {
+        data: { user },
+        error: authError
+    } = await supabase.auth.getUser();
+    if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
 
     // Destructure all the new fields from the request body
     // *** NEW: Renamed 'avatar_url' to 'new_avatar_url' for clarity ***
@@ -28,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data: old_profile, error: fetchError } = await supabase
         .from('profiles')
         .select('avatar_url')
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         .single();
 
     // We can just log this error, but we'll still try to update the profile
@@ -77,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data, error } = await supabase
         .from('profiles')
         .upsert({
-            id: session.user.id,
+            id: user.id,
             updated_at: new Date().toISOString(),
             full_name, company_name,
             avatar_url: new_avatar_url, // Pass the new URL to be saved
