@@ -16,10 +16,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '@/components/FeatureGate';
 import Image from 'next/image';
-import { Check, Plus, Search } from 'lucide-react';
+import { Check, CircleX, Plus, Search } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import Link from 'next/link';
 
 type Client = { id: number; name: string };
 type LineItem = { description: string; quantity: number; unit_price: number };
@@ -43,20 +42,9 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
         { description: '', quantity: 1, unit_price: 0 },
     ]);
     // --- NEW STATE FOR ITEM MODAL ---
-    const [isItemModalOpen, setItemModalOpen] = useState(false);
+    const [isItemModalOpen, setItemModalOpen] = useState<null | number>(null);
     const [itemSearchQuery, setItemSearchQuery] = useState('');
-
-    // Function to add a saved item to the brief
-    const handleAddSavedItem = (item: any) => {
-        setLineItems([...lineItems, {
-            description: item.description || item.name,
-            quantity: 1,
-            unit_price: item.default_price
-        }]);
-        setItemModalOpen(false);
-        toast.success('Item added!');
-    };
-
+    console.log("lineItems", lineItems)
     // Mutation to save brief
     const createBriefMutation = useMutation({
         mutationFn: async (newBrief: any) => {
@@ -88,6 +76,11 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
 
     // Handlers
     const handleLineItemChange = (index: number, field: keyof LineItem, value: string | number) => {
+        //for the new one opening modal
+        if (value === "add_new_sheet2bill") {
+            return setItemModalOpen(index)
+        }
+        if (!value || value === "add_new_sheet2bill") return
         const updated = [...lineItems];
         updated[index] = { ...updated[index], [field]: value };
         setLineItems(updated);
@@ -124,10 +117,24 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
     };
 
     // Filter items based on search
-    const filteredItems = items.filter(item =>
-        item.name.toLowerCase().includes(itemSearchQuery.toLowerCase())
-    );
+    const addNewVal = (name: string, index: number) => {
+        setLineItems(prev => {
+            const data = [...prev]
+            data[index] = { ...data[index], description: name }
+            console.log("update is ", data)
+            return data
+        })
+        //close dialog and reset search
+        setItemModalOpen(null);
+        setItemSearchQuery('');
+    }
 
+
+    const isAddedItem = (item: string) => {
+        const selected = items?.find(it => String(it.id) === String(item))
+        if (!selected) return item
+        return selected?.name
+    }
     return (
         <div className="flex flex-col min-h-dvh">
             {/* Main Content */}
@@ -190,6 +197,7 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                                         }
                                                         required
                                                     />
+
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <div>
@@ -243,14 +251,42 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                                 {lineItems.map((item, index) => (
                                                     <tr key={index} className="border-b">
                                                         <td className="py-2">
-                                                            <Input
+                                                            {/* <Input
                                                                 placeholder="Description..."
                                                                 value={item.description}
                                                                 onChange={(e) =>
                                                                     handleLineItemChange(index, 'description', e.target.value)
                                                                 }
                                                                 required
-                                                            />
+                                                            /> */}
+                                                            {item?.description ?
+                                                                <div className='p-2 border items-center rounded-md  justify-between grid grid-cols-9 gap-2'>
+                                                                    <p className='col-span-8'> {isAddedItem(item.description)}</p>
+                                                                    <CircleX className='cursor-pointer' size={16} onClick={() => {
+                                                                        setLineItems(it => {
+                                                                            const data = [...it]
+                                                                            data[index] = { ...data[index], description: "" }
+                                                                            return data
+                                                                        })
+                                                                    }} /></div>
+                                                                : <Select onValueChange={(value) => handleLineItemChange(index, 'description', value)} value={item.description}>
+                                                                    <SelectTrigger className='w-full '>
+                                                                        <SelectValue placeholder="Add from item library..." />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        {items?.map((libItem) => (
+                                                                            <SelectItem
+                                                                                key={libItem.id}
+                                                                                value={libItem.id.toString()}
+                                                                            >
+                                                                                {libItem.name}
+                                                                            </SelectItem>
+                                                                        ))}
+
+                                                                        {items?.length === 0 && <SelectItem value='no' disabled>No items in library</SelectItem>}
+                                                                        <SelectItem value='add_new_sheet2bill' className='text-sm font-semibold p-4! hover:underline cursor-pointer text-primary' >+ Add from library</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>}
                                                         </td>
                                                         <td className="py-2 px-2 w-20">
                                                             <Input
@@ -502,7 +538,7 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                 </CardContent>
                             </Card>
                         </div>
-                        <Dialog open={isItemModalOpen} onOpenChange={setItemModalOpen}>
+                        <Dialog open={isItemModalOpen !== null} onOpenChange={() => setItemModalOpen(null)}>
                             <DialogContent className="sm:max-w-md">
                                 <DialogHeader>
                                     <DialogTitle>Select Item from Library</DialogTitle>
@@ -517,34 +553,10 @@ export default function NewBriefPage({ clients, items }: { clients: Client[], it
                                             className="pl-8"
                                         />
                                     </div>
-                                    <div className="max-h-[300px] overflow-y-auto space-y-2">
-                                        {filteredItems.length > 0 ? (
-                                            filteredItems.map((item) => (
-                                                <div
-                                                    key={item.id}
-                                                    onClick={() => handleAddSavedItem(item)}
-                                                    className="flex items-center justify-between p-3 border rounded-md hover:bg-muted cursor-pointer transition-colors"
-                                                >
-                                                    <div>
-                                                        <p className="font-medium">{item.name}</p>
-                                                        <p className="text-xs text-muted-foreground truncate max-w-[200px]">{item.description}</p>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="font-semibold">₹{item.default_price}</span>
-                                                        <Plus className="h-4 w-4 text-primary" />
-                                                    </div>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <p className="text-center text-sm text-muted-foreground py-4">No items found.</p>
-                                        )}
-                                    </div>
                                 </div>
                                 <DialogFooter>
-                                    <Button variant="outline" onClick={() => setItemModalOpen(false)}>Close</Button>
-                                    <Link href="/items" target="_blank">
-                                        <Button variant="link">Manage Library</Button>
-                                    </Link>
+                                    <Button variant="outline" onClick={() => setItemModalOpen(null)}>Close</Button>
+                                    <Button onClick={() => addNewVal(itemSearchQuery, isItemModalOpen ?? -1)}>Add new item</Button>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
@@ -581,7 +593,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         .select('id, name')
         .eq('user_id', session.user.id);
 
-    // 2. NEW: Fetch Items
+    // 2.  Fetch Items
     const { data: items } = await supabase
         .from('items')
         .select('*')
