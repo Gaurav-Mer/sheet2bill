@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // 2. Destructure the original brief to safely separate unwanted fields.
-        const { line_items, ...restOfBrief } = originalBrief;
+        const { line_items, id: _, brief_token, ...restOfBrief } = originalBrief;
 
         // 3. Auto-generate a new brief number.
         const { count } = await supabase.from('briefs').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             status: 'draft', // A duplicated brief always starts as a draft.
             title: `${originalBrief.title} (Copy)`,
             brief_number: newBriefNumber,
-            issue_date: new Date().toISOString().split('T')[0], // Set issue date to today.
+            issue_date: restOfBrief?.issue_date ?? new Date().toISOString().split('T')[0], // Set issue date to today.
         };
 
         // 5. Create the new brief in the database.
@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .insert(newBriefData)
             .select('id')
             .single();
-
+        console.log("insertBriefError", insertBriefError)
         if (insertBriefError) throw insertBriefError;
 
         // 6. Copy the line items to the new brief.
