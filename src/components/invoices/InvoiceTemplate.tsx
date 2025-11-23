@@ -3,7 +3,6 @@
 
 import { normalizeCountry, normalizeCurrency } from "@/lib/normalizeCountry";
 import { Client, Profile } from "@/types";
-import Head from "next/head";
 import Image from "next/image";
 
 // The full data structure required by the template
@@ -145,12 +144,12 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                         </table>
                     </section>
 
-                    {/* {(data.profile.tax_id || data.notes) && (
+                    {(data.profile.tax_id || data.notes) && (
                         <section style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '10px', fontSize: '12px', color: '#6b7280' }}>
                             {data.notes && <div><strong>Notes:</strong><p>{data.notes}</p></div>}
                             {data.profile.tax_id && <div style={{ marginTop: '10px' }}><strong>Tax ID:</strong><p>{data.profile.tax_id}</p></div>}
                         </section>
-                    )} */}
+                    )}
 
                     <footer className="footer">
                         <p>{thanksMessage}</p>

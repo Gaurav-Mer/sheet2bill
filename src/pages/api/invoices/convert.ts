@@ -46,14 +46,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 brief_id: brief.id,
                 status: 'draft', // Invoices are always created as 'draft' first
                 invoice_number: newInvoiceNumber,
-                issue_date: new Date().toISOString().split('T')[0],
+                issue_date: brief.issue_date ?? new Date().toISOString().split('T')[0],
                 due_date: brief.due_date,
                 currency: brief.currency,
                 subtotal: brief.subtotal,
                 tax_rate: brief.tax_rate,
                 tax_amount: brief.tax_amount,
                 total: brief.total,
-                notes: brief.notes,
+                notes: brief.notes ?? "",
                 template_id: brief.template_id || 'zurich', // Default to 'zurich' if none
             })
             .select()
