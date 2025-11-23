@@ -70,11 +70,11 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
 
     return (
         <html>
-            <Head>
+            <head>
                 <meta charSet="utf-8" />
                 {/* Font link moved to pages/_document.tsx for global loading */}
                 <style dangerouslySetInnerHTML={{ __html: css }} />
-            </Head>
+            </head>
             <body>
                 <div className="invoice-container">
                     <header className="header">
