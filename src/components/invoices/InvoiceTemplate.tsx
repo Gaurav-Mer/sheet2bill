@@ -147,7 +147,7 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
 
                     {(data.profile.tax_id || data.notes) && (
                         <section style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '10px', fontSize: '12px', color: '#6b7280' }}>
-                            {data.notes && <div><strong>Notes:</strong><p>{data.notes}</p></div>}
+                            {/* {data.notes && <div><strong>Notes:</strong><p>{data.notes}</p></div>} */}
                             {data.profile.tax_id && <div style={{ marginTop: '10px' }}><strong>Tax ID:</strong><p>{data.profile.tax_id}</p></div>}
                         </section>
                     )}
