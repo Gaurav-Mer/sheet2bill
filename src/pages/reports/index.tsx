@@ -277,7 +277,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
             client_id_filter: filters.client_id === 'all' ? null : parseInt(filters.client_id),
             currency_filter: filters.currency === 'all' ? null : filters.currency,
         }).single(),
-        supabase.from('clients').select('id, name').order('name')
+        supabase.from('clients').select('id, name').eq("user_id", user.id).order('name')
     ]);
 
     const { data: stats, error: statsError } = statsQuery;
