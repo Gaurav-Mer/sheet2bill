@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '@/components/FeatureGate';
 import Image from 'next/image';
-import { Check, CircleX, Plus, Search } from 'lucide-react';
+import { Check, CircleX, Search } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
@@ -26,15 +26,14 @@ type LineItem = { description: string; quantity: number; unit_price: number, ite
 // Utility: Format date
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
-export default function NewBriefPage({ clients, items }: { clients: Client[], items: any[] }) {
+export default function NewBriefPage({ clients, items, user }: { clients: Client[], items: any[], user: any }) {
     const router = useRouter();
-
     // Form state
     const [title, setTitle] = useState('');
     const [clientId, setClientId] = useState<string>('');
     const [notes, setNotes] = useState('Payment due within 14 days.');
     const [taxRate, setTaxRate] = useState<number>(0);
-    const [currency, setCurrency] = useState('INR');
+    const [currency, setCurrency] = useState(user?.default_currency ?? 'INR');
     const [issueDate, setIssueDate] = useState(getTodayDate());
     const [dueDate, setDueDate] = useState('');
     const [templateId, setTemplateId] = useState('zurich');
@@ -640,10 +639,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         .eq('user_id', user.id)
         .order('name');
 
+    const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+
     return {
         props: {
             clients: clients || [],
-            items: items || [] // Pass items to the page
+            items: items || [], // Pass items to the page
+            user: profile
         }
     };
 };
