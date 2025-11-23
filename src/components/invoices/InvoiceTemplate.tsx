@@ -71,7 +71,6 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
         <html>
             <head>
                 <meta charSet="utf-8" />
-                {/* Font link moved to pages/_document.tsx for global loading */}
                 <style dangerouslySetInnerHTML={{ __html: css }} />
             </head>
             <body>
@@ -79,7 +78,7 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                     <header className="header">
                         <div>
                             {data.profile.avatar_url ? (
-                                <Image width={142} height={142} src={data.profile.avatar_url} alt="Company Logo" className="logo" />
+                                <img src={data.profile.avatar_url} alt="Company Logo" className="logo" />
                             ) : (
                                 <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: primaryColor, margin: 0 }}>
                                     {data.profile.company_name || data.profile.full_name}
