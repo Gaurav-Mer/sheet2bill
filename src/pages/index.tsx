@@ -4,7 +4,7 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { FaqSection } from '@/components/landing/FaqSection';
@@ -50,6 +50,33 @@ export default function LandingPage() {
       }
     ]
   };
+
+  useEffect(() => {
+    // Load external CSS
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://orufybookings.beta.orufy.in/external/widget.css";
+    document.head.appendChild(link);
+
+    // Load external JS
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = "https://orufybookings.beta.orufy.in/external/widget.js";
+
+    script.onload = () => {
+      if (window.orufyBookings) {
+        window?.orufyBookings?.PopupWidget?.({
+          AccessLink:
+            "/sheet2bill/demo-book?BrandColor=61ac0d&hideLHS=false&BackgroundColor=transparent",
+          ButtonBackground: "61ac0d",
+          ButtonText: "Book a demo",
+          ButtonTextColor: "FFFFFF",
+        });
+      }
+    };
+
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
