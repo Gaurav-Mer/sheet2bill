@@ -80,6 +80,27 @@ export const AVAILABLE_TEMPLATES = [
         img: "/invoice/six.png"
     },
     {
+        id: 'basel',
+        name: 'Basel',
+        description: 'A bold, creative, and modern asymmetrical design.',
+        settings: {
+            theme: {
+                primaryColor: '#FF4500', // Bold OrangeRed
+                backgroundColor: '#ffffff',
+                textColor: '#111827',
+                headingColor: '#FF4500',
+            },
+            typography: {
+                fontFamily: "'Poppins', sans-serif",
+                googleFontUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@700&display=swap',
+            },
+            layout: {
+                headerAlignment: 'left',
+            },
+        },
+        img: "/invoice/basil.png"
+    },
+    {
         id: 'jaipur',
         name: 'Jaipur',
         description: 'An elegant, warm, and artisan-style design.',

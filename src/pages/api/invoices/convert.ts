@@ -55,6 +55,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 total: brief.total,
                 notes: brief.notes ?? "",
                 template_id: brief.template_id || 'zurich', // Default to 'zurich' if none
+                service_start_date: brief.service_start_date,
+                delivery_date: brief.delivery_date,     // Maps Delivery -> Supply
             })
             .select()
             .single();

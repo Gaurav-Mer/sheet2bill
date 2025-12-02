@@ -14,8 +14,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { createClient } from '@supabase/supabase-js';
 import qs from 'qs';
-import { Calendar, CheckCircle, Mail, XCircle } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Mail, XCircle } from 'lucide-react';
 import { normalizeCurrency } from '@/lib/normalizeCountry';
+import { format } from 'date-fns';
 
 // --- Type Definition ---
 type BriefDetails = {
@@ -31,6 +32,8 @@ type BriefDetails = {
     status: string;
     clients: { name: string; email: string | null };
     line_items: { description: string; quantity: number; unit_price: number }[];
+    service_start_date?: string;
+    delivery_date?: string;
 };
 
 // --- Component 1: The Password Form ---
@@ -133,6 +136,29 @@ const BriefContent = ({ brief }: { brief: BriefDetails }) => {
                             <Calendar className="w-4 h-4 flex-shrink-0" />
                             <span>Issued on: {formattedIssueDate}</span>
                         </div>
+                        {/* 2. Delivery Date / Service Period (The Important Part) */}
+                        {brief.delivery_date && <div className="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-md border border-primary/5 mt-2 text-primary">
+                            <Clock className="w-4 h-4" />
+                            <span>
+                                <span className="font-bold text-primary text-xs uppercase tracking-wider mr-2">
+                                    {brief?.service_start_date && brief.service_start_date !== brief.delivery_date
+                                        ? "Service Period"
+                                        : "Delivery Date"
+                                    }
+                                </span>
+
+                                {/* Range Logic Display */}
+                                {brief.service_start_date && brief.service_start_date !== brief.delivery_date ? (
+                                    <span>
+                                        {format(new Date(brief.service_start_date), 'MMM d')}
+                                        {' — '}
+                                        {format(new Date(brief.delivery_date), 'MMM d, yyyy')}
+                                    </span>
+                                ) : (
+                                    <span>{format(new Date(brief.delivery_date), 'MMMM d, yyyy')}</span>
+                                )}
+                            </span>
+                        </div>}
                     </div>
                     <div className="flex-shrink-0">
                         {getStatusBadge()}

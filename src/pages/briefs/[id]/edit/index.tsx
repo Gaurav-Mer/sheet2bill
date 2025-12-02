@@ -20,6 +20,7 @@ export default function Index({ clients, brief, items }: EditPageProps) {
 
     const editBriefMutation = useMutation({
         mutationFn: async (updatedBrief: any) => {
+            console.log("updatedBrief", updatedBrief)
             const response = await fetch(`/api/briefs/${brief.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },

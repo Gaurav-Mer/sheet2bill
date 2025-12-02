@@ -140,6 +140,9 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                         <DropdownMenuItem asChild>
                             <Link href="/settings">Settings</Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href="/settings/public-view">Storefront</Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem disabled>Support</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onSelect={handleLogout}>

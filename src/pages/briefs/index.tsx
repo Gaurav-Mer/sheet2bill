@@ -24,7 +24,7 @@ type Brief = {
     total: number;
     currency: string;
     brief_token: string;
-    clients: { name: string } | null;
+    clients: { name: string, email?: string } | null;
 };
 
 type PageProps = {
@@ -216,7 +216,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     // Build the query to fetch briefs and their related client names
     let query = supabase
         .from('briefs')
-        .select('id, brief_number, title, status, total, currency, brief_token, clients(name)', { count: 'exact' })
+        .select('id, brief_number, title, status, total, currency, brief_token, clients(name,email)', { count: 'exact' })
         .eq('user_id', user.id);
 
     if (searchQuery) {
@@ -228,7 +228,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     query = query.order('created_at', { ascending: false }).range(startIndex, endIndex);
 
     const { data: briefs, error, count } = await query;
-
+    console.log("briefs", briefs)
     if (error) console.error("Error fetching briefs:", error);
 
     return { props: { briefs: briefs || [], count: count || 0, page, searchQuery } };

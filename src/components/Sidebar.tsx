@@ -1,7 +1,7 @@
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { LayoutDashboard, Users, FileText, Settings, LogOut, BarChart3, CreditCard, Package } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Settings, LogOut, BarChart3, CreditCard, Package, SearchCheck } from 'lucide-react';
 import { Logo } from './Logo';
 
 const navItems = [
@@ -11,6 +11,7 @@ const navItems = [
     { href: '/invoices', label: 'Invoices', icon: FileText },
     { href: '/reports', label: 'Reports', icon: BarChart3 }, // ADD THIS LINE
     { href: '/items', label: 'Items', icon: Package }, // 2. Add the new "Items" link
+    { href: '/inquiries', label: 'Inquiries', icon: SearchCheck }, // 2. Add the new "Items" link
 
     // { href: '/settings/templates', label: 'Templates', icon: Palette }, // ADD THIS LINE
     { href: '/billing', label: 'Billing', icon: CreditCard }, // ADD THIS LINE

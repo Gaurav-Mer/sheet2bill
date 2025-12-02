@@ -43,7 +43,8 @@ export type Brief = {
     is_password_protected?: boolean
     template_id?: string; // NEW: Template identifier
     // ... any other relational data if needed
-
+    service_start_date?: string; // ISO date string
+    delivery_date?: string; // ISO date string
     // ... all other brief fields
 };
 
@@ -96,3 +97,12 @@ export type InvoiceTemplateDefinition = {
     description: string;
     settings: TemplateSettings;
 };
+
+
+export interface Iitem {
+    id: number
+    name: string
+    description?: string | null
+    default_price: number
+    currency: string
+}

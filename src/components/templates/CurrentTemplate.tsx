@@ -2,6 +2,7 @@
 // import { ManhattanTemplate } from './templates/ManhattanTemplate'; // We would add this later
 
 import InvoiceTemplate from "../invoices/InvoiceTemplate";
+import { BasilTemplate } from "./BasilTemplate";
 import { BerlinTemplate } from "./BerlinTemplate";
 import { JaipurTemplate } from "./JaipurTemplate";
 import { KyotoTemplate } from "./KyotoTemplate";
@@ -37,6 +38,10 @@ export const CurrentTemplate = ({ templateId, data }: InvoiceTemplateRouterProps
         case 'kyoto':
             // Default to the Zurich template if no match is found
             return <KyotoTemplate data={data} />;
+
+        case 'basel':
+            // Default to the Zurich template if no match is found
+            return <BasilTemplate data={data as any} />;
         default:
             return <InvoiceTemplate data={data as any} />
     }

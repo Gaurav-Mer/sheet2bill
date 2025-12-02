@@ -16,9 +16,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '@/components/FeatureGate';
 import Image from 'next/image';
-import { Check, CircleX, Search } from 'lucide-react';
+import { CalendarIcon, Check, CircleX, Search } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { Calendar } from '@/components/ui/calendar';
 
 type Client = { id: number; name: string };
 type LineItem = { description: string; quantity: number; unit_price: number, item_id?: string | number };
@@ -40,6 +43,11 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
     const [lineItems, setLineItems] = useState<LineItem[]>([
         { description: '', quantity: 1, unit_price: 0, item_id: undefined },
     ]);
+    const [dateRange, setDateRange] = useState<any>({
+        from: null,
+        to: null
+    });
+
     // --- NEW STATE FOR ITEM MODAL ---
     const [isItemModalOpen, setItemModalOpen] = useState<null | number>(null);
     const [itemSearchQuery, setItemSearchQuery] = useState('');
@@ -83,7 +91,6 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
         if (field === "description") {
             //check whether the current value in the items library 
             const selected = items.find(it => String(it.id) === String(value))
-            console.log("selected", selected)
             if (selected.id) {
                 updated[index] = { ...updated[index], description: selected.name, item_id: selected.id, unit_price: selected.default_price };
                 return setLineItems(updated);
@@ -120,6 +127,8 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
             issue_date: issueDate,
             due_date: dueDate || null,
             template_id: templateId,
+            service_start_date: dateRange?.from ? format(dateRange?.from, "yyyy-MM-dd") : null,
+            delivery_date: dateRange?.to ? format(dateRange?.to, "yyyy-MM-dd") : null,
         });
     };
 
@@ -422,6 +431,50 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
                                                 onChange={(e) => setDueDate(e.target.value)}
                                             />
                                         </div>
+                                        <div className='col-span-2'>
+                                            <Label className="text-xs sm:text-sm">When is this required?</Label>
+                                            <Label className="text-xs sm:text-xs text-slate-600"> Select a single date for a deadline, or a range for an event.</Label>
+                                            <Popover >
+                                                <PopoverTrigger asChild className='w-full col-span-2'>
+                                                    <Button
+                                                        variant="outline"
+                                                        className={twMerge(
+                                                            "w-full pl-3 mt-0 text-left font-normal",
+                                                            !dateRange && "text-muted-foreground"
+                                                        )}
+                                                    >
+
+                                                        <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
+
+                                                        {dateRange?.from ? (
+                                                            dateRange.to ? (
+                                                                <>
+                                                                    {format(dateRange.from, "LLL dd, y")} -{" "}
+                                                                    {format(dateRange.to, "LLL dd, y")}
+                                                                </>
+                                                            ) : (
+                                                                format(dateRange.from, "LLL dd, y")
+                                                            )
+                                                        ) : (
+                                                            <span>Pick a date</span>
+                                                        )}
+                                                    </Button>
+                                                </PopoverTrigger>
+
+                                                <PopoverContent className="w-auto p-0" align="start">
+                                                    <Calendar
+                                                        initialFocus
+                                                        mode="range"
+                                                        defaultMonth={dateRange?.from}
+                                                        selected={dateRange}
+                                                        onSelect={(range) => setDateRange(range)}
+                                                        numberOfMonths={1}
+                                                        disabled={(date) => date < new Date()}
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+
                                     </div>
 
                                     <div>

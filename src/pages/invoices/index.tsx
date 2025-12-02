@@ -12,14 +12,15 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { MoreHorizontal } from 'lucide-react';
 import { normalizeCurrency } from '@/lib/normalizeCountry';
+import SendInvoiceButton from '@/components/invoices/SendInvoiceButton';
 
-type Invoice = {
+export type Invoice = {
     id: number;
     invoice_number: string;
     status: string;
     total: number;
     currency: string;
-    clients: { name: string } | null;
+    clients: { name: string, email?: string } | null;
     invoice_token?: string;
 };
 
@@ -177,6 +178,7 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
                                                             Delete
                                                         </DropdownMenuItem>
                                                     )}
+                                                    <SendInvoiceButton invoice={invoice} />
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </td>
@@ -378,7 +380,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     let query = supabase
         .from('invoices')
-        .select('*, clients(name)', { count: 'exact' })
+        .select('*, clients(name,email)', { count: 'exact' })
         .eq('user_id', user.id);
 
     if (searchQuery) query = query.ilike('invoice_number', `%${searchQuery}%`);

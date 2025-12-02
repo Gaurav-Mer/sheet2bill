@@ -4,8 +4,9 @@ import { normalizeCurrency } from '@/lib/normalizeCountry';
 import { MoreHorizontal, FileText, Eye, Link as LinkIcon, Edit, Copy, Trash2, FileCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import SendBriefButton from './SendBriefButtont';
 
-type Brief = {
+export type Brief = {
     id: number;
     brief_number: string;
     title: string;
@@ -13,7 +14,7 @@ type Brief = {
     total: number;
     currency: string;
     brief_token: string;
-    clients: { name: string } | null;
+    clients: { name: string, email?: string } | null;
 };
 
 type BriefsListProps = {
@@ -175,6 +176,9 @@ export function BriefsList({
                                                             Delete
                                                         </DropdownMenuItem>
                                                     )}
+                                                    <DropdownMenuItem>
+                                                        <SendBriefButton brief={brief} />
+                                                    </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </td>
@@ -292,6 +296,7 @@ export function BriefsList({
                                                             Delete
                                                         </DropdownMenuItem>
                                                     )}
+
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>

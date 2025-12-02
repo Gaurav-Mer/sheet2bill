@@ -11,13 +11,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 // Import your central types
 import { Client, Brief, LineItem } from '@/types';
-import { AlertCircle, X, Check, CircleX, Search } from 'lucide-react';
+import { AlertCircle, X, Check, CircleX, Search, CalendarIcon } from 'lucide-react';
 import { Switch } from '../ui/switch';
 import { AVAILABLE_TEMPLATES } from '@/lib/templates';
 import { FeatureGate } from '../FeatureGate';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { twMerge } from 'tailwind-merge';
+import { format } from 'date-fns/format';
+import { Calendar } from '../ui/calendar';
 
 type BriefFormProps = {
     clients: Client[];
@@ -52,6 +56,10 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
     const [templateId, setTemplateId] = useState(initialData?.template_id ?? 'zurich');
     const [isItemModalOpen, setItemModalOpen] = useState<null | number>(null);
     const [itemSearchQuery, setItemSearchQuery] = useState('');
+    const [dateRange, setDateRange] = useState<any>({
+        from: initialData?.service_start_date ?? null,
+        to: initialData?.delivery_date ?? null
+    });
     // --- Calculations ---
     const totals = useMemo(() => {
         const subtotal = lineItems.reduce((total, item) => total + (item.quantity * item.unit_price), 0);
@@ -101,7 +109,7 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
             console.error('Please select a client.');
             return;
         }
-
+        console.log("dateRange", dateRange)
         const payload = {
             client_id: parseInt(clientId),
             lineItems, title, currency, notes,
@@ -115,6 +123,8 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
             is_password_protected: isPasswordProtected,
             access_password: password,
             template_id: templateId,
+            service_start_date: dateRange?.from ? format(dateRange?.from, "yyyy-MM-dd") : null,
+            delivery_date: dateRange?.to ? format(dateRange.to, "yyyy-MM-dd") : null,
         };
 
         onSubmit(payload);
@@ -216,6 +226,50 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                     <Label htmlFor="due-date-mobile" className="text-sm">Due Date</Label>
                                     <Input id="due-date-mobile" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
                                 </div>
+                            </div>
+
+                            <div className='col-span-2'>
+                                <Label className="text-xs sm:text-sm">When is this required?</Label>
+                                <Label className="text-xs sm:text-xs text-slate-600"> Select a single date for a deadline, or a range for an event.</Label>
+                                <Popover>
+                                    <PopoverTrigger asChild className='w-full col-span-2'>
+                                        <Button
+                                            variant="outline"
+                                            className={twMerge(
+                                                "w-full pl-3 mt-0 text-left font-normal",
+                                                !dateRange && "text-muted-foreground"
+                                            )}
+                                        >
+
+                                            <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
+
+                                            {dateRange?.from ? (
+                                                dateRange.to ? (
+                                                    <>
+                                                        {format(dateRange.from, "LLL dd, y")} -{" "}
+                                                        {format(dateRange.to, "LLL dd, y")}
+                                                    </>
+                                                ) : (
+                                                    format(dateRange.from, "LLL dd, y")
+                                                )
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                        </Button>
+                                    </PopoverTrigger>
+
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            initialFocus
+                                            mode="range"
+                                            defaultMonth={dateRange?.from}
+                                            selected={dateRange}
+                                            onSelect={(range) => setDateRange(range)}
+                                            numberOfMonths={1}
+                                            disabled={(date) => date < new Date()}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                             <div>
                                 <Label htmlFor="currency-mobile">Currency</Label>
@@ -389,6 +443,50 @@ export function BriefForm({ clients, initialData, onSubmit, submitButtonText, is
                                         <div>
                                             <Label htmlFor="due-date">Due Date</Label>
                                             <Input id="due-date" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
+                                        </div>
+
+                                        <div className='col-span-2'>
+                                            <Label className="text-xs sm:text-sm">When is this required?</Label>
+                                            <Label className="text-xs sm:text-xs text-slate-600"> Select a single date for a deadline, or a range for an event.</Label>
+                                            <Popover>
+                                                <PopoverTrigger asChild className='w-full col-span-2'>
+                                                    <Button
+                                                        variant="outline"
+                                                        className={twMerge(
+                                                            "w-full pl-3 mt-0 text-left font-normal",
+                                                            !dateRange && "text-muted-foreground"
+                                                        )}
+                                                    >
+
+                                                        <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
+
+                                                        {dateRange?.from ? (
+                                                            dateRange.to ? (
+                                                                <>
+                                                                    {format(dateRange.from, "LLL dd, y")} -{" "}
+                                                                    {format(dateRange.to, "LLL dd, y")}
+                                                                </>
+                                                            ) : (
+                                                                format(dateRange.from, "LLL dd, y")
+                                                            )
+                                                        ) : (
+                                                            <span>Pick a date</span>
+                                                        )}
+                                                    </Button>
+                                                </PopoverTrigger>
+
+                                                <PopoverContent className="w-auto p-0" align="start">
+                                                    <Calendar
+                                                        initialFocus
+                                                        mode="range"
+                                                        defaultMonth={dateRange?.from}
+                                                        selected={dateRange}
+                                                        onSelect={(range) => setDateRange(range)}
+                                                        numberOfMonths={1}
+                                                        disabled={(date) => date < new Date()}
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
                                         </div>
                                     </div>
                                     <div className='w-full'>

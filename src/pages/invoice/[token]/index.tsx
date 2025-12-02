@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/invoice/[token].tsx
 import { CurrentTemplate } from '@/components/templates/CurrentTemplate';
+import { Button } from '@/components/ui/button';
 import { createClient } from '@supabase/supabase-js';
+import { HardDriveDownloadIcon, Share2 } from 'lucide-react';
 import { GetServerSidePropsContext } from 'next';
 import { ReactElement } from 'react';
 
@@ -14,7 +16,55 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
     }
 
     // CORRECTED: We must pass mode="web" to prevent hydration errors.
-    return <CurrentTemplate templateId={invoice?.template_id ?? undefined} data={invoice as any} />
+    return (
+        <>{/* Floating Action Buttons */}
+            <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+
+                {/* Download PDF */}
+                <Button
+                    className="shadow-lg rounded-full px-5 py-3 text-sm"
+                    variant="secondary"
+                >
+                    <a
+                        href={`/api/invoices/${invoice.id}/pdf`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full h-full"
+                    >
+                    </a>
+                    <HardDriveDownloadIcon size={30} /> Download PDF
+                </Button>
+
+                {/* Share Invoice */}
+                <Button
+                    className="shadow-lg rounded-full px-5 py-3 text-sm"
+                    variant="secondary"
+                    onClick={async () => {
+                        const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/invoice/${invoice.invoice_token}`;
+
+                        if (navigator.share) {
+                            try {
+                                await navigator.share({
+                                    title: "Invoice",
+                                    text: "Here is your invoice",
+                                    url: shareUrl,
+                                });
+                            } catch (err) {
+                                console.error("Share cancelled:", err);
+                            }
+                        } else {
+                            await navigator.clipboard.writeText(shareUrl);
+                            alert("Invoice link copied to clipboard!");
+                        }
+                    }}
+                >
+                    <Share2 size={30} />  Share Invoice
+                </Button>
+            </div>
+
+            <CurrentTemplate templateId={invoice?.template_id ?? undefined} data={invoice as any} />
+        </>
+    )
 }
 
 // In pages/invoice/[token].tsx

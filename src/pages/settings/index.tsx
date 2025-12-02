@@ -44,7 +44,6 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
 
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [logoPreview, setLogoPreview] = useState<string | null>(profile?.avatar_url || null);
-
     const updateProfileMutation = useMutation({
         mutationFn: async (updatedProfile: any) => {
             const response = await fetch('/api/profile', {

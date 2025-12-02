@@ -3,7 +3,7 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -182,7 +182,7 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
                         </div>
                         <div>
                             <Label htmlFor="description">Description (Optional)</Label>
-                            <Input id="description" name="description" defaultValue={selectedItem?.description || ''} />
+                            <Input maxLength={100} id="description" name="description" defaultValue={selectedItem?.description || ''} />
                         </div>
                         <div>
                             <Label htmlFor="default_price">Default Price</Label>
