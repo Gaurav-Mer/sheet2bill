@@ -10,6 +10,7 @@ import { Switch } from '../ui/switch'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { SkillsInput } from '../skill-input/Skill-Input'
+import Link from 'next/link'
 
 export default function StorefrontForm({ initialData }: { initialData: any }) {
 
@@ -48,6 +49,20 @@ export default function StorefrontForm({ initialData }: { initialData: any }) {
 
     const onSubmit = async (data: StorefrontFormValues) => {
         try {
+            if (!initialData?.company_name) {
+                toast.error('Please set your Company Name in the Settings page before publishing your storefront.');
+                return;
+            }
+            if (!initialData?.country || !initialData.city) {
+                toast.error('Please set your location in the Settings page before publishing your storefront.');
+                return;
+            }
+
+
+            if (!initialData?.default_currency) {
+                toast.error('Please set your Default Currency in the Settings page before publishing your storefront.');
+                return;
+            }
             // 1. Transform comma-separated string back to Array
 
             // 2. Prepare payload
@@ -81,6 +96,7 @@ export default function StorefrontForm({ initialData }: { initialData: any }) {
                 <div>
                     <h1 className="text-3xl font-bold flex items-center gap-2"> <Globe size={25} /> Public Visibility</h1>
                     <p className="text-muted-foreground mt-2">Manage how clients find you.</p>
+                    <Link href={"/settings"}><p className='text-xs text-primary underline'>Manage Company Details etc</p></Link>
                 </div>
                 <Button type="submit" disabled={updateProfileMutation.isPending}>
                     {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}

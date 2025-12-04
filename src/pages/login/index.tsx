@@ -41,7 +41,7 @@ export default function LoginPage() {
             </Head>
             <div className="w-full max-w-md rounded-2xl shadow-md border border-white/20 p-8 pt-0 px-0 bg-white">
                 <div className='mx-auto flex flex-col items-center justify-center bg-primary rounded-t-xl rounded-b-[45%] w-full'>
-                    <div className='mt-2'>
+                    <div onClick={() => router.push("/")} className='mt-2 cursor-pointer'>
                         <Logo className="h-10 w-10 mb-0 " />
                     </div>
                     <p className='font-semibold text-white mb-2'>Sheet2Bill</p>

@@ -9,12 +9,14 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
+import { useRouter } from 'next/navigation';
 
 export default function SignUpPage() {
     const supabaseClient = useSupabaseClient();
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
+    const router = useRouter()
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -46,7 +48,7 @@ export default function SignUpPage() {
             </Head>
             <Card className="w-full max-w-md shadow-md border border-white pt-0 border-t-0 ">
                 <div className='mx-auto flex flex-col items-center justify-center bg-primary rounded-t-xl rounded-b-[45%] w-full'>
-                    <div className='mt-2'>
+                    <div onClick={() => router.push("/")} className='cursor-pointer mt-2'>
                         <Logo className="h-10 w-10 mb-0" />
                     </div>
                     <p className='font-semibold text-white mb-2'>Sheet2Bill</p>
