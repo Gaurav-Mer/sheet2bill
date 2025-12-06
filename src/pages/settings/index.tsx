@@ -23,11 +23,12 @@ import NotificationToggle from '@/components/push_notification/NotificationToggl
 
 type SettingsPageProps = {
     profile: Profile | null;
+    user: any
 };
 
-export default function SettingsPage({ profile }: SettingsPageProps) {
+export default function SettingsPage({ profile, user }: SettingsPageProps) {
     const supabase = useSupabaseClient();
-    const user = useUser();
+    // const usera = useUser();
 
     // --- State for all profile fields ---
     const [fullName, setFullName] = useState(profile?.full_name || '');
@@ -118,7 +119,7 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                     <CardHeader>
                         <CardTitle>Profile</CardTitle>
                         <CardDescription>This is your personal and company information.</CardDescription>
-                        <NotificationToggle />
+                        <NotificationToggle savedIds={profile?.onesignal_ids ?? []} />
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="space-y-2">
