@@ -8,8 +8,7 @@ export const openEmailClient = (email: string, subject: string, body: string) =>
 
 // --- OneSignal Push Notification Helper ---
 
-const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!;
-const ONESIGNAL_API_KEY = process.env.ONESIGNAL_REST_API_KEY!;
+
 
 /**
  * Sends a push notification to specific users via OneSignal REST API
@@ -21,6 +20,8 @@ export async function sendPushNotification(
     content: string,
     url?: string
 ) {
+    const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID;
+    const ONESIGNAL_API_KEY = process.env.ONESIGNAL_REST_API_KEY;
     console.log("Sending push to IDs:", subscriptionIds);
     if (!subscriptionIds || subscriptionIds.length === 0) return;
 
