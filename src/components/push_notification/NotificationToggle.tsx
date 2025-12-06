@@ -36,7 +36,7 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
             // Unsubscribe
             OneSignal.User.PushSubscription.optOut();
             if (currentId) {
-                await fetch("/api/notifications/unsubscribe", {
+                await fetch("/api/push_notification/unsubscribe", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ player_id: currentId }),
@@ -66,7 +66,7 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
             return;
         }
 
-        await fetch("/api/notifications/subscribe", {
+        await fetch("/api/push_notification/subscribe", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ player_id: id }),
