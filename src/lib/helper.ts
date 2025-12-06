@@ -23,7 +23,7 @@ export async function sendPushNotification(
         headers: {
             accept: 'application/json',
             'content-type': 'application/json',
-            Authorization: `Basic ${ONESIGNAL_API_KEY}`,
+            Authorization: `Key ${ONESIGNAL_API_KEY}`,
         },
         body: JSON.stringify({
             app_id: ONESIGNAL_APP_ID,
@@ -38,7 +38,7 @@ export async function sendPushNotification(
     };
 
     try {
-        const response = await fetch('https://onesignal.com/api/v1/notifications', options);
+        const response = await fetch('https://onesignal.com/notifications?c=push', options);
         const data = await response.json();
         console.log('Push Sent:', data);
         return data;
