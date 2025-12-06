@@ -1,125 +1,81 @@
-'use client'
-
-import { useState } from 'react'
-import OneSignal from 'react-onesignal'
-import { Switch } from "@/components/ui/switch"
-import { BellRing, Loader2 } from 'lucide-react'
-import toast from 'react-hot-toast'
-import { useOnesignalStatus } from "@/hooks/useOnesignalStatus"
+import { useState } from "react";
+import OneSignal from "react-onesignal";
+import { Switch } from "@/components/ui/switch";
+import { BellRing, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { useOnesignalStatus } from "@/hooks/useOnesignalStatus";
 
 export default function NotificationToggle({ savedIds }: { savedIds: string[] }) {
-
-    const {
-        enabled,
-        setEnabled,
-        currentId,
-        setCurrentId,
-        isReady
-    } = useOnesignalStatus(savedIds);
-
+    const { enabled, setEnabled, supported, currentId } = useOnesignalStatus(savedIds);
     const [loading, setLoading] = useState(false);
 
-    //  Wait until OneSignal generates the ID
-    const waitForPlayerId = async (max = 30): Promise<string | null> => {
-        return new Promise(resolve => {
-            let attempts = 0;
+    if (!supported) return null;
 
+    const waitForId = () =>
+        new Promise<string | null>((resolve) => {
+            let tries = 0;
             const timer = setInterval(() => {
-                attempts++;
-
+                tries++;
                 const id = OneSignal.User?.PushSubscription?.id;
-                const optedIn = OneSignal.User?.PushSubscription?.optedIn;
-
-                if (id && optedIn) {
+                const opt = OneSignal.User?.PushSubscription?.optedIn;
+                if (id && opt) {
                     clearInterval(timer);
                     resolve(id);
                 }
-
-                if (attempts >= max) {
+                if (tries > 30) {
                     clearInterval(timer);
                     resolve(null);
                 }
             }, 300);
         });
-    };
 
     const handleToggle = async (checked: boolean) => {
+        setLoading(true);
+
         if (!checked) {
-            // ====================
-            // DISABLE NOTIFICATIONS
-            // ====================
-            try {
-                setLoading(true);
-
-                OneSignal.User.PushSubscription.optOut();
-
-                if (currentId) {
-                    await fetch("/api/push_notification/unsubscribe", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ player_id: currentId })
-                    });
-                }
-
-                setEnabled(false);
-                toast.success("Notifications disabled.");
-            } catch (err) {
-                console.error(err);
-                toast.error("Unable to disable notifications.");
-            } finally {
-                setLoading(false);
+            // Unsubscribe
+            OneSignal.User.PushSubscription.optOut();
+            if (currentId) {
+                await fetch("/api/notifications/unsubscribe", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ player_id: currentId }),
+                });
             }
+            setEnabled(false);
+            toast.success("Notifications disabled");
+            setLoading(false);
             return;
         }
 
-        // ====================
-        // ENABLE NOTIFICATIONS
-        // ====================
-        try {
-            setLoading(true);
+        // SUBSCRIBE
+        const permission = await OneSignal.Notifications.requestPermission();
 
-            const permission = await OneSignal.Notifications.requestPermission();
-
-            if (!permission) {
-                toast.error("Permission denied.");
-                setEnabled(false);
-                return;
-            }
-
-            const newId = await waitForPlayerId();
-
-            if (!newId) {
-                toast.error("Could not get device ID.");
-                setEnabled(false);
-                return;
-            }
-
-            setCurrentId(newId);
-
-            const res = await fetch("/api/push_notification/subscribe", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ player_id: newId })
-            });
-
-            if (!res.ok) {
-                toast.error("Failed to enable on server.");
-                setEnabled(false);
-                return;
-            }
-
-            setEnabled(true);
-            toast.success("Notifications enabled!");
-
-        } catch (err) {
-            console.error(err);
-            toast.error("Could not enable notifications.");
-        } finally {
+        if (!permission) {
+            toast.error("Permission denied");
+            setEnabled(false);
             setLoading(false);
+            return;
         }
-    };
 
-    if (!isReady) return null;
+        const id = await waitForId();
+        if (!id) {
+            toast.error("Could not activate notifications");
+            setEnabled(false);
+            setLoading(false);
+            return;
+        }
+
+        await fetch("/api/notifications/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ player_id: id }),
+        });
+
+        setEnabled(true);
+        toast.success("Notifications enabled!");
+        setLoading(false);
+    };
 
     return (
         <div className="flex items-center justify-between p-4 border rounded-xl bg-white shadow-sm">
@@ -137,12 +93,8 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
 
             <div className="flex items-center gap-2">
                 {loading && <Loader2 className="animate-spin text-gray-400" size={16} />}
-                <Switch
-                    checked={enabled}
-                    onCheckedChange={handleToggle}
-                    disabled={loading}
-                />
+                <Switch checked={enabled} onCheckedChange={handleToggle} disabled={loading} />
             </div>
         </div>
-    )
+    );
 }
