@@ -17,16 +17,19 @@ export default function NotificationToggle() {
                 // 1. Initialize (Safe to call multiple times)
                 OneSignal.init({
                     appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!,
-                    // CRITICAL FOR LOCALHOST:
+                    // Note: allowLocalhostAsSecureOrigin is often not needed for localhost on HTTP 
+                    // if you use the OneSignal localhost setup, but keeping it if your config relies on it.
                     allowLocalhostAsSecureOrigin: true,
-
                 }).then(() => {
                     console.log("OneSignal Initialized");
                     setIsSupported(true);
+
                     // Check initial status
-                    // Note: In v16+, use OneSignal.User.PushSubscription.optedIn
+                    // We check if they are actually opted in, not just if they have an ID.
                     const isOptedIn = OneSignal.User?.PushSubscription?.optedIn;
-                    setEnabled(!!isOptedIn);
+                    const id = OneSignal.User?.PushSubscription?.id;
+
+                    setEnabled(!!(isOptedIn && id));
                 }).catch((e) => {
                     console.error("OneSignal Init Error:", e);
                 });
@@ -37,26 +40,72 @@ export default function NotificationToggle() {
         }
     }, [])
 
+    // --- HELPER: Wait for OneSignal to generate the ID ---
+    // We poll every 500ms until we have both an opted-in status and an ID.
+    const waitForSubscriptionChange = async (maxAttempts = 20): Promise<string | null> => {
+        return new Promise((resolve) => {
+            let attempts = 0;
+            const checkInterval = setInterval(() => {
+                attempts++;
+
+                const isOptedIn = OneSignal.User?.PushSubscription?.optedIn;
+                const id = OneSignal.User?.PushSubscription?.id;
+
+                // Success: User clicked allowed AND ID was generated
+                if (isOptedIn && id) {
+                    clearInterval(checkInterval);
+                    resolve(id);
+                }
+
+                // Timeout: User ignored prompt or network failed
+                if (attempts >= maxAttempts) {
+                    clearInterval(checkInterval);
+                    resolve(null);
+                }
+            }, 500);
+        });
+    };
+
     const handleToggle = async (checked: boolean) => {
         if (!checked) {
-            toast.error("To disable notifications, you must block them in your browser settings.");
+            // Opt-out logic
+            // Note: We can't revoke browser permission via JS, only opt-out in OneSignal SDK
+            OneSignal.User.PushSubscription.optOut();
+            setEnabled(false);
+            toast.success("Notifications disabled.");
             return;
         }
 
         setLoading(true);
         try {
+            // 1. Check if already subscribed locally
+            if (OneSignal.User.PushSubscription.optedIn && OneSignal.User.PushSubscription.id) {
+                console.log("User already subscribed locally.");
+                setEnabled(true);
+                setLoading(false);
+                return;
+            }
+
             console.log("Requesting permission...");
 
-            // 1. Trigger the Native Prompt
-            await OneSignal.Slidedown.promptPush();
+            // 2. Trigger the Native Prompt
+            // requestPermission waits for the user to click 'Allow' or 'Block'
+            const accepted = await OneSignal.Notifications.requestPermission();
 
-            // 2. Wait for the ID to be generated (It might take a second after 'Allow')
-            const playerId = await waitForOneSignalId();
+            if (!accepted) {
+                toast.error("Permission was denied or dismissed.");
+                setLoading(false);
+                return;
+            }
+
+            // 3. Wait for the ID to be generated
+            // Even after permission is granted, the ID generation is an async network call.
+            const playerId = await waitForSubscriptionChange();
 
             console.log("Got Player ID:", playerId);
 
             if (playerId) {
-                // 3. Send to Backend
+                // 4. Send to Backend
                 const res = await fetch('/api/notifications/subscribe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -67,37 +116,23 @@ export default function NotificationToggle() {
                     setEnabled(true);
                     toast.success("Notifications enabled successfully!");
                 } else {
-                    throw new Error("Failed to save subscription");
+                    throw new Error("Failed to save subscription to server");
                 }
             } else {
-                // User likely dismissed or blocked the prompt
-                toast.error("Notifications were blocked or dismissed.");
+                // Permission granted, but ID generation failed/timed out
+                toast.error("Connection timeout. Please try again.");
             }
         } catch (e) {
             console.error("Toggle Error:", e);
             toast.error("Could not enable notifications. Check console.");
+            // Revert switch state if error
+            setEnabled(false);
         } finally {
             setLoading(false);
         }
     }
 
-    // --- HELPER: Wait for OneSignal to generate the ID ---
-    // The ID is not always available instantly after permission grant.
-    const waitForOneSignalId = async (attempts = 0): Promise<string | null | undefined> => {
-        // V16 SDK syntax
-        const id = OneSignal.User?.PushSubscription?.id;
-
-        if (id) return id;
-
-        if (attempts > 10) return null; // Give up after 5 seconds
-
-        // Wait 500ms and try again
-        await new Promise(r => setTimeout(r, 500));
-        return waitForOneSignalId(attempts + 1);
-    }
-
-    if (!isSupported) return null;
-
+    if (!isSupported) return null; // Or return a placeholder/loading state
 
     return (
         <div className="flex items-center justify-between p-4 border rounded-xl bg-white shadow-sm">
@@ -118,7 +153,10 @@ export default function NotificationToggle() {
                 <Switch
                     checked={enabled}
                     onCheckedChange={handleToggle}
-                    disabled={loading || enabled} // Disable if already on (browser setting required to turn off)
+                    disabled={loading || enabled}
+                // Note: 'enabled' in disabled prop prevents users from trying to toggle OFF 
+                // if your logic doesn't support full unsubscribe (browser blocking required).
+                // If optOut() works for your case, you can remove '|| enabled'.
                 />
             </div>
         </div>
