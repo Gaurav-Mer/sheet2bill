@@ -38,7 +38,7 @@ export async function sendPushNotification(
     };
 
     try {
-        const response = await fetch('[https://onesignal.com/api/v1/notifications](https://onesignal.com/api/v1/notifications)', options);
+        const response = await fetch('https://onesignal.com/api/v1/notifications', options);
         const data = await response.json();
         console.log('Push Sent:', data);
         return data;
