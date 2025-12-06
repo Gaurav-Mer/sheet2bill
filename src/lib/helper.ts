@@ -27,7 +27,7 @@ export async function sendPushNotification(
         },
         body: JSON.stringify({
             app_id: ONESIGNAL_APP_ID,
-            include_player_ids: playerIds, // Target specific devices
+            include_subscription_ids: playerIds, // Target specific devices
             headings: { en: heading },
             contents: { en: content },
             url: url, // Deep link to open when clicked
