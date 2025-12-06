@@ -21,6 +21,7 @@ export async function sendPushNotification(
     content: string,
     url?: string
 ) {
+    console.log("Sending push to IDs:", subscriptionIds);
     if (!subscriptionIds || subscriptionIds.length === 0) return;
 
     if (!ONESIGNAL_API_KEY) {

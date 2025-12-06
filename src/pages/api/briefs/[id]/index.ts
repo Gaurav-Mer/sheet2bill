@@ -136,7 +136,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 //         html: `<p>${message}</p><p>You can view it here: ${process.env.NEXT_PUBLIC_BASE_URL}${link_to}</p>`,
                 //     });
                 // }
-
+                console.log("Profile fetched for notifications:", profile);
                 // D. Send Push Notification via OneSignal (NEW)
                 if (profile?.onesignal_ids && profile.onesignal_ids.length > 0) {
                     await sendPushNotification(
