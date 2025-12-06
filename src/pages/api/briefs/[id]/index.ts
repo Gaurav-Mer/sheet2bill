@@ -122,8 +122,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 const { data: profile } = await supabase
                     .from('profiles')
-                    .select('email, onesignal_ids') // <--- FETCH ONESIGNAL IDS HERE
-                    .eq('id', id)
+                    .select('email, onesignal_ids')
+                    .eq('id', updatedBrief.user_id) // <--- CHANGED FROM 'id' TO 'updatedBrief.user_id'
                     .single();
 
                 // const userEmail = profile?.email;
