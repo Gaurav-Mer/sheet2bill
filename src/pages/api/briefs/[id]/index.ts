@@ -120,12 +120,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // --- 2. Send Email Notification (RUNS CONDITIONALLY) ---
             // Now, separately, we try to get the email and send.
             try {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('email, onesignal_ids')
-                    .eq('id', updatedBrief.user_id) // <--- CHANGED FROM 'id' TO 'updatedBrief.user_id'
-                    .single();
-
                 // const userEmail = profile?.email;
 
                 // if (userEmail && subject) {
@@ -136,7 +130,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 //         html: `<p>${message}</p><p>You can view it here: ${process.env.NEXT_PUBLIC_BASE_URL}${link_to}</p>`,
                 //     });
                 // }
-                console.log("Profile fetched for notifications:", profile);
+                const { data: profile } = await supabase.from("profiles").select("onesignal_ids").eq("id", updatedBrief.user_id).single();
                 // D. Send Push Notification via OneSignal (NEW)
                 if (profile?.onesignal_ids && profile.onesignal_ids.length > 0) {
                     await sendPushNotification(
