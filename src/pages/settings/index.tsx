@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { FeatureGate } from '@/components/FeatureGate';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countryList } from '@/lib/countryList';
+import NotificationToggle from '@/components/push_notification/NotificationToggle';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -117,6 +118,7 @@ export default function SettingsPage({ profile }: SettingsPageProps) {
                     <CardHeader>
                         <CardTitle>Profile</CardTitle>
                         <CardDescription>This is your personal and company information.</CardDescription>
+                        <NotificationToggle />
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="space-y-2">

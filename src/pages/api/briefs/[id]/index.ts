@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
 import { Resend } from 'resend'; // 1. Import Resend
+import { sendPushNotification } from '@/lib/helper';
 
 // 2. Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -88,12 +89,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const clientName = (updatedBrief.clients as any)?.name || 'A client';
             let subject = '';
             let message = '';
+            let shortHeading = ''; // For Push Notification title
+
             const link_to = status === 'rejected' ? `/briefs/${updatedBrief.id}/edit` : '/briefs';
 
             if (status === 'approved') {
+                shortHeading = '🚀 Brief Approved!';
                 subject = `✅ Your brief has been approved! (${updatedBrief.brief_number})`;
                 message = `${clientName} has approved your brief: "${updatedBrief.title}"`;
             } else if (status === 'rejected') {
+                shortHeading = '🔴 Changes Requested';
                 subject = `🔴 Changes requested on your brief (${updatedBrief.brief_number})`;
                 message = `${clientName} has requested changes on your brief: "${updatedBrief.title}"`;
             }
@@ -117,19 +122,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 const { data: profile } = await supabase
                     .from('profiles')
-                    .select('email')
+                    .select('email, onesignal_ids') // <--- FETCH ONESIGNAL IDS HERE
                     .eq('id', updatedBrief.user_id)
                     .single();
 
-                const userEmail = profile?.email;
+                // const userEmail = profile?.email;
 
-                if (userEmail && subject) {
-                    await resend.emails.send({
-                        from: 'Sheet2Bill <admin@sheet2bill.com>',
-                        to: userEmail,
-                        subject: subject,
-                        html: `<p>${message}</p><p>You can view it here: ${process.env.NEXT_PUBLIC_BASE_URL}${link_to}</p>`,
-                    });
+                // if (userEmail && subject) {
+                //     await resend.emails.send({
+                //         from: 'Sheet2Bill <admin@sheet2bill.com>',
+                //         to: userEmail,
+                //         subject: subject,
+                //         html: `<p>${message}</p><p>You can view it here: ${process.env.NEXT_PUBLIC_BASE_URL}${link_to}</p>`,
+                //     });
+                // }
+
+                // D. Send Push Notification via OneSignal (NEW)
+                if (profile?.onesignal_ids && profile.onesignal_ids.length > 0) {
+                    await sendPushNotification(
+                        profile.onesignal_ids,
+                        shortHeading, // e.g. "🚀 Brief Approved!"
+                        message,      // e.g. "Alice has approved your brief..."
+                        `${process.env.NEXT_PUBLIC_BASE_URL}${link_to}` // Deep link
+                    );
                 }
             } catch (emailError) {
                 console.error("Failed to send email notification:", emailError);
