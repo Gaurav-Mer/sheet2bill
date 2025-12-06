@@ -20,8 +20,8 @@ export async function sendPushNotification(
     content: string,
     url?: string
 ) {
-    const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID ?? "os_v2_app_ibmbmskje5bazolyqjrtsebve4kcv7snehgugsnzfbrvdjwkc57odrt7z3wxptvq3ul2vt2dzup47hmopap2mebl7amdty344isea5a";
-    const ONESIGNAL_API_KEY = process.env.ONESIGNAL_REST_API_KEY ?? "40581649-4927-420c-b978-826339103527";
+    const ONESIGNAL_APP_ID = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID;
+    const ONESIGNAL_API_KEY = process.env.ONESIGNAL_REST_API_KEY;
     console.log("Sending push to IDs:", subscriptionIds);
     if (!subscriptionIds || subscriptionIds.length === 0) return;
 
