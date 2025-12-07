@@ -275,14 +275,14 @@ const BlogPost = () => {
                     {/* Share Section */}
                     <div className="mt-8 bg-white rounded-xl shadow p-6 text-center">
                         <p className="text-gray-600 mb-4">Found this helpful? Share it with other freelancers!</p>
-                        <div className="flex justify-center gap-4">
+                        {/* <div className="flex justify-center gap-4">
                             <button className="px-6 py-2 bg-primary text-white rounded-lg  transition-colors">
                                 Share on Twitter
                             </button>
                             <button className="px-6 py-2 bg-primary text-white rounded-lg  transition-colors">
                                 Share on LinkedIn
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
