@@ -20,6 +20,7 @@ import { FeatureGate } from '@/components/FeatureGate';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countryList } from '@/lib/countryList';
 import NotificationToggle from '@/components/push_notification/NotificationToggle';
+import Script from 'next/script';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -103,139 +104,145 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
     };
 
     return (
-        <div className="container mx-auto  max-w-4xl">
-            <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="flex justify-between items-center">
-                    <div>
-                        <h1 className="text-3xl font-bold">Settings</h1>
-                        <p className="text-muted-foreground mt-2">Manage your account and profile settings.</p>
+        <>
+            <Script
+                src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+                strategy="afterInteractive"
+            />
+            <div className="container mx-auto  max-w-4xl">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <h1 className="text-3xl font-bold">Settings</h1>
+                            <p className="text-muted-foreground mt-2">Manage your account and profile settings.</p>
+                        </div>
+                        <Button type="submit" disabled={updateProfileMutation.isPending}>
+                            {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
+                        </Button>
                     </div>
-                    <Button type="submit" disabled={updateProfileMutation.isPending}>
-                        {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
-                    </Button>
-                </div>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Profile</CardTitle>
-                        <CardDescription>This is your personal and company information.</CardDescription>
-                        <NotificationToggle savedIds={profile?.onesignal_ids ?? []} />
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="space-y-2">
-                            <Label>Company Logo</Label>
-                            <div className="flex items-center space-x-4">
-                                {logoPreview ? (
-                                    <Image fetchPriority='low' src={logoPreview} alt="Logo Preview" width={64} height={64} className="rounded-md object-contain h-16 w-16 border" />
-                                ) : (
-                                    <div className="h-16 w-16 rounded-md border bg-muted flex items-center justify-center text-muted-foreground text-xs">No Logo</div>
-                                )}
-                                <Input id="logo" type="file" accept="image/png, image/jpeg" onChange={handleLogoChange} className="max-w-xs" />
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2"><Label htmlFor="fullName">Full Name</Label><Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} maxLength={100} /></div>
-                            <div className="space-y-2"><Label htmlFor="companyName">Company Name</Label><Input id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} maxLength={150} /></div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader><CardTitle>Contact Details</CardTitle></CardHeader>
-                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" value={user?.email || ''} disabled /></div>
-
-                        <div className="space-y-2"><Label htmlFor="phone">Phone Number</Label><Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} /></div>
-
-                        <div className="space-y-2 col-span-full"><Label htmlFor="website">Website</Label><Input maxLength={100} id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." /></div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader><CardTitle>Billing Address & Tax Info</CardTitle></CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="country">Country</Label>
-                                <Select onValueChange={setCountry} defaultValue={country}>
-                                    <SelectTrigger className='w-full' id="country"><SelectValue placeholder="Select your country..." /></SelectTrigger>
-                                    <SelectContent>
-                                        {countryList.map((country) => (
-                                            <SelectItem key={country.code} value={country.code}>
-                                                {country.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" value={city} onChange={(e) => setCity(e.target.value)} /></div>
-
-                        </div>
-                        <div className="space-y-2"><Label htmlFor="address1">Address</Label><Input id="address1" value={address1} onChange={(e) => setAddress1(e.target.value)} /></div>
-                        <div className="space-y-2">
-                            <Label htmlFor="defaultCurrency">Default Currency</Label>
-                            <Select onValueChange={setDefaultCurrency} defaultValue={defaultCurrency}>
-                                <SelectTrigger id="defaultCurrency"><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="INR">INR - Indian Rupee</SelectItem>
-                                    <SelectItem value="USD">USD - US Dollar</SelectItem>
-                                    <SelectItem value="EUR">EUR - Euro</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2"><Label htmlFor="taxId">Tax ID (e.g., GSTIN, VAT ID)</Label><Input id="taxId" value={taxId} onChange={(e) => setTaxId(e.target.value)} /></div>
-                    </CardContent>
-                </Card>
-
-                <FeatureGate>
-                    <Card id="branding">
+                    <Card>
                         <CardHeader>
-                            <CardTitle>Branding</CardTitle>
-                            <CardDescription>Customize the look of your invoices.</CardDescription>
+                            <CardTitle>Profile</CardTitle>
+                            <CardDescription>This is your personal and company information.</CardDescription>
+                            <NotificationToggle savedIds={profile?.onesignal_ids ?? []} />
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            {/* Logo Upload Section */}
                             <div className="space-y-2">
                                 <Label>Company Logo</Label>
-                                {/* ... logo upload JSX ... */}
-                            </div>
-
-                            {/* --- NEW: BRAND COLOR PICKER --- */}
-                            <div className="space-y-2">
-                                <Label htmlFor="brandColor">Brand Color</Label>
-                                <div className="flex items-center gap-2">
-                                    <Input
-                                        id="brandColor"
-                                        type="color"
-                                        value={brandColor}
-                                        onChange={(e) => setBrandColor(e.target.value)}
-                                        className="p-1 h-10 w-14"
-                                    />
-                                    <Input
-                                        type="text"
-                                        value={brandColor}
-                                        onChange={(e) => setBrandColor(e.target.value)}
-                                        className="max-w-[120px]"
-                                    />
+                                <div className="flex items-center space-x-4">
+                                    {logoPreview ? (
+                                        <Image fetchPriority='low' src={logoPreview} alt="Logo Preview" width={64} height={64} className="rounded-md object-contain h-16 w-16 border" />
+                                    ) : (
+                                        <div className="h-16 w-16 rounded-md border bg-muted flex items-center justify-center text-muted-foreground text-xs">No Logo</div>
+                                    )}
+                                    <Input id="logo" type="file" accept="image/png, image/jpeg" onChange={handleLogoChange} className="max-w-xs" />
                                 </div>
-                                <p className="text-sm text-muted-foreground">This color will be used on your invoices.</p>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="footerMessage">Invoice Footer Message</Label>
-                                <Textarea
-                                    id="footerMessage"
-                                    value={footerMessage}
-                                    onChange={(e) => setFooterMessage(e.target.value)}
-                                    placeholder="e.g., Thank you for your business!"
-                                    maxLength={250}
-                                />
-                                <p className="text-sm text-muted-foreground">This message will appear at the bottom of your invoices.</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2"><Label htmlFor="fullName">Full Name</Label><Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} maxLength={100} /></div>
+                                <div className="space-y-2"><Label htmlFor="companyName">Company Name</Label><Input id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} maxLength={150} /></div>
                             </div>
                         </CardContent>
                     </Card>
-                </FeatureGate>
-            </form>
-        </div>
+
+                    <Card>
+                        <CardHeader><CardTitle>Contact Details</CardTitle></CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" value={user?.email || ''} disabled /></div>
+
+                            <div className="space-y-2"><Label htmlFor="phone">Phone Number</Label><Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={20} /></div>
+
+                            <div className="space-y-2 col-span-full"><Label htmlFor="website">Website</Label><Input maxLength={100} id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." /></div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader><CardTitle>Billing Address & Tax Info</CardTitle></CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="country">Country</Label>
+                                    <Select onValueChange={setCountry} defaultValue={country}>
+                                        <SelectTrigger className='w-full' id="country"><SelectValue placeholder="Select your country..." /></SelectTrigger>
+                                        <SelectContent>
+                                            {countryList.map((country) => (
+                                                <SelectItem key={country.code} value={country.code}>
+                                                    {country.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" value={city} onChange={(e) => setCity(e.target.value)} /></div>
+
+                            </div>
+                            <div className="space-y-2"><Label htmlFor="address1">Address</Label><Input id="address1" value={address1} onChange={(e) => setAddress1(e.target.value)} /></div>
+                            <div className="space-y-2">
+                                <Label htmlFor="defaultCurrency">Default Currency</Label>
+                                <Select onValueChange={setDefaultCurrency} defaultValue={defaultCurrency}>
+                                    <SelectTrigger id="defaultCurrency"><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="INR">INR - Indian Rupee</SelectItem>
+                                        <SelectItem value="USD">USD - US Dollar</SelectItem>
+                                        <SelectItem value="EUR">EUR - Euro</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2"><Label htmlFor="taxId">Tax ID (e.g., GSTIN, VAT ID)</Label><Input id="taxId" value={taxId} onChange={(e) => setTaxId(e.target.value)} /></div>
+                        </CardContent>
+                    </Card>
+
+                    <FeatureGate>
+                        <Card id="branding">
+                            <CardHeader>
+                                <CardTitle>Branding</CardTitle>
+                                <CardDescription>Customize the look of your invoices.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                {/* Logo Upload Section */}
+                                <div className="space-y-2">
+                                    <Label>Company Logo</Label>
+                                    {/* ... logo upload JSX ... */}
+                                </div>
+
+                                {/* --- NEW: BRAND COLOR PICKER --- */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="brandColor">Brand Color</Label>
+                                    <div className="flex items-center gap-2">
+                                        <Input
+                                            id="brandColor"
+                                            type="color"
+                                            value={brandColor}
+                                            onChange={(e) => setBrandColor(e.target.value)}
+                                            className="p-1 h-10 w-14"
+                                        />
+                                        <Input
+                                            type="text"
+                                            value={brandColor}
+                                            onChange={(e) => setBrandColor(e.target.value)}
+                                            className="max-w-[120px]"
+                                        />
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">This color will be used on your invoices.</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="footerMessage">Invoice Footer Message</Label>
+                                    <Textarea
+                                        id="footerMessage"
+                                        value={footerMessage}
+                                        onChange={(e) => setFooterMessage(e.target.value)}
+                                        placeholder="e.g., Thank you for your business!"
+                                        maxLength={250}
+                                    />
+                                    <p className="text-sm text-muted-foreground">This message will appear at the bottom of your invoices.</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </FeatureGate>
+                </form>
+            </div>
+        </>
     );
 }
 
