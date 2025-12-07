@@ -21,9 +21,10 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
             <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
 
                 {/* Download PDF */}
-                <Button
+                {/* <Button
                     className="shadow-lg rounded-full px-5 py-3 text-sm"
                     variant="secondary"
+                    type='button'
                 >
                     <a
                         href={`/api/invoices/${invoice.id}/pdf`}
@@ -33,7 +34,15 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
                     >
                     </a>
                     <HardDriveDownloadIcon size={30} /> Download PDF
-                </Button>
+                </Button> */}
+                <a
+                    href={`/api/invoices/${invoice.id}/pdf`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full h-full bg-secondary rounded-3xl flex items-center gap-2 p-2 font-medium  px-4 shadow-lg"
+                >
+                    <HardDriveDownloadIcon size={20} /> Download PDF
+                </a>
 
                 {/* Share Invoice */}
                 <Button
@@ -60,7 +69,7 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
                 >
                     <Share2 size={30} />  Share Invoice
                 </Button>
-            </div>
+            </div >
 
             <CurrentTemplate templateId={invoice?.template_id ?? undefined} data={invoice as any} />
         </>
