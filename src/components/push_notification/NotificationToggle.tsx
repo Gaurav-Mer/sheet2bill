@@ -71,8 +71,19 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
             const permission = await OneSignal.Notifications.requestPermission();
 
             if (!permission) {
-                toast.error("Permission denied");
-                // If denied, we should probably opt-out again to keep state consistent
+                // DETAILED ERROR HANDLING
+                // Check if the user has hard-blocked notifications in browser settings
+                if (typeof window !== 'undefined' && window.Notification?.permission === 'denied') {
+                    toast.error(
+                        "Notifications are blocked! 🚫\n\nPlease click the lock icon 🔒 in your address bar and set Notifications to 'Allow'.",
+                        { duration: 6000 }
+                    );
+                } else {
+                    // User dismissed the popup or clicked "No thanks"
+                    toast.error("Permission required to receive alerts. Please try again and click 'Allow'.");
+                }
+
+                // If denied, we should opt-out again to keep state consistent
                 OneSignal.User.PushSubscription.optOut();
                 setEnabled(false);
                 setLoading(false);
@@ -84,7 +95,7 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
 
             if (!id) {
                 console.warn("Timeout waiting for OneSignal ID/OptIn state");
-                toast.error("Could not activate notifications");
+                toast.error("Activation timed out. Please check your internet connection.");
                 // Revert visual state
                 setEnabled(false);
                 setLoading(false);
@@ -106,7 +117,7 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
             }
         } catch (error) {
             console.error(error);
-            toast.error("Something went wrong");
+            toast.error("Something went wrong while enabling notifications.");
             setEnabled(false);
         } finally {
             setLoading(false);

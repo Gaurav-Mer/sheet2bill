@@ -137,7 +137,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         profile.onesignal_ids,
                         shortHeading, // e.g. "🚀 Brief Approved!"
                         message,      // e.g. "Alice has approved your brief..."
-                        `${process.env.NEXT_PUBLIC_BASE_URL}${link_to}` // Deep link
+                        `{link_to}` // Deep link
                     );
                 }
             } catch (emailError) {
