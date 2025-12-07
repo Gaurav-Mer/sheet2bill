@@ -12,6 +12,7 @@ export function useOnesignalStatus(savedIds: string[]) {
                 await OneSignal.init({
                     appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!,
                     allowLocalhostAsSecureOrigin: true,
+                    android_channel_id: 'high-priority',
                 });
 
                 setSupported(true);
