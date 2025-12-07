@@ -3,7 +3,7 @@
 import { useState } from "react";
 import OneSignal from "react-onesignal";
 import { Switch } from "@/components/ui/switch";
-import { BellRing, Loader2 } from "lucide-react";
+import { BellRing, Loader2, MonitorSmartphone } from "lucide-react";
 import toast from "react-hot-toast";
 import { useOnesignalStatus } from "@/hooks/useOnesignalStatus";
 
@@ -11,7 +11,7 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
     const { enabled, setEnabled, supported, currentId } = useOnesignalStatus(savedIds);
     const [loading, setLoading] = useState(false);
 
-    if (!supported) return null;
+    // if (!supported) return null;
 
     const waitForId = () =>
         new Promise<string | null>((resolve) => {
@@ -125,7 +125,7 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
     };
 
     return (
-        <div className="flex items-center justify-between p-4 border rounded-xl bg-white shadow-sm">
+        <div className="flex items-center justify-between p-4 gap-4 border rounded-xl bg-white shadow-sm">
             <div className="flex items-start gap-3">
                 <div className="p-2 bg-primary/10 rounded-full text-primary mt-1">
                     <BellRing size={20} />
@@ -135,6 +135,10 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
                     <p className="text-sm text-gray-500 max-w-xs">
                         Get notified instantly when a client accepts your brief or sends a request.
                     </p>
+                    <div className="inline-flex mt-3 items-center gap-1.5 px-2 py-1 rounded-md bg-gray-100 text-xs text-gray-600 font-medium">
+                        <MonitorSmartphone size={12} className="text-gray-500" />
+                        <span>This setting is specific to this device</span>
+                    </div>
                 </div>
             </div>
 
