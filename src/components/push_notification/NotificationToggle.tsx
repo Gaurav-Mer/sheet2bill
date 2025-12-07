@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import OneSignal from "react-onesignal";
 import { Switch } from "@/components/ui/switch";
@@ -18,10 +20,14 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
                 tries++;
                 const id = OneSignal.User?.PushSubscription?.id;
                 const opt = OneSignal.User?.PushSubscription?.optedIn;
+
+                // We wait for BOTH to be true
                 if (id && opt) {
                     clearInterval(timer);
                     resolve(id);
                 }
+
+                // Timeout after ~9 seconds
                 if (tries > 30) {
                     clearInterval(timer);
                     resolve(null);
@@ -33,14 +39,20 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
         setLoading(true);
 
         if (!checked) {
-            // Unsubscribe
+            // Unsubscribe: Sets SDK state to "User Opted Out"
             OneSignal.User.PushSubscription.optOut();
+
             if (currentId) {
-                await fetch("/api/push_notification/unsubscribe", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ player_id: currentId }),
-                });
+                // Best effort backend sync
+                try {
+                    await fetch("/api/push_notification/unsubscribe", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ player_id: currentId }),
+                    });
+                } catch (e) {
+                    console.error("Unsubscribe sync failed", e);
+                }
             }
             setEnabled(false);
             toast.success("Notifications disabled");
@@ -48,33 +60,57 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
             return;
         }
 
-        // SUBSCRIBE
-        const permission = await OneSignal.Notifications.requestPermission();
+        // --- SUBSCRIBE LOGIC ---
 
-        if (!permission) {
-            toast.error("Permission denied");
+        try {
+            // 1. CRITICAL FIX: Explicitly Opt-In to reverse the previous Opt-Out
+            // Without this, 'optedIn' stays false even if permission is granted.
+            OneSignal.User.PushSubscription.optIn();
+
+            // 2. Request/Check Browser Permission
+            const permission = await OneSignal.Notifications.requestPermission();
+
+            if (!permission) {
+                toast.error("Permission denied");
+                // If denied, we should probably opt-out again to keep state consistent
+                OneSignal.User.PushSubscription.optOut();
+                setEnabled(false);
+                setLoading(false);
+                return;
+            }
+
+            // 3. Wait for SDK to update state (generate ID + flip optedIn to true)
+            const id = await waitForId();
+
+            if (!id) {
+                console.warn("Timeout waiting for OneSignal ID/OptIn state");
+                toast.error("Could not activate notifications");
+                // Revert visual state
+                setEnabled(false);
+                setLoading(false);
+                return;
+            }
+
+            // 4. Send to Backend
+            const res = await fetch("/api/push_notification/subscribe", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ player_id: id }),
+            });
+
+            if (res.ok) {
+                setEnabled(true);
+                toast.success("Notifications enabled!");
+            } else {
+                throw new Error("Backend subscription failed");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
             setEnabled(false);
+        } finally {
             setLoading(false);
-            return;
         }
-
-        const id = await waitForId();
-        if (!id) {
-            toast.error("Could not activate notifications");
-            setEnabled(false);
-            setLoading(false);
-            return;
-        }
-
-        await fetch("/api/push_notification/subscribe", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ player_id: id }),
-        });
-
-        setEnabled(true);
-        toast.success("Notifications enabled!");
-        setLoading(false);
     };
 
     return (
