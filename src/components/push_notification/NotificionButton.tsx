@@ -32,7 +32,7 @@ export default function NotificationButton({ savedIds }: { savedIds: string[] })
             const permission = await OneSignal.Notifications.requestPermission();
             console.log("Permission result:", permission);
 
-            if (permission !== "granted") {
+            if (!permission) {
                 toast.error("Notifications are blocked.");
                 return;
             }
