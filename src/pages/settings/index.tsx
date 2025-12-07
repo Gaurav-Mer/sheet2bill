@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { countryList } from '@/lib/countryList';
 import NotificationToggle from '@/components/push_notification/NotificationToggle';
 import Script from 'next/script';
+import NotificationButton from '@/components/push_notification/NotificationButton';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -125,7 +126,8 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
                         <CardHeader>
                             <CardTitle>Profile</CardTitle>
                             <CardDescription>This is your personal and company information.</CardDescription>
-                            <NotificationToggle savedIds={profile?.onesignal_ids ?? []} />
+                            {/* <NotificationToggle savedIds={profile?.onesignal_ids ?? []} /> */}
+                            <NotificationButton savedIds={profile?.onesignal_ids ?? []} />
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="space-y-2">
