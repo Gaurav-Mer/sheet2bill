@@ -11,7 +11,7 @@ export default function NotificationToggle({ savedIds }: { savedIds: string[] })
     const { enabled, setEnabled, supported, currentId } = useOnesignalStatus(savedIds);
     const [loading, setLoading] = useState(false);
 
-    // if (!supported) return null;
+    if (!supported) return null;
 
     const waitForId = () =>
         new Promise<string | null>((resolve) => {

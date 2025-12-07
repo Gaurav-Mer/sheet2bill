@@ -130,6 +130,18 @@ export default function InquiryModal({ isOpen, onClose, initialItem, allItems, f
 
             if (error) throw error
 
+            // E. TRIGGER NOTIFICATION (New Logic)
+            // We call the API route to handle the secure push notification
+            await fetch('/api/inquiries/notify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    freelancer_id: freelancerId,
+                    client_name: values.name,
+                    service_count: values.selected_items.length
+                })
+            });
+
             setSuccess(true)
             form.reset()
         } catch (error) {
