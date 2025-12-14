@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { useState, ChangeEvent } from 'react';
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
 
 // UI Components
@@ -20,7 +20,6 @@ import { FeatureGate } from '@/components/FeatureGate';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countryList } from '@/lib/countryList';
 import NotificationToggle from '@/components/push_notification/NotificationToggle';
-import Script from 'next/script';
 
 type SettingsPageProps = {
     profile: Profile | null;

@@ -4,11 +4,11 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
-import { Resend } from 'resend'; // 1. Import Resend
+// import { Resend } from 'resend'; // 1. Import Resend
 import { sendPushNotification } from '@/lib/helper';
 
 // 2. Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;

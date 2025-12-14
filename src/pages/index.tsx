@@ -17,6 +17,7 @@ import FeatureList from '@/components/landing/FeatureList';
 import { WhyChooseUs } from '@/components/landing/WhyChooseUs';
 import { PremiumHeroSection } from '@/components/landing/PremiumHeroSection';
 import InvoiceTemplatesShowCase from '@/components/landing/InvoiceTemplateShowCase';
+import PricingSection from '@/components/landing/PricingSection';
 
 
 declare global {
@@ -262,11 +263,14 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+        <PricingSection />
+
 
         {/* --- FAQ Section --- */}
         <section>
           <InvoiceTemplatesShowCase />
         </section>
+
 
         <section>
           <FaqSection />

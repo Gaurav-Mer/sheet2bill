@@ -15,6 +15,7 @@ import CookieConsent from "react-cookie-consent"; // <-- 1. Import the component
 import { Analytics } from "@vercel/analytics/next"
 import { useRouter } from 'next/router'
 import { pageview } from "@/lib/gtag"
+import { UpgradeModalProvider } from '@/components/providers/UpgradeModalProvider'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,40 +63,42 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionContextProvider
-        supabaseClient={supabaseClient}
-        initialSession={pageProps.initialSession}
-      >
-        <Head>
-          <title>Sheet2Bill</title>
-          <meta name="description" content="The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
-        </Head>
-        {getLayout(<Component {...pageProps} />)}
-        {/* --- ADD THESE TWO LINES --- */}
-        {pageProps.user && <FeedbackLink />}
-        {/* --------------------------- */}
-
-        {/* --- 2. ADD THE COOKIE CONSENT COMPONENT --- */}
-        <CookieConsent
-          location="bottom"
-          buttonText="I understand"
-          cookieName="sheet2bill-cookie-consent"
-          style={{ background: "#2B373B" }}
-          buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
-          expires={150}
+      <UpgradeModalProvider>
+        <SessionContextProvider
+          supabaseClient={supabaseClient}
+          initialSession={pageProps.initialSession}
         >
-          This website uses cookies to ensure you get the best experience on our website.
-        </CookieConsent>
-        {/* ------------------------------------------- */}
+          <Head>
+            <title>Sheet2Bill</title>
+            <meta name="description" content="The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
+          </Head>
+          {getLayout(<Component {...pageProps} />)}
+          {/* --- ADD THESE TWO LINES --- */}
+          {pageProps.user && <FeedbackLink />}
+          {/* --------------------------- */}
+
+          {/* --- 2. ADD THE COOKIE CONSENT COMPONENT --- */}
+          <CookieConsent
+            location="bottom"
+            buttonText="I understand"
+            cookieName="sheet2bill-cookie-consent"
+            style={{ background: "#2B373B" }}
+            buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+            expires={150}
+          >
+            This website uses cookies to ensure you get the best experience on our website.
+          </CookieConsent>
+          {/* ------------------------------------------- */}
 
 
-        <Toaster // This component will render the toast notifications
-          position="bottom-right"
-          toastOptions={{
-            duration: 5000,
-          }}
-        />
-      </SessionContextProvider>
+          <Toaster // This component will render the toast notifications
+            position="bottom-right"
+            toastOptions={{
+              duration: 5000,
+            }}
+          />
+        </SessionContextProvider>
+      </UpgradeModalProvider >
       <Analytics />
     </QueryClientProvider>
   )

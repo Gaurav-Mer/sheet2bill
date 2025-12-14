@@ -4,28 +4,28 @@ import { CheckCheck, FileText, Sheet, Users, FileDown } from "lucide-react";
 
 export function ProblemSolutionBanner() {
     return (
-        <section className="relative py-12  overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white">
+        <section className="relative py-12  overflow-hidden bg-[#f9efe4] text-black">
             {/* Soft background accent */}
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.06),transparent_70%)]" />
 
             <div className="container mx-auto px-6">
                 {/* Heading Section */}
                 <div className="text-center max-w-3xl mx-auto mb-20">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                        <span className="text-sm font-bold text-primary">The Problem</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full  mb-6 bg-white border-black border-2">
+                        <span className="text-sm font-bold text-black ">The Problem</span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6">
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-black mb-6">
                         Stop Wasting 5+ Hours Per Week on Admin Work
                     </h2>
-                    <p className="text-lg text-slate-600 leading-relaxed">
-                        Freelancers lose an average of <span className="font-semibold text-slate-900">$800/month</span> switching between Google Docs, spreadsheets, email chains, and invoicing tools. Sheet2Bill eliminates the chaos.
+                    <p className="text-lg text-black leading-relaxed">
+                        Freelancers lose an average of <span className="font-semibold text-primary bg-white px-4 rotate-1">$800/month</span> switching between Google Docs, spreadsheets, email chains, and invoicing tools. Sheet2Bill eliminates the chaos.
                     </p>
                 </div>
 
                 {/* Visual Comparison */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
                     {/* BEFORE: The Chaos */}
-                    <Card className="bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200 shadow-sm rounded-2xl overflow-hidden">
+                    <Card className="bg-[#d7e0cc]  border-l-4 border-black shadow-sm rounded-2xl overflow-hidden">
                         <CardContent className="p-8">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
@@ -79,7 +79,7 @@ export function ProblemSolutionBanner() {
                     </Card>
 
                     {/* AFTER: The Solution */}
-                    <Card className="bg-gradient-to-br from-primary/5 via-white to-primary/5 border-2 border-primary/30 shadow-xl rounded-2xl overflow-hidden relative">
+                    <Card className="bg-[#fde3aa] border-l-4 border-black  shadow-xl rounded-2xl overflow-hidden relative">
                         {/* Premium badge */}
                         <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold">
                             Recommended

@@ -3,15 +3,15 @@ import { BarChart, CheckCheck, Clock, FileDown, FilePlus, Settings, Users, Zap, 
 
 const FeatureList = () => {
     return (
-        <section id="features" className="py-12 bg-gradient-to-b from-background to-secondary/5 relative overflow-hidden">
+        <section id="features" className="py-12 bg-[#f9efe4] relative overflow-hidden">
             {/* Decorative background */}
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(56,189,248,0.08),transparent_50%)]" />
 
             <div className="container mx-auto px-6">
                 <div className="text-center mb-20">
-                    <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-6">
+                    <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white border-black border-2 rounded-full mb-6">
                         <Sparkles className="h-4 w-4 text-primary" />
-                        <span className="text-md font-bold text-primary">Powerful Features</span>
+                        <span className="text-md font-bold text-black">Powerful Features</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
                         Everything You Need to Bill Like a Pro
@@ -99,10 +99,9 @@ const FeatureList = () => {
                     ].map((feature, index) => (
                         <div
                             key={index}
-                            className="group relative bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/40 transition-all duration-500 hover:-translate-y-1"
+                            className="group relative bg-white border-b-2 border-r-2 b border-black rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/40 transition-all duration-500 hover:-translate-y-1"
                         >
                             {/* Gradient overlay on hover */}
-                            <div className={`absolute inset-0 ${feature.gradient} opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
 
                             <div className="relative p-6">
                                 {/* Icon with gradient background */}
@@ -112,8 +111,8 @@ const FeatureList = () => {
                                     </div>
 
                                     {/* Benefit badge */}
-                                    <div className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-                                        <span className="text-xs font-semibold text-primary">{feature.benefit}</span>
+                                    <div className={`px-3 py-1 rounded-full bg-secondary  `}>
+                                        <span className="text-xs font-semibold text-black">{feature.benefit}</span>
                                     </div>
                                 </div>
 
@@ -126,7 +125,7 @@ const FeatureList = () => {
                                 </p>
 
                                 {/* Bottom accent line */}
-                                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
+                                {/* <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} /> */}
                             </div>
                         </div>
                     ))}

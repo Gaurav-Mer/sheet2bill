@@ -1,146 +1,194 @@
-import { Zap, CheckCircle, FileText, ArrowRight, Clock } from 'lucide-react';
-import Link from 'next/link';
+import { Zap, CheckCircle, FileText, ArrowRight, Clock, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 const steps = [
     {
         icon: Zap,
-        title: 'Create Your Brief',
-        description: 'Build a detailed project brief with line items, deliverables, and pricing. Share a secure approval link with your client.',
-        time: '2 minutes',
-        color: 'from-blue-500 to-cyan-500',
-        bgColor: 'from-blue-50 to-cyan-50'
+        title: "Create Your Brief",
+        description:
+            "Build a detailed project brief with line items, deliverables, and pricing. Share a secure approval link with your client.",
+        time: "2 minutes",
+        bgColor: "bg-blue-100",
+        cardBg: "bg-white",
+        mockupType: "brief"
     },
     {
         icon: CheckCircle,
-        title: 'Get Client Approval',
-        description: 'Client reviews and approves with one click—no login required. Track approval status and handle revisions in real-time.',
-        time: '30 seconds',
-        color: 'from-green-500 to-emerald-500',
-        bgColor: 'from-green-50 to-emerald-50'
+        title: "Get Client Approval",
+        description:
+            "Client reviews and approves with one click—no login required. Track approval status and handle revisions in real-time.",
+        time: "30 seconds",
+        bgColor: "bg-cyan-100",
+        cardBg: "bg-white",
+        mockupType: "approval"
     },
     {
         icon: FileText,
-        title: 'Generate Invoice',
-        description: 'Convert the approved brief into a professional, branded PDF invoice instantly. Download or send directly to get paid faster.',
-        time: '1 click',
-        color: 'from-purple-500 to-pink-500',
-        bgColor: 'from-purple-50 to-pink-50'
+        title: "Generate Invoice",
+        description:
+            "Convert the approved brief into a professional, branded PDF invoice instantly. Download or send directly to get paid faster.",
+        time: "1 click",
+        bgColor: "bg-emerald-100",
+        cardBg: "bg-white",
+        mockupType: "invoice"
     },
 ];
 
 export function HowItWorks() {
     return (
-        <section className="py-12 bg-gradient-to-b from-primary/10 via-primary/5 to-primary/10 relative overflow-hidden">
-            {/* Decorative background */}
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.06),transparent_70%)]" />
-
-            <div className="container mx-auto px-6">
+        <section className="relative py-12 overflow-hidden bg-gradient-to-b from-slate-50 to-white">
+            <div className="container mx-auto px-6 relative z-10">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto mb-20">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                        <span className="text-md font-bold text-primary">Simple Process</span>
+                <div className="text-center max-w-4xl mx-auto mb-20">
+                    <div className="inline-block px-4 py-1.5 rounded-full bg-white border-2 border-black mb-6">
+                        <span className="text-sm font-semibold text-black uppercase tracking-wide">
+                            Simple Process
+                        </span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-                        From Brief to Payment in 3 Easy Steps
+                    <h2 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-slate-900">
+                        From Brief to Payment in 3 Steps
                     </h2>
-                    <p className="text-lg text-slate-600 leading-relaxed">
-                        No complex setup. No learning curve. Just a straightforward workflow that saves you hours every week.
+                    <p className="text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto">
+                        Choose the workflow that fits your style: create briefs, get approvals, and generate invoices—all in one seamless platform
                     </p>
                 </div>
 
                 {/* Steps Grid */}
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid md:grid-cols-3 gap-8 relative">
-                        {/* Connector arrows for desktop */}
-                        <div className="hidden md:flex absolute top-24 left-0 w-full items-center justify-between px-[20%] -z-10">
-                            <ArrowRight className="h-8 w-8 text-primary/30" />
-                            <ArrowRight className="h-8 w-8 text-primary/30" />
-                        </div>
-
-                        {steps.map((step, index) => (
-                            <div
-                                key={step.title}
-                                className="relative group"
-                            >
-                                {/* Card */}
-                                <div className="bg-white border border-slate-200 rounded-2xl p-8 h-full hover:shadow-xl hover:shadow-primary/10 hover:border-primary/30 transition-all duration-500 hover:-translate-y-2">
-                                    {/* Icon with gradient */}
-                                    <div className="relative mb-6">
-                                        <div className={`w-20 h-20 bg-gradient-to-br ${step.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 mx-auto`}>
-                                            <step.icon className="h-10 w-10 text-white" />
-                                        </div>
-
-                                        {/* Step number badge */}
-                                        <div className="absolute -top-2 -right-2 w-8 h-8 bg-slate-900 rounded-full flex items-center justify-center shadow-md">
-                                            <span className="text-white text-sm font-bold">{index + 1}</span>
+                <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-8 mb-20">
+                    {steps.map((step, index) => (
+                        <div key={step.title} className="group">
+                            <div className={`relative h-full ${step.bgColor} rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl`}>
+                                {/* Card Content */}
+                                <div className="p-8 pb-0">
+                                    <div className="text-center mb-8">
+                                        <h3 className="text-3xl font-bold text-slate-900 mb-3">
+                                            {step.title}
+                                        </h3>
+                                        <p className="text-slate-700 leading-relaxed mb-4">
+                                            {step.description}
+                                        </p>
+                                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200/50">
+                                            <Clock className="h-4 w-4 text-slate-600" />
+                                            <span className="font-semibold text-slate-700 text-sm">{step.time}</span>
                                         </div>
                                     </div>
 
-                                    {/* Time estimate */}
-                                    <div className="flex items-center justify-center gap-2 mb-4">
-                                        <Clock className="h-4 w-4 text-primary" />
-                                        <span className="text-sm font-semibold text-primary">{step.time}</span>
+                                    {/* Mockup Preview */}
+                                    <div className="relative mt-8">
+                                        <div className={`${step.cardBg} rounded-t-2xl shadow-xl border border-slate-200 overflow-hidden`}>
+                                            {step.mockupType === "brief" && (
+                                                <div className="p-6">
+                                                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                                                <Zap className="w-5 h-5 text-white" />
+                                                            </div>
+                                                            <span className="font-bold text-slate-900">Project Brief</span>
+                                                        </div>
+                                                        <span className="text-xs font-semibold px-3 py-1 bg-blue-100 text-blue-700 rounded-full">Draft</span>
+                                                    </div>
+                                                    <div className="space-y-3">
+                                                        <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                                                            <span className="text-sm text-slate-700">Homepage Design</span>
+                                                            <span className="font-bold text-slate-900">$5,000</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                                                            <span className="text-sm text-slate-700">Backend API</span>
+                                                            <span className="font-bold text-slate-900">$8,500</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                                                            <span className="text-sm text-slate-700">Testing & QA</span>
+                                                            <span className="font-bold text-slate-900">$2,000</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {step.mockupType === "approval" && (
+                                                <div className="p-6">
+                                                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center">
+                                                                <CheckCircle className="w-5 h-5 text-white" />
+                                                            </div>
+                                                            <span className="font-bold text-slate-900">Client Review</span>
+                                                        </div>
+                                                        <span className="text-xs font-semibold px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
+                                                    </div>
+                                                    <div className="bg-slate-50 rounded-lg p-4 mb-4">
+                                                        <p className="text-sm text-slate-700 mb-3">Review project scope and approve to proceed:</p>
+                                                        <div className="text-2xl font-bold text-slate-900 mb-2">Total: $15,500</div>
+                                                        <p className="text-xs text-slate-600">3 deliverables • Est. 4 weeks</p>
+                                                    </div>
+                                                    <button className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
+                                                        Approve Project
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {step.mockupType === "invoice" && (
+                                                <div className="p-6">
+                                                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                                                <FileText className="w-5 h-5 text-white" />
+                                                            </div>
+                                                            <span className="font-bold text-slate-900">Invoice #001</span>
+                                                        </div>
+                                                        <span className="text-xs font-semibold px-3 py-1 bg-green-100 text-green-700 rounded-full">✓ Paid</span>
+                                                    </div>
+                                                    <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-lg p-4 mb-3">
+                                                        <div className="flex justify-between items-center mb-2">
+                                                            <span className="text-sm text-slate-600">Amount Due</span>
+                                                            <span className="text-3xl font-black text-emerald-600">$15,500</span>
+                                                        </div>
+                                                        <p className="text-xs text-slate-600">Due: Dec 25, 2024</p>
+                                                    </div>
+                                                    <div className="flex gap-2">
+                                                        <button className="flex-1 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-lg text-sm hover:bg-slate-200 transition-colors">
+                                                            Download PDF
+                                                        </button>
+                                                        <button className="flex-1 py-2.5 bg-emerald-500 text-white font-semibold rounded-lg text-sm hover:bg-emerald-600 transition-colors">
+                                                            Send Invoice
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-
-                                    {/* Content */}
-                                    <h3 className="text-xl font-bold text-slate-900 mb-3 text-center group-hover:text-primary transition-colors">
-                                        {step.title}
-                                    </h3>
-                                    <p className="text-sm text-slate-600 leading-relaxed text-center">
-                                        {step.description}
-                                    </p>
-
-                                    {/* Bottom gradient accent */}
-                                    <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${step.color} rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center`} />
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
                 </div>
 
-                {/* Bottom section with stats */}
-                <div className="mt-20 max-w-4xl mx-auto">
-                    <div className="bg-gradient-to-br from-primary/5 via-white to-primary/5 border-2 border-primary/20 rounded-2xl p-8 md:p-12">
-                        <div className="grid md:grid-cols-3 gap-8 text-center">
-                            <div>
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                {/* Stats */}
+                <div className="max-w-5xl mx-auto mb-20">
+                    <div className="bg-white rounded-3xl border border-l-8 border-r-8  border-black relative p-10">
+                        <div className="grid md:grid-cols-3 gap-10 divide-x divide-slate-200">
+                            <div className="text-center md:px-6">
+                                <div className="text-5xl font-black text-slate-900 mb-2">
                                     &lt;5 min
                                 </div>
-                                <p className="text-sm text-slate-600">
-                                    Total time per invoice
-                                </p>
+                                <p className="text-slate-600">Total time per invoice</p>
                             </div>
-                            <div>
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                            <div className="text-center md:px-6">
+                                <div className="text-5xl font-black text-slate-900 mb-2">
                                     90%
                                 </div>
-                                <p className="text-sm text-slate-600">
-                                    Faster than traditional methods
-                                </p>
+                                <p className="text-slate-600">Faster than manual methods</p>
                             </div>
-                            <div>
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                            <div className="text-center md:px-6">
+                                <div className="text-5xl font-black text-slate-900 mb-2">
                                     Zero
                                 </div>
-                                <p className="text-sm text-slate-600">
-                                    Invoice disputes or errors
-                                </p>
+                                <p className="text-slate-600">Invoice errors or disputes</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* CTA */}
-                <div className="text-center mt-16">
-                    <Link href={"/signup"}>
-                        <button className="group px-10 cursor-pointer py-4 bg-gradient-to-r from-primary to-primary/90 text-white rounded-full font-bold text-base shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 inline-flex items-center gap-2">
-                            Get Started Free
-                            <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                        </button></Link>
-                    {/* <p className="text-sm text-slate-500 mt-4">
-                        No credit card required • Set up in under 2 minutes
-                    </p> */}
-                </div>
             </div>
         </section>
     );

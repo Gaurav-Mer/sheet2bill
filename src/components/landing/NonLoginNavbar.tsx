@@ -18,7 +18,7 @@ const NonLoginNavbar = () => {
                     <Link href="/login" passHref>
                         <Button variant="ghost" className="hover:bg-primary/5">Login</Button>
                     </Link>
-                    <Link href="/pricing" passHref>
+                    <Link href="#pricing" passHref>
                         <Button variant="ghost" className="hover:bg-primary/5">Pricing</Button>
                     </Link>
                     <Link href="/signup" passHref>

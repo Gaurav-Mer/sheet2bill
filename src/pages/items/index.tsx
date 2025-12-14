@@ -12,6 +12,7 @@ import { Pagination } from '@/components/clients/Pagination';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { useUpgradeModal } from '@/components/providers/UpgradeModalProvider';
 
 type Item = {
     id: number;
@@ -34,6 +35,7 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
     const [isDeleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+    const { triggerUpgrade } = useUpgradeModal()
 
     const refreshData = () => router.replace(router.asPath);
 
@@ -59,19 +61,34 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
             const url = isEditing ? `/api/items/${selectedItem.id}` : '/api/items';
             const method = isEditing ? 'PUT' : 'POST';
 
-            const response = await fetch(url, {
+            const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
-            if (!response.ok) throw new Error(await response.json().then(d => d.message));
+            if (!res.ok) {
+                const errorBody = await res.json().catch(() => ({}));
+                throw {
+                    status: res.status,
+                    message: errorBody.message || "Something went wrong",
+                };
+            }
         },
         onSuccess: () => {
             toast.success(selectedItem ? 'Item updated successfully!' : 'Item added successfully!');
             handleCloseForm();
             refreshData();
         },
-        onError: (error: Error) => toast.error(error.message),
+        onError: (error: any) => {
+            if (error.status === 402) {
+                // 4. Trigger the modal with the message sent from the server
+                triggerUpgrade(error.message)
+                return
+            } else {
+
+                toast.error(error.message)
+            }
+        },
     });
 
     const handleDeleteItem = useMutation({

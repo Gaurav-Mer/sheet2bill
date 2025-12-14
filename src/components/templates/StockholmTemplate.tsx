@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
+import { Logo } from '../Logo';
 
 
 type TemplateData = any & {
@@ -16,6 +17,17 @@ type TemplateProps = {
 export const StockholmTemplate = ({ data }: TemplateProps) => {
     // Use the user's brand color, with a fallback
     const primaryColor = data.profile?.brand_color || '#3B82F6'; // Default to a strong blue
+
+
+
+    // --- WATERMARK LOGIC ---
+    // Check if user is Pro (Subscription is active)
+    const isPro = data.profile?.subscription_ends_at
+        ? new Date(data.profile.subscription_ends_at) > new Date()
+        : false;
+    // Show watermark if NOT Pro, unless manually overridden
+    const showWatermark = data.enable_watermark ?? !isPro;
+
     const css = `
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
     
@@ -75,6 +87,16 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
     .totals-table .label { text-align: left; color: #555; }
     .totals-table .value { text-align: right; font-weight: bold; color: #000; }
     .totals-table .total-amount { font-size: 22px; font-weight: bold; color: ${primaryColor}; }
+     .watermark {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: black;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+}
   `;
 
     const formatDate = (dateString: string | null) => {
@@ -160,6 +182,13 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
                         </section>
 
                         {data.notes && <div style={{ marginTop: '50px' }}><h2 style={{ fontSize: '12px', textTransform: 'uppercase' }}>Notes</h2><p>{data.notes}</p></div>}
+
+                        {
+                            showWatermark && (
+                                <a href="https://sheet2bill.com"><div className="watermark">
+                                    <Logo className="h-4 w-4" /> <span className='font-semibold'>Sheet2Bill</span>
+                                </div></a>
+                            )}
                     </main>
                 </div>
             </body>

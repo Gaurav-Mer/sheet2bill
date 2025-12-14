@@ -3,7 +3,7 @@
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
-import { checkPlanLimits } from '@/lib/permission';
+import { checkUserLimit } from '@/lib/server-limit';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -35,8 +35,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        await checkPlanLimits(supabase, user.id, 'CREATE_BRIEF');
-
+        const limitCheck = await checkUserLimit(supabase, user.id, 'create_brief');
+        console.log("Limit Check:", limitCheck);
+        if (!limitCheck.allowed) {
+            // Return 402 (Payment Required) so the frontend knows to show the Pricing Modal
+            return res.status(402).json({ message: limitCheck.message });
+        }
         // --- Auto-generate the brief_number ---
         const { data: lastBrief } = await supabase
             .from('briefs')

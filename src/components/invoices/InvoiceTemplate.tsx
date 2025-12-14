@@ -3,13 +3,15 @@
 
 import { normalizeCountry, normalizeCurrency } from "@/lib/normalizeCountry";
 import { Client, Profile } from "@/types";
-import Image from "next/image";
+import { Logo } from "../Logo";
 
 // The full data structure required by the template
 type InvoiceTemplateData = any & {
     client: Client;
     invoice_line_items: any[];
     profile: Profile & { email?: string };
+    enable_watermark?: boolean; // Optional override
+
 };
 
 type InvoiceTemplateProps = {
@@ -21,6 +23,16 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
     // A professional color scheme for the PDF.
     const primaryColor = 'black'; // Indigo
     const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
+
+
+    // --- WATERMARK LOGIC ---
+    // Check if user is Pro (Subscription is active)
+    const isPro = data.profile?.subscription_ends_at
+        ? new Date(data.profile.subscription_ends_at) > new Date()
+        : false;
+    // Show watermark if NOT Pro, unless manually overridden
+    const showWatermark = data.enable_watermark ?? !isPro;
+
     // Self-contained CSS for perfect PDF rendering
     const css = `
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -56,7 +68,17 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
         .totals td:first-child { text-align: left; color: #6b7280; }
         .totals .total-amount td { font-size: 18px; font-weight: bold; color: #111827; border-top: 1px solid #374151; }
         .footer { margin-top: 40px; border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center; color: #9ca3af; font-size: 12px; }
-    `;
+        .watermark {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: black;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+            `;
 
     // Helper to format dates consistently for the PDF
     const formatDate = (dateString: string | null) => {
@@ -153,6 +175,13 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
                     <footer className="footer">
                         <p>{thanksMessage}</p>
                         <p>{data.profile.company_name || 'Sheet2bill'}</p>
+
+                        {
+                            showWatermark && (
+                                <a href="https://sheet2bill.com"><div className="watermark">
+                                    <Logo className="h-4 w-4" /> <span className='font-semibold'>Sheet2Bill</span>
+                                </div></a>
+                            )}
                     </footer>
                 </div>
             </body>

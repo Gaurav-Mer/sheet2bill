@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { Star } from "lucide-react"
 import Link from "next/link"
+import { useUpgradeModal } from "./providers/UpgradeModalProvider"
 
 type UpgradeModalProps = {
     isOpen: boolean
@@ -17,8 +18,13 @@ type UpgradeModalProps = {
 }
 
 export function UpgradeModal({ isOpen, onClose, message }: UpgradeModalProps) {
+    const { closeUpgrade } = useUpgradeModal()
+
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={isOpen} onOpenChange={() => {
+            closeUpgrade()
+            onClose()
+        }}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
@@ -30,10 +36,13 @@ export function UpgradeModal({ isOpen, onClose, message }: UpgradeModalProps) {
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="sm:justify-center pt-4">
-                    <Button type="button" variant="outline" onClick={onClose}>
+                    <Button type="button" variant="outline" onClick={() => {
+                        closeUpgrade()
+                        onClose()
+                    }}>
                         Maybe Later
                     </Button>
-                    <Link href="/pricing" passHref>
+                    <Link onClick={closeUpgrade} href="/pricing" passHref>
                         <Button>View Plans</Button>
                     </Link>
                 </DialogFooter>

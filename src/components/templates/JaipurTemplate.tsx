@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
+import { Logo } from '../Logo';
 
 
 type TemplateData = any & {
@@ -15,6 +16,14 @@ type TemplateProps = {
 
 export const JaipurTemplate = ({ data }: TemplateProps) => {
     const accentColor = data.profile?.brand_color || '#D95B43'; // Terracotta/Rust
+
+    // --- WATERMARK LOGIC ---
+    // Check if user is Pro (Subscription is active)
+    const isPro = data.profile?.subscription_ends_at
+        ? new Date(data.profile.subscription_ends_at) > new Date()
+        : false;
+    // Show watermark if NOT Pro, unless manually overridden
+    const showWatermark = data.enable_watermark ?? !isPro;
 
     const css = `
       @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
@@ -57,6 +66,16 @@ export const JaipurTemplate = ({ data }: TemplateProps) => {
     .totals-table .value { text-align: right; font-weight: bold; color: #000; }
     .totals-table .total-amount { font-size: 22px; font-weight: bold; color: ${accentColor}; }
     .footer { margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; color: #aaa; font-size: 12px; }
+      .watermark {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: black;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+}
   `;
 
     const formatDate = (dateString: string | null) => {
@@ -132,6 +151,12 @@ export const JaipurTemplate = ({ data }: TemplateProps) => {
 
                     <footer className="footer">
                         <p>{data.notes || 'Thank you for your business!'}</p>
+                        {
+                            showWatermark && (
+                                <a href="https://sheet2bill.com"><div className="watermark">
+                                    <Logo className="h-4 w-4" /> <span className='font-semibold'>Sheet2Bill</span>
+                                </div></a>
+                            )}
                     </footer>
                 </div>
             </body>

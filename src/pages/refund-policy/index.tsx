@@ -1,65 +1,63 @@
 /* eslint-disable react/no-unescaped-entities */
 import { ReactElement } from 'react';
-// import Link from 'next/link'; // Replaced with <a> tag
-import { Info } from 'lucide-react';
 import Link from 'next/link';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
+import Head from 'next/head';
 
 export default function RefundPolicyPage() {
     return (
         <>
+            <Head>
+                <title>Refund Policy - Sheet2Bill</title>
+                <meta name="description" content="Read the Sheet2Bill refund policy regarding prepaid passes and cancellations." />
+            </Head>
             <NonLoginNavbar />
             <main className="bg-background mt-4">
                 <div className="container mx-auto max-w-prose py-16 px-6">
                     <article className="prose dark:prose-invert">
                         <h1>Refund Policy for Sheet2Bill</h1>
-                        <p className="lead">Last updated: October 12, 2025</p>
+                        <p className="lead text-muted-foreground">Last updated: December 13, 2025</p>
 
-                        {/* --- BETA NOTICE BANNER --- */}
-                        <div className="my-6 rounded-md bg-blue-50 p-4 border-l-4 border-blue-500 dark:bg-blue-900/30">
-                            <div className="flex items-start gap-x-3">
-                                <Info className="h-5 w-5 text-blue-500" aria-hidden="true" />
-                                <div className="text-sm">
-                                    <p className="font-semibold text-blue-800 dark:text-blue-300">Public Beta Offer</p>
-                                    <p className="mt-1 text-blue-700 dark:text-blue-400">
-                                        Sheet2Bill is currently free for all users until <strong>January 31st, 2026</strong>. The following policy, including the 7-day trial, will apply to all paid subscriptions after this date.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        {/* --------------------------- */}
-
-                        <h2>1. 7-Day Free Trial</h2>
+                        <h2>1. No Automatic Renewals</h2>
                         <p>
-                            We offer a 7-day free trial for all new users. During the trial, you have full access to all features of the selected plan to determine if Sheet2Bill is the right fit for your needs.
-                        </p>
-                        <p>
-                            It is your responsibility to use the trial period to evaluate the service. We encourage you to test all features thoroughly before your trial ends.
+                            Sheet2Bill operates on a <strong>Prepaid Pass</strong> model. You manually purchase access for a specific duration (e.g., 30 days or 1 year). We do <strong>not</strong> automatically charge your card or bank account when your pass expires. You are always in full control of when you pay.
                         </p>
 
-                        <h2>2. Subscription Payments Are Non-Refundable</h2>
+                        <h2>2. Refund Eligibility</h2>
                         <p>
-                            Once your 7-day free trial ends and your first subscription payment is processed, that payment is **final and non-refundable**.
+                            Because our "Pro Pass" provides immediate access to digital features (such as premium templates and unlimited usage), all sales are generally <strong>final and non-refundable</strong> once the payment is successfully processed and the features are unlocked.
                         </p>
                         <p>
-                            By providing your payment information and subscribing after the trial, you are agreeing to these terms. We do not offer refunds or credits for payments made after a successful trial period.
+                            However, we understand that technical errors happen. We may consider a refund request under the following specific circumstances:
+                        </p>
+                        <ul>
+                            <li><strong>Double Charge:</strong> If you were charged twice for the same transaction due to a technical glitch.</li>
+                            <li><strong>Service Unavailability:</strong> If a critical feature of the Pro plan was technically unavailable for more than 72 hours immediately following your purchase.</li>
+                        </ul>
+
+                        <h2>3. Requesting a Refund</h2>
+                        <p>
+                            If you believe you are eligible for a refund based on the criteria above, you must contact us within <strong>7 days</strong> of the transaction date.
+                        </p>
+                        <p>
+                            To request a refund, please email <strong>admin@sheet2bill.com</strong> with:
+                        </p>
+                        <ul>
+                            <li>Your registered email address.</li>
+                            <li>The Payment ID (e.g., pay_H23...) found in your Billing history.</li>
+                            <li>A description of the issue.</li>
+                        </ul>
+                        <p>
+                            Refunds are granted at our sole discretion. If approved, the refund will be processed to your original payment method within 5-10 business days.
                         </p>
 
-                        <h2>3. Subscription Renewals</h2>
+                        <h2>4. Cancellations & Downgrades</h2>
                         <p>
-                            To ensure uninterrupted service, your subscription will automatically renew at the end of each billing cycle (monthly or annually). **Renewal payments are also non-refundable.**
-                        </p>
-                        <p>
-                            You can cancel your subscription at any time from your account settings to prevent future charges.
+                            Since there are no automatic recurring charges, there is no need to "cancel" a subscription to stop future payments. If you do not wish to continue using the Pro features, simply do not purchase a new pass when your current one expires. Your account will automatically revert to the Free Plan limits.
                         </p>
 
-                        <h2>4. How to Cancel Your Subscription</h2>
-                        <p>
-                            You are in full control of your subscription. To avoid being charged after your trial or for a renewal, you must cancel your subscription before the billing date. You can do this from the "Billing" or "Account" section of your dashboard.
-                        </p>
-
-                        <p className="mt-8">
-                            <Link href="/" className="no-underline hover:underline">← Back to Home</Link>
+                        <p className="mt-8 border-t pt-8">
+                            <Link href="/" className="no-underline hover:underline text-primary">← Back to Home</Link>
                         </p>
                     </article>
                 </div>

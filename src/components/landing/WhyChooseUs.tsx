@@ -53,17 +53,17 @@ const benefits = [
 
 export function WhyChooseUs() {
     return (
-        <section className="py-12 bg-gradient-to-b from-white via-slate-50 to-white relative overflow-hidden">
+        <section className="py-12 bg-[#f9efe4] relative overflow-hidden">
             {/* Decorative background */}
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.06),transparent_70%)]" />
 
             <div className="container mx-auto px-6">
                 {/* Header */}
                 <div className="text-center mb-20 max-w-3xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                        <span className="text-md font-bold text-primary">Why Sheet2Bill</span>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full  mb-6 bg-white border-black border-2">
+                        <span className="text-md font-bold text-black">Why Sheet2Bill</span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6">
+                    <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6">
                         Built for Freelancers Who Value Their Time
                     </h2>
                     <p className="text-lg text-slate-600 leading-relaxed">
@@ -76,7 +76,7 @@ export function WhyChooseUs() {
                     {benefits.map((item, index) => (
                         <div
                             key={index}
-                            className="group relative bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 transition-all duration-500 hover:-translate-y-2"
+                            className="group relative bg-white border-l-2 border-b-2 border-black rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 transition-all duration-500 hover:-translate-y-2"
                         >
                             {/* Gradient overlay on hover */}
                             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -103,8 +103,6 @@ export function WhyChooseUs() {
                                     {item.description}
                                 </p>
 
-                                {/* Bottom accent line */}
-                                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${item.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
                             </div>
                         </div>
                     ))}

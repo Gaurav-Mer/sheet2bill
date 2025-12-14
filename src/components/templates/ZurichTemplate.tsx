@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
+import { Logo } from '../Logo';
 
 
 type TemplateData = any & {
@@ -16,6 +17,18 @@ type TemplateProps = {
 export const ZurichTemplate = ({ data }: TemplateProps) => {
     const primaryColor = data.profile?.brand_color || 'hsl(243, 75%, 59%)';
     const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
+
+
+
+    // --- WATERMARK LOGIC ---
+    // Check if user is Pro (Subscription is active)
+    const isPro = data.profile?.subscription_ends_at
+        ? new Date(data.profile.subscription_ends_at) > new Date()
+        : false;
+    // Show watermark if NOT Pro, unless manually overridden
+    const showWatermark = data.enable_watermark ?? !isPro;
+
+
     const css = `
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
@@ -51,6 +64,16 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
     .totals-table .value { text-align: right; }
     .totals-table .total-amount { font-size: 20px; font-weight: bold; color: ${primaryColor}; border-top: 2px solid #111827; }
     .footer { margin-top: 50px; border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center; color: #9ca3af; font-size: 12px; }
+      .watermark {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: black;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+}
   `;
 
     const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
@@ -126,6 +149,13 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
 
                     <footer className="footer">
                         <p>{thanksMessage}</p>
+
+                        {
+                            showWatermark && (
+                                <a href="https://sheet2bill.com"><div className="watermark">
+                                    <Logo className="h-4 w-4" /> <span className='font-semibold'>Sheet2Bill</span>
+                                </div></a>
+                            )}
                     </footer>
                 </div>
             </body>

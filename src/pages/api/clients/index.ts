@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { checkPlanLimits } from '@/lib/permission';
+import { checkUserLimit } from '@/lib/server-limit';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -21,15 +21,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         // --- THIS IS THE GATEKEEPER ---
         // Before we do anything else, we check if the user is allowed to perform this action.
-        await checkPlanLimits(supabase, user.id, 'CREATE_CLIENT');
+        const limitCheck = await checkUserLimit(supabase, user.id, 'add_client');
 
-        // If checkPlanLimits succeeds (doesn't throw an error), we proceed.
+        if (!limitCheck.allowed) {
+            // Return 402 (Payment Required) so the frontend knows to show the Pricing Modal
+            return res.status(402).json({ message: limitCheck.message });
+        }
+
         const { name, ...clientData } = req.body;
 
         if (!name) {
             return res.status(400).json({ message: 'Client name is required.' });
         }
 
+        console.log("Adding client for user:", clientData);
         const { data, error } = await supabase
             .from('clients')
             .insert({

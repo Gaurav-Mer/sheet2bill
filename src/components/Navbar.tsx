@@ -15,6 +15,9 @@ import { useEffect, useState } from 'react';
 import { NotificationBell } from './NotificationBell';
 import { useProfile } from '@/hooks/useProfile';
 import { Logo } from './Logo';
+import { MaleProfileSvg, StartSvg } from './SVG/Laptop';
+import { differenceInDays } from 'date-fns';
+import { twMerge } from 'tailwind-merge';
 
 type NavbarProps = {
     onMenuClick: () => void;
@@ -33,40 +36,44 @@ const generateBreadcrumbs = (pathname: string) => {
     return [{ href: '/dashboard', label: 'Home' }, ...breadcrumbs];
 };
 
-// Helper function to check if the user is on any paid or trial plan
-const isPaidPlan = (status: string | null | undefined): boolean => {
-    if (!status) return false;
-    return ['trialing', 'starter', 'pro'].includes(status);
-};
-
 export const PlanStatus = () => {
     const { profile, isLoading } = useProfile();
-    if (isLoading || !profile) {
+
+    if (isLoading) {
         return <div className="h-8 w-24 rounded-md bg-muted animate-pulse" />; // Loading skeleton
     }
 
-    const getTrialDaysRemaining = () => {
+    // OPTIMIZATION: Calculate Status Locally to avoid API calls in Navbar
+    const isPro = profile?.subscription_ends_at
+        ? new Date(profile.subscription_ends_at) > new Date()
+        : false;
+
+    const getDaysLeft = () => {
         if (!profile?.subscription_ends_at) return 0;
         const endDate = new Date(profile.subscription_ends_at);
-        const now = new Date();
-        return Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+        return endDate ? Math.max(0, differenceInDays(endDate, new Date())) : 0;
     };
+
+    const daysLeft = isPro ? getDaysLeft() : 0;
 
     return (
         <div className="hidden sm:flex items-center gap-4">
-            {isPaidPlan(profile.subscription_status) ? (
-                <div className="flex items-center gap-2 text-sm font-semibold text-primary">
-                    <Star className="h-4 w-4" />
-                    {profile.subscription_status === 'trialing'
-                        ? `Pro Trial (${getTrialDaysRemaining()}d left)`
-                        : `${(profile?.subscription_status ?? "")?.charAt(0)?.toUpperCase() + profile?.subscription_status?.slice(1)} Plan`
-                    }
+            {isPro ? (
+                // --- PRO VIEW: Show Days Left ---
+                <div className={twMerge("flex items-center gap-2 text-sm font-semibold text-primary px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5", daysLeft === 0 && "text-destructive bg-destructive/5")}>
+                    {daysLeft === 0 ? null : <StartSvg />}
+                    <span>
+                        {daysLeft === 0 ? "Plan expiring today" : `Pro Pass (${daysLeft}d left)`}
+                    </span>
                 </div>
             ) : (
+                // --- FREE VIEW: Show Upgrade Button ---
                 <>
-                    <p className="text-sm text-muted-foreground">Free Plan</p>
+                    <p className="text-sm text-muted-foreground hidden lg:block">Free Plan</p>
                     <Link href="/pricing" passHref>
-                        <Button size="sm">Upgrade</Button>
+                        <Button size="sm" className="bg-gradient-to-r from-primary/90 to-primary text-white shadow-sm hover:shadow-md transition-all">
+                            Upgrade
+                        </Button>
                     </Link>
                 </>
             )}
@@ -74,15 +81,11 @@ export const PlanStatus = () => {
     );
 };
 
-
-
-
 export function Navbar({ onMenuClick }: NavbarProps) {
     const user = useUser();
     const router = useRouter();
     const supabaseClient = useSupabaseClient();
     const [breadcrumbs, setBreadcrumbs] = useState<{ href: string, label: string }[]>([]);
-
 
     // Update breadcrumbs whenever the page changes
     useEffect(() => {
@@ -120,14 +123,15 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                     <NotificationBell />
                 </div>
 
-                {/* --- PREMIUM: User Dropdown Menu with User Info --- */}
+                {/* --- User Dropdown Menu with User Info --- */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
-                            <UserCircle className="h-6 w-6" />
-                        </Button>
+                        {/* Replaced standard button with your SVG container */}
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 transition-colors">
+                            <MaleProfileSvg />
+                        </div>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="w-56">
                         <DropdownMenuLabel>
                             <div className="flex flex-col space-y-1">
                                 <p className="text-sm font-medium leading-none">My Account</p>
@@ -138,14 +142,16 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                            <Link href="/settings">Settings</Link>
+                            <Link href="/settings" className="cursor-pointer">Settings</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link href="/settings/public-view">Storefront</Link>
+                            <Link href="/settings/public-view" className="cursor-pointer">Public Profile</Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem disabled>Support</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href="/pricing" className="cursor-pointer font-medium text-primary">Upgrade Plan</Link>
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onSelect={handleLogout}>
+                        <DropdownMenuItem onSelect={handleLogout} className="text-red-600 focus:text-red-600 cursor-pointer">
                             Logout
                         </DropdownMenuItem>
                     </DropdownMenuContent>

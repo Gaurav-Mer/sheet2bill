@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { checkPlanLimits } from '@/lib/permission'; // Your existing permission helper
+import { checkUserLimit } from '@/lib/server-limit';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
@@ -34,7 +34,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         // 1. GATEKEEPER: Check Plan Limits
         // We check both Briefs and Clients because accepting might create both.
-        await checkPlanLimits(supabase, user.id, 'CREATE_BRIEF');
+        const limitCheck = await checkUserLimit(supabase, user.id, 'create_brief');
+
+        if (!limitCheck.allowed) {
+            // Return 402 (Payment Required) so the frontend knows to show the Pricing Modal
+            return res.status(402).json({ message: limitCheck.message });
+        }
         // Note: Ideally check CREATE_CLIENT too, but that logic might be complex 
         // if the client already exists. You might want to be lenient here.
 

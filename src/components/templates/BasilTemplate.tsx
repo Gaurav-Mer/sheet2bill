@@ -2,6 +2,7 @@
 import { normalizeCurrency } from '@/lib/normalizeCountry';
 import { hexToLight } from '@/lib/utils';
 import { Client, Profile } from '@/types';
+import { Logo } from '../Logo';
 
 type TemplateData = any & {
     client: Client;
@@ -45,6 +46,13 @@ export const BasilTemplate = ({ data }: TemplateProps) => {
     const svgPattern = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill-opacity='0.015'  width='64' height='64' viewBox='0 0 256 256' fill='none'><path d='M 192 0 C 227.346 0 256 28.654 256 64 C 256 99.346 227.346 128 192 128 C 227.346 128 256 156.654 256 192 C 256 227.346 227.346 256 192 256 C 156.654 256 128 227.346 128 192 C 128 227.346 99.346 256 64 256 C 28.654 256 0 227.346 0 192 C 0 156.654 28.654 128 64 128 C 28.654 128 0 99.346 0 64 C 0 28.654 28.654 0 64 0 C 99.346 0 128 28.654 128 64 C 128 28.654 156.654 0 192 0 Z M 64 160 C 46.327 160 32 174.327 32 192 C 32 209.673 46.327 224 64 224 C 81.673 224 96 209.673 96 192 C 96 174.327 81.673 160 64 160 Z M 192 160 C 174.327 160 160 174.327 160 192 C 160 209.673 174.327 224 192 224 C 209.673 224 224 209.673 224 192 C 224 174.327 209.673 160 192 160 Z M 64 32 C 46.327 32 32 46.327 32 64 C 32 81.673 46.327 96 64 96 C 81.673 96 96 81.673 96 64 C 96 46.327 81.673 32 64 32 Z M 192 32 C 174.327 32 160 46.327 160 64 C 160 81.673 174.327 96 192 96 C 209.673 96 224 81.673 224 64 C 224 46.327 209.673 32 192 32 Z' fill='%23000000' ></path></svg>`;
 
 
+    // --- WATERMARK LOGIC ---
+    // Check if user is Pro (Subscription is active)
+    const isPro = data.profile?.subscription_ends_at
+        ? new Date(data.profile.subscription_ends_at) > new Date()
+        : false;
+    // Show watermark if NOT Pro, unless manually overridden
+    const showWatermark = data.enable_watermark ?? !isPro;
 
     const css = `
      @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap');
@@ -193,6 +201,17 @@ export const BasilTemplate = ({ data }: TemplateProps) => {
             color: #9CA3AF;
             margin-top: 20px;
         }
+
+        .watermark {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: black;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+}  
     `;
 
     return (
@@ -320,6 +339,14 @@ export const BasilTemplate = ({ data }: TemplateProps) => {
 
                     <footer className="footer">
                         <p>{data.notes || 'Thank you for your business!'}</p>
+
+                        {
+                            showWatermark && (
+                                <a href="https://sheet2bill.com"><div className="watermark">
+                                    <Logo className="h-4 w-4" /> <span className='font-semibold'>Sheet2Bill</span>
+                                </div>
+                                </a>
+                            )}
                     </footer>
                 </div>
             </body>

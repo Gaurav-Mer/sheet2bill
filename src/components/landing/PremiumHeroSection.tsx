@@ -106,15 +106,16 @@ export function PremiumHeroSection() {
                                                 src="/landing.png"
                                                 alt="Sheet2Bill Dashboard Preview - Client Project Alpha Invoice Paid"
                                                 fetchPriority='high'
-                                                width={400}
-                                                height={250}
-                                                className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
+                                                // width={400}
+                                                // height={250}
+                                                layout='fill'
+                                                className="w-full  h-full   transition-transform duration-700"
                                             />
                                         </div>
                                     </div>
                                 </div>
 
-                                <p className="text-center mt-6 text-sm font-medium text-muted-foreground">
+                                <p className="text-center text-sm font-medium text-muted-foreground">
                                     Your new command center awaits
                                 </p>
                             </div>

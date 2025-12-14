@@ -1,3 +1,4 @@
+import { checkUserLimit } from '@/lib/server-limit';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -43,6 +44,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // --- HANDLE CREATING A NEW ITEM (POST) ---
     if (req.method === 'POST') {
         const { name, description, default_price } = req.body;
+
+        const limitCheck = await checkUserLimit(supabase, session?.user.id, 'add_item');
+
+        if (!limitCheck.allowed) {
+            // Return 402 (Payment Required) so the frontend knows to show the Pricing Modal
+            return res.status(402).json({ message: limitCheck.message });
+        }
 
         if (!name) {
             return res.status(400).json({ message: 'Item name is required.' });

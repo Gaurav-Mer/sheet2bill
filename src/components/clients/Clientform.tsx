@@ -18,21 +18,25 @@ export function ClientForm({ client, onSubmit, submitButtonText }: ClientFormPro
         <form onSubmit={onSubmit} className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
                 <div><Label htmlFor="name">Name*</Label><Input id="name" name="name" required defaultValue={client?.name} /></div>
-                <div><Label htmlFor="email">Email</Label><Input id="email" name="email" type="email" defaultValue={client?.email ?? ''} /></div>
+                <div><Label htmlFor="email">Email*</Label>
+                    <Input required id="email" name="email" type="email" defaultValue={client?.email ?? ''} /></div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-                <div><Label htmlFor="contact_person">Contact Person</Label><Input id="contact_person" name="contact_person" defaultValue={client?.contact_person ?? ''} /></div>
+                <div>
+                    <Label htmlFor="contact_person">Contact Person</Label>
+                    <Input id="contact_person" name="contact_person" defaultValue={client?.contact_person ?? ''} />
+                </div>
                 <div><Label htmlFor="phone_number">Phone</Label><Input id="phone_number" name="phone_number" defaultValue={client?.phone_number ?? ''} /></div>
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <Label htmlFor="country">Country</Label>
-                    <Select name='country' defaultValue={client?.country ?? ""}>
+                    <Select name='country' defaultValue={client?.country ?? "IN"}>
                         <SelectTrigger className='w-full' name='country' id="country">
                             <SelectValue placeholder="Select your country..." /></SelectTrigger>
                         <SelectContent>
-                            {countryList.map((country) => (
-                                <SelectItem key={country.code} value={country.code}>
+                            {countryList.map((country, i) => (
+                                <SelectItem key={i} value={country.code}>
                                     {country.name}
                                 </SelectItem>
                             ))}

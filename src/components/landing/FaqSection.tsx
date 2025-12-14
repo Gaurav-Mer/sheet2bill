@@ -48,7 +48,7 @@ export function FaqSection() {
         }))
     };
     return (
-        <section className="py-24 sm:py-32 bg-secondary ">
+        <section className="py-24 sm:py-12   bg-[#f9efe4] ">
             <Head>
                 <script
                     type="application/ld+json"
@@ -56,8 +56,13 @@ export function FaqSection() {
                 />
             </Head>
             <div className="container mx-auto px-6">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                <div className="text-center max-w-4xl mx-auto mb-16">
+                    <div className="inline-block px-4 py-1.5 rounded-full bg-white border-2 border-black mb-6">
+                        <span className="text-sm font-semibold text-black uppercase tracking-wide">
+                            FAQs
+                        </span>
+                    </div>
+                    <h2 className="text-3xl md:text-6xl w-full shrink-0 font-bold tracking-tight">
                         Frequently Asked Questions
                     </h2>
                     <p className="mt-4 text-lg text-muted-foreground">

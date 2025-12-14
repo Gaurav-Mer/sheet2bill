@@ -3,7 +3,6 @@ import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ReactElement } from 'react';
-// import Link from 'next/link'; // Replaced with standard <a> tag for compatibility
 
 export default function PrivacyPolicyPage() {
     return (
@@ -17,7 +16,7 @@ export default function PrivacyPolicyPage() {
                 <div className="container mx-auto max-w-prose py-16 px-6">
                     <article className="prose dark:prose-invert">
                         <h1>Privacy Policy for Sheet2Bill</h1>
-                        <p className="lead">Last updated: October 12, 2025</p>
+                        <p className="lead text-muted-foreground">Last updated: December 13, 2025</p>
 
                         <h2>1. Introduction</h2>
                         <p>
@@ -54,8 +53,8 @@ export default function PrivacyPolicyPage() {
                         <ul>
                             <li><strong>Supabase:</strong> Our primary infrastructure provider for database hosting, authentication, and file storage.</li>
                             <li><strong>Vercel:</strong> For hosting our web application.</li>
-                            <li><strong>Payment Processors (e.g., Stripe/Razorpay):</strong> For processing subscription payments. We do not store or have access to your full credit card information.</li>
-                            <li><strong>Email Services (e.g., Resend):</strong> For sending transactional and notification emails.</li>
+                            <li><strong>Payment Processors (Razorpay):</strong> For processing subscription payments. We do not store or have access to your full credit card information.</li>
+                            <li><strong>OneSignal:</strong> For sending push notifications regarding your account activity.</li>
                         </ul>
                         <p>We may also disclose your information if required by law or to protect our rights and the safety of our users.</p>
 
@@ -80,8 +79,8 @@ export default function PrivacyPolicyPage() {
                         <h2>9. Changes to This Privacy Policy</h2>
                         <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last updated" date at the top.</p>
 
-                        <p className="mt-8">
-                            <Link href="/" className="no-underline hover:underline">← Back to Home</Link>
+                        <p className="mt-8 border-t pt-8">
+                            <Link href="/" className="no-underline hover:underline text-primary">← Back to Home</Link>
                         </p>
                     </article>
                 </div>
@@ -94,4 +93,3 @@ export default function PrivacyPolicyPage() {
 PrivacyPolicyPage.getLayout = function getLayout(page: ReactElement) {
     return page;
 };
-

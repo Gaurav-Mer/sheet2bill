@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile, } from '@/types';
+import { Logo } from '../Logo';
 
 // The full data structure required by the template
 type TemplateData = any & {
@@ -16,6 +17,15 @@ type TemplateProps = {
 export const BerlinTemplate = ({ data }: TemplateProps) => {
     // Dynamically use the user's brand color, with OrangeRed as the fallback
     const accentColor = data.profile?.brand_color || '#FF4500';
+
+    // --- WATERMARK LOGIC ---
+    // Check if user is Pro (Subscription is active)
+    const isPro = data.profile?.subscription_ends_at
+        ? new Date(data.profile.subscription_ends_at) > new Date()
+        : false;
+    // Show watermark if NOT Pro, unless manually overridden
+    const showWatermark = data.enable_watermark ?? !isPro;
+
 
     // Self-contained CSS for perfect PDF rendering
     const css = `
@@ -84,6 +94,16 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
         .company-name {
           font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
+        .watermark {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: black;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+}   
     `;
 
     const formatDate = (dateString: string | null) => {
@@ -173,6 +193,12 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
 
                     <footer className="footer">
                         <p>{data.notes || 'Thank you for your business!'}</p>
+                        {
+                            showWatermark && (
+                                <a href="https://sheet2bill.com"><div className="watermark">
+                                    <Logo className="h-4 w-4" /> <span className='font-semibold'>Sheet2Bill</span>
+                                </div></a>
+                            )}
                     </footer>
                 </div>
             </body>

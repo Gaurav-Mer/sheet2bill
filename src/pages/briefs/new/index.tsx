@@ -22,6 +22,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
+import { useUpgradeModal } from '@/components/providers/UpgradeModalProvider';
 
 type Client = { id: number; name: string };
 type LineItem = { description: string; quantity: number; unit_price: number, item_id?: string | number };
@@ -33,6 +34,7 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
     const router = useRouter();
     // Form state
     const [title, setTitle] = useState('');
+    const { triggerUpgrade } = useUpgradeModal()
     const [clientId, setClientId] = useState<string>('');
     const [notes, setNotes] = useState('Payment due within 14 days.');
     const [taxRate, setTaxRate] = useState<number>(0);
@@ -59,16 +61,30 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newBrief),
             });
-            if (!res.ok) throw new Error('Failed to create brief');
+
+            if (!res.ok) {
+                const errorBody = await res.json().catch(() => ({}));
+                throw {
+                    status: res.status,
+                    message: errorBody.message || "Something went wrong",
+                };
+            }
             return res.json();
         },
         onSuccess: () => {
             toast.success('Brief saved successfully!');
             router.push('/briefs');
         },
-        onError: (error) => {
-            console.error(error);
-            toast.error('Error saving brief. Please try again.');
+        onError: (error: any) => {
+            if (error.status === 402) {
+                // 4. Trigger the modal with the message sent from the server
+                triggerUpgrade(error.message)
+                return
+            } else {
+                toast.error('Error saving brief. Please try again.');
+
+            }
+
         },
     });
 
