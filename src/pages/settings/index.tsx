@@ -104,10 +104,10 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
 
     return (
         <>
-            {/* <Script
+            <Script
                 src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
                 strategy="afterInteractive"
-            /> */}
+            />
             <div className="container mx-auto  max-w-4xl">
                 <form onSubmit={handleSubmit} className="space-y-8">
                     <div className="flex justify-between items-center">
