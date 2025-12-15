@@ -77,6 +77,10 @@ export default function LandingPage() {
     };
 
     document.body.appendChild(script);
+    return () => {
+      document.head.removeChild(link);
+      document.body.removeChild(script);
+    }
   }, []);
 
   return (
@@ -105,7 +109,7 @@ export default function LandingPage() {
       <NonLoginNavbar />
 
       <main className="flex-1 pt-16">
-        <BetaBanner />
+        {/* <BetaBanner /> */}
 
         {/* --- Hero Section --- */}
         <PremiumHeroSection />

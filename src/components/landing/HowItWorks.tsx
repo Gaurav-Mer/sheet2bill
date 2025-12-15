@@ -1,5 +1,4 @@
-import { Zap, CheckCircle, FileText, ArrowRight, Clock, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { Zap, CheckCircle, FileText, Clock, } from "lucide-react";
 
 const steps = [
     {
@@ -55,7 +54,7 @@ export function HowItWorks() {
 
                 {/* Steps Grid */}
                 <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-8 mb-20">
-                    {steps.map((step, index) => (
+                    {steps.map((step) => (
                         <div key={step.title} className="group">
                             <div className={`relative h-full ${step.bgColor} rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl`}>
                                 {/* Card Content */}
@@ -75,7 +74,7 @@ export function HowItWorks() {
 
                                     {/* Mockup Preview */}
                                     <div className="relative mt-8">
-                                        <div className={`${step.cardBg} rounded-t-2xl shadow-xl border border-slate-200 overflow-hidden`}>
+                                        <div className={`${step.cardBg} rounded-t-2xl shadow-xl border border-slate-200 overflow-hidden `}>
                                             {step.mockupType === "brief" && (
                                                 <div className="p-6">
                                                     <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">

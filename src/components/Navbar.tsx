@@ -127,8 +127,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         {/* Replaced standard button with your SVG container */}
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 transition-colors">
-                            <MaleProfileSvg />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full cursor-pointer uppercase border border-black  text-white bg-primary transition-colors">
+                            {user?.email?.[0]}
                         </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56">

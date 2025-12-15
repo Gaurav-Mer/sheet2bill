@@ -20,9 +20,9 @@ export function PremiumHeroSection() {
                 <div className="grid md:grid-cols-2 gap-16 items-center">
                     {/* Left: Text Content */}
                     <div className="text-center md:text-left space-y-8 mt-4">
-                        <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
+                        <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/20 border-2 border-black rounded-full">
                             <Sparkles className="h-4 w-4 text-primary" />
-                            <span className="text-sm font-medium text-primary">The Future of Freelance Invoicing</span>
+                            <span className="text-sm font-medium text-black">The Future of Freelance Invoicing</span>
                         </div>
                         <h1 className='font-bold text-primary text-lg'>Invoice & Client Management for Freelancers</h1>
                         <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
@@ -74,7 +74,7 @@ export function PremiumHeroSection() {
                             <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-secondary/20 rounded-2xl transform -rotate-12 animate-pulse" style={{ animationDelay: '1s' }} />
 
                             {/* Main Card */}
-                            <div className="relative p-6 bg-gradient-to-br from-card/90 to-card/50 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl shadow-primary/10 transform hover:scale-105 transition-transform duration-500">
+                            <div className="relative p-1 bg-gradient-to-br from-card/90 to-card/50 backdrop-blur-xl border border-black border-r-8 border-b-4 rounded-3xl shadow-2xl shadow-primary/10 transform hover:scale-105 transition-transform duration-500">
                                 {/* Browser Chrome */}
                                 <div className="bg-background/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-border/30">
                                     <div className="flex justify-between items-center px-4 py-3 bg-secondary/30 border-b border-border/30">
