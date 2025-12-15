@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const heading = "New Service Request! 🚀";
             const message = `${client_name} is requesting ${service_count} service${service_count > 1 ? 's' : ''}. Tap to view details.`;
             // Deep link to the inquiries page (adjust path as needed for your app)
-            const url = `${process.env.NEXT_PUBLIC_BASE_URL}/inquiries`;
+            const url = `/inquiries`;
 
             await sendPushNotification(profile.onesignal_ids, heading, message, url);
         }
