@@ -9,7 +9,7 @@ const razorpay = new Razorpay({
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') return res.status(405).end()
-
+    console.log("razorpay instance:", razorpay, process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, process.env.RAZORPAY_KEY_SECRET);
     // 1. Accept 'region' from the frontend
     const { plan, region = 'IN' } = req.body // Default to 'IN'
 
