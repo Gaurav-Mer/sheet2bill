@@ -9,7 +9,6 @@ import { ArrowRight } from 'lucide-react';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { FaqSection } from '@/components/landing/FaqSection';
 import { Footer } from '@/components/landing/Footer';
-import { BetaBanner } from '@/components/BetaBanner';
 import Head from 'next/head';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 import { ProblemSolutionBanner } from '@/components/landing/ProblemSolutionBanner';

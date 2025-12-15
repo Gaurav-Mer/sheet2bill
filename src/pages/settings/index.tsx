@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { useState, ChangeEvent } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
+import Script from 'next/script'
 
 // UI Components
 import { Button } from '@/components/ui/button';
