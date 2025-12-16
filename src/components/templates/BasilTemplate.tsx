@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { normalizeCurrency } from '@/lib/normalizeCountry';
+import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { hexToLight } from '@/lib/utils';
 import { Client, Profile } from '@/types';
 import { Logo } from '../Logo';
@@ -139,7 +139,7 @@ export const BasilTemplate = ({ data }: TemplateProps) => {
             text-transform: uppercase;
             letter-spacing: 1px;
             color: ${accentColor};
-            margin: 0 0 15px 0;
+            margin: 0 0 0px 0;
             font-weight: 700;
             // border-bottom: 2px solid #F3F4F6;
             padding-bottom: 8px;
@@ -230,7 +230,8 @@ export const BasilTemplate = ({ data }: TemplateProps) => {
                                 <img src={data.profile.avatar_url} alt="Logo" className="logo" />
                             ) : null}
                             <h1>{data.profile.company_name || data.profile.full_name}</h1>
-                            <p>{data.profile.city}, {data.profile.country}</p>
+                            <p>{data.profile.address_line_1}</p>
+                            <p>{data.profile.city}{data.profile.city && data.profile.country && ","} {normalizeCountry(data.profile.country)}</p>
                             <p>{data.profile.email}</p>
                             {data.profile.tax_id && <p>Tax ID: {data.profile.tax_id}</p>}
                         </div>
@@ -302,15 +303,13 @@ export const BasilTemplate = ({ data }: TemplateProps) => {
                     {/* Footer Section (Notes + Totals) */}
                     <div className="footer-section">
                         <div className="notes">
-                            {data.notes && (
+                            {/* {data.notes && (
                                 <>
                                     <h4>Notes / Payment Terms</h4>
                                     <p>{data.notes}</p>
                                 </>
-                            )}
-                            <div style={{ marginTop: 20 }}>
-                                <p>Please include invoice number on your payment.</p>
-                            </div>
+                            )} */}
+
                         </div>
 
                         <div className="totals-box">

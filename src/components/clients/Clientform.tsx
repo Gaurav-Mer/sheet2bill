@@ -23,8 +23,10 @@ export function ClientForm({ client, onSubmit, submitButtonText }: ClientFormPro
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <Label htmlFor="contact_person">Contact Person</Label>
-                    <Input id="contact_person" name="contact_person" defaultValue={client?.contact_person ?? ''} />
+                    <Label htmlFor="contact_person">Address</Label>
+                    <Input
+                        placeholder="Street Address, P.O. Box"
+                        id="address_line_1" name="address_line_1" defaultValue={client?.address_line_1 ?? ''} />
                 </div>
                 <div><Label htmlFor="phone_number">Phone</Label><Input id="phone_number" name="phone_number" defaultValue={client?.phone_number ?? ''} /></div>
             </div>

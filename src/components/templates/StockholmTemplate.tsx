@@ -66,7 +66,7 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
     }  
     .sidebar-header .logo {max-width: 180px; max-height: 70px; object-fit: contain;  invert(1); border-radius: 4px; }
     .sidebar-header h2 { font-size: 20px; font-weight: bold; margin-top: 10px; }
-    .sidebar-footer { font-size: 12px; opacity: 0.7; }
+    .sidebar-footer { font-size: 12px;  }
     .sidebar-footer p { margin: 5px 0; }
     .main-content { flex-grow: 1; padding: 50px; }
     .main-header { text-align: right; margin-bottom: 50px; }
@@ -105,6 +105,7 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
     };
 
     const currencySymbol = normalizeCurrency(data.currency)?.currency?.symbol ?? data?.currency;
+    const thanksMessage = data.profile?.thank_u_note || "Thank you for your business!";
 
     return (
         <html>
@@ -126,14 +127,14 @@ export const StockholmTemplate = ({ data }: TemplateProps) => {
                                     {data.profile.company_name || data.profile.full_name}
                                 </h2>
                             )}
-                            <div style={{ marginTop: '30px', opacity: 0.8 }}>
+                            <div style={{ marginTop: '30px', }}>
                                 <p>{data.profile.address_line_1}</p>
                                 <p>{data.profile.city}{data.profile.country && data.profile.city && ","} {normalizeCountry(data.profile.country)}</p>
                                 <p>{data.profile.email}</p>
                             </div>
                         </div>
                         <footer className="sidebar-footer">
-                            <p>Thank you for your business!</p>
+                            <p>{thanksMessage}</p>
                             {data.profile.tax_id && <p>Tax ID: {data.profile.tax_id}</p>}
                         </footer>
                     </aside>

@@ -116,10 +116,10 @@ export const JaipurTemplate = ({ data }: TemplateProps) => {
                             <p>{data.client.city}{data.client.city && data.client.country && ","} {normalizeCountry(data.client.country)}</p>
                             <p>{data.client.email}</p>
                         </div>
-                        <div className="due-date">
+                        {data.due_date && <div className="due-date">
                             <h2>Payment Due</h2>
                             <p><b>{formatDate(data.due_date)}</b></p>
-                        </div>
+                        </div>}
                     </section>
 
                     <section>

@@ -63,7 +63,7 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
           line-height: 1; 
         }
         .header-right p { margin: 2px 0 0 0; font-size: 15px; color: #4b5563; }
-        .parties { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 50px; }
+        .parties { display: grid; grid-template-columns:${data.due_date ? "1fr 1fr 1fr" : "1fr 1fr "}; gap: 20px; margin-bottom: 50px; }
         .parties h2 { 
           font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; 
           font-weight: 700; 
@@ -153,10 +153,10 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
                             <p>{data.client.city}, {data.client.country}</p>
                             <p>{data.client.email}</p>
                         </div>
-                        <div className="due-date">
+                        {data.due_date && <div className="due-date">
                             <h2>Payment Due</h2>
                             <p><b>{formatDate(data.due_date)}</b></p>
-                        </div>
+                        </div>}
                     </section>
 
                     <section>

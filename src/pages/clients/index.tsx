@@ -23,6 +23,7 @@ export type Client = {
   city: string | null;
   tax_id: string | null;
   notes: string | null;
+  address_line_1?: string
 };
 
 type PageProps = {

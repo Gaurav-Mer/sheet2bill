@@ -34,7 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ message: 'Client name is required.' });
         }
 
-        console.log("Adding client for user:", clientData);
         const { data, error } = await supabase
             .from('clients')
             .insert({

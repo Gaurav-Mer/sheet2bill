@@ -56,7 +56,7 @@ const InvoiceTemplate = ({ data }: InvoiceTemplateProps) => {
         .invoice-details h1 { font-size: 36px; font-weight: bold; color: ${primaryColor}; margin: 0 0 10px 0; }
         .invoice-details p { margin: 0; line-height: 1.6; }
         .company-info { margin-bottom: 40px; display: flex; justify-content: space-between; }
-        .bill-to p, .from p { margin: 0; line-height: 1.6; }
+        .bill-to p, .from p { margin: 0; line-height: 1.6; max-width: 20dvw; }
         .line-items-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .line-items-table thead th { text-align: left; color: #6b7280; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
         .line-items-table tbody td { border-bottom: 1px solid #e5e7eb; padding: 12px 0; }
