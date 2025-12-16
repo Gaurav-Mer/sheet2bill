@@ -49,6 +49,7 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
         from: null,
         to: null
     });
+    const [isInvoiceMode, setIsInvoiceMode] = useState(false);
 
     // --- NEW STATE FOR ITEM MODAL ---
     const [isItemModalOpen, setItemModalOpen] = useState<null | number>(null);
@@ -145,6 +146,7 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
             template_id: templateId,
             service_start_date: dateRange?.from ? format(dateRange?.from, "yyyy-MM-dd") : null,
             delivery_date: dateRange?.to ? format(dateRange?.to, "yyyy-MM-dd") : null,
+            create_as_invoice: isInvoiceMode
         });
     };
 
@@ -181,7 +183,17 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
                             </p>
                         </div>
                         {/* Desktop Save Button */}
-                        <div className="hidden md:block">
+                        <div className="hidden md:flex gap-2  items-center">
+                            <Button
+                                type="submit"
+                                size="lg"
+                                disabled={createBriefMutation.isPending}
+                                isLoading={createBriefMutation.isPending}
+                                variant={"outline"}
+                                onClick={() => setIsInvoiceMode(true)}
+                            >
+                                Generate Invoice
+                            </Button>
                             <Button
                                 type="submit"
                                 size="lg"
@@ -506,26 +518,6 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
                                             </SelectContent>
                                         </Select>
                                     </div>
-
-                                    {/* <div>
-                                        <Label>Template</Label>
-                                        <FeatureGate>
-                                            <Select onValueChange={setTemplateId} defaultValue={templateId}>
-                                                <SelectTrigger className='w-full'>
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {AVAILABLE_TEMPLATES.map((t) => (
-                                                        <SelectItem key={t.id} value={t.id}>
-                                                            {t.name}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                            {currentTemplate && <Image src={currentTemplate?.img} className='mx-auto mt-4 border rounded-sm' width={200} height={200} alt='sdf' />}
-                                        </FeatureGate>
-                                    </div> */}
-
                                 </CardContent>
                             </Card>
                         </aside>
@@ -670,17 +662,28 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
             </div>
 
             {/* Mobile: Fixed Bottom Save Button */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t p-4 shadow-lg z-10">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 flex items-center gap-4 bg-background border-t p-4 shadow-lg z-10">
+                <Button
+                    type="submit"
+                    size="lg"
+                    disabled={createBriefMutation.isPending}
+                    isLoading={createBriefMutation.isPending}
+                    variant={"outline"}
+                    onClick={() => setIsInvoiceMode(true)}
+                >
+                    Generate Invoice
+                </Button>
                 <Button
                     type="submit"
                     size="lg"
                     disabled={createBriefMutation.isPending}
                     isLoading={createBriefMutation.isPending}
                     onClick={handleSubmit}
-                    className="w-full"
+                    className="w-fir"
                 >
                     Save Draft Brief
                 </Button>
+
             </div>
         </div>
     );
