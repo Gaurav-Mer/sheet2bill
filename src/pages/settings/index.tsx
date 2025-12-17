@@ -147,7 +147,9 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
                     </Card>
 
                     <Card>
-                        <CardHeader><CardTitle>Contact Details</CardTitle></CardHeader>
+                        <CardHeader>
+                            <CardTitle>Contact Details</CardTitle>
+                        </CardHeader>
                         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" value={user?.email || ''} disabled /></div>
 

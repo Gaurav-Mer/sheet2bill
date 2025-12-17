@@ -6,7 +6,9 @@ import { BasilTemplate } from "./BasilTemplate";
 import { BerlinTemplate } from "./BerlinTemplate";
 import { JaipurTemplate } from "./JaipurTemplate";
 import { KyotoTemplate } from "./KyotoTemplate";
+import LuxeTemplate from "./LuxeTemplate";
 import { ManhattanTemplate } from "./ManhattanTemplate";
+import MonacoTemplate from "./MonacoTemplate";
 import { StockholmTemplate } from "./StockholmTemplate";
 import { ZurichTemplate } from "./ZurichTemplate";
 
@@ -42,6 +44,10 @@ export const CurrentTemplate = ({ templateId, data }: InvoiceTemplateRouterProps
         case 'basel':
             // Default to the Zurich template if no match is found
             return <BasilTemplate data={data as any} />;
+        case "monaco":
+            return <MonacoTemplate data={data as any} />;
+        case "luxe":
+            return <LuxeTemplate data={data as any} />;
         default:
             return <InvoiceTemplate data={data as any} />
     }

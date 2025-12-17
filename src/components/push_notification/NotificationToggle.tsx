@@ -8,10 +8,10 @@ import toast from "react-hot-toast";
 import { useOnesignalStatus } from "@/hooks/useOnesignalStatus";
 
 export default function NotificationToggle({ savedIds }: { savedIds: string[] }) {
-    const { enabled, setEnabled, supported, currentId } = useOnesignalStatus(savedIds);
+    const { enabled, setEnabled, currentId } = useOnesignalStatus(savedIds);
     const [loading, setLoading] = useState(false);
 
-    if (!supported) return null;
+    // if (!supported) return null;
 
     const waitForId = () =>
         new Promise<string | null>((resolve) => {
