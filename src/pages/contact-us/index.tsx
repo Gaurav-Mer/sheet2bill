@@ -2,7 +2,7 @@ import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ReactElement } from 'react';
-import { Mail, MapPin } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export default function ContactUsPage() {
     return (
@@ -34,22 +34,6 @@ export default function ContactUsPage() {
                                     <a href="mailto:admin@sheet2bill.com" className="text-primary font-medium hover:underline">
                                         admin@sheet2bill.com
                                     </a>
-                                </div>
-                            </div>
-
-                            {/* Registered Address */}
-                            <div className="flex items-start gap-4 p-4 rounded-lg border bg-card">
-                                <div className="p-2 bg-primary/10 rounded-full text-primary">
-                                    <MapPin className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold mt-0">Registered Office</h3>
-                                    <p className="text-sm text-muted-foreground mb-0">
-                                        Sheet2Bill (Individual Sole Proprietorship)<br />
-                                        {/* REPLACE THIS with your actual address provided to Razorpay */}
-                                        123, Freelancer Street,<br />
-                                        Jaipur, Rajasthan, India - 302001
-                                    </p>
                                 </div>
                             </div>
                         </div>
