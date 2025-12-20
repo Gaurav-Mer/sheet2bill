@@ -13,6 +13,7 @@ const legalLinks = [
     { href: "/term-condition", label: "Terms of Service" },
     { href: "/refund-policy", label: "Refund Policy" },
     { href: "/shipping-policy", label: "Shipping Policy" },
+    { href: "/contact-us", label: "Contact Us" },
 ];
 
 export function Footer() {
