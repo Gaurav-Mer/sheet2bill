@@ -82,6 +82,56 @@ export default function LandingPage() {
     }
   }, []);
 
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const thresholds = [25, 50, 75, 100];
+    const fired = new Set<number>();
+    let ticking = false;
+
+    const calculateScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+
+      const totalScrollable = scrollHeight - clientHeight;
+      if (totalScrollable <= 0) return;
+
+      const scrolledPercent = Math.floor(
+        (scrollTop / totalScrollable) * 100
+      );
+
+      thresholds.forEach((threshold) => {
+        if (scrolledPercent >= threshold && !fired.has(threshold)) {
+          fired.add(threshold);
+
+          // Safe GA call
+          if (typeof window.gtag === "function") {
+            window.gtag("event", "scroll_depth", {
+              value: threshold,
+              page_path: window.location.pathname,
+            });
+          }
+        }
+      });
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(calculateScroll);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
 
