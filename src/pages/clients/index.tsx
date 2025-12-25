@@ -62,7 +62,6 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
     try {
       const formData = new FormData(event.currentTarget);
       console.log("formData", Object.fromEntries(formData))
-      return
       const res = await fetch('/api/clients', {
         method: 'POST',
         body: JSON.stringify(Object.fromEntries(formData)),

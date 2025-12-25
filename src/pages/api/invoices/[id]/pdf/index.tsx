@@ -31,11 +31,7 @@ async function getBrowserConfig() {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const supabase = createPagesServerClient({ req, res });
-    const {
-        data: { user },
-        error: authError
-    } = await supabase.auth.getUser();
-    if (!user || authError) return res.status(401).json({ message: 'Unauthorized' });
+    const { userId } = req.query ?? {};
 
     const { id } = req.query;
 
@@ -43,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // --- 1. Fetch all necessary data ---
         const [invoiceQuery, profileQuery] = await Promise.all([
             supabase.from('invoices').select('*, client:clients!client_id(*), invoice_line_items(*)').eq('id', id).single(),
-            supabase.from('profiles').select('*').eq('id', user.id).single()
+            supabase.from('profiles').select('*').eq('id', userId).single()
         ]);
 
         const { data: invoiceData, error: invoiceError } = invoiceQuery;
@@ -71,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // --- 3. Combine all data for the template ---
         const fullInvoiceData = {
             ...invoiceData,
-            profile: { ...profileData, email: user.email },
+            profile: { ...profileData, },
             client: invoiceData.client,
             settings: templateSettings, // Pass the settings to the template
         };

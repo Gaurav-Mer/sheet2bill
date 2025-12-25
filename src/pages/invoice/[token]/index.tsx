@@ -36,7 +36,7 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
                     <HardDriveDownloadIcon size={30} /> Download PDF
                 </Button> */}
                 <a
-                    href={`/api/invoices/${invoice.id}/pdf`}
+                    href={`/api/invoices/${invoice.id}/pdf?userId=${invoice.user_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full h-full bg-secondary rounded-3xl flex items-center gap-2 p-2 font-medium  px-4 shadow-lg"
