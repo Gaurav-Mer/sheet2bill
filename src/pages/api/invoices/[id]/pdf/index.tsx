@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/api/invoices/[id]/pdf.tsx
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js'; // Import the standard client
 import { NextApiRequest, NextApiResponse } from 'next';
 import { renderToStaticMarkup } from 'react-dom/server';
 import playwright from 'playwright-core';
@@ -28,83 +28,93 @@ async function getBrowserConfig() {
     };
 }
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const supabase = createPagesServerClient({ req, res });
-    const { userId } = req.query ?? {};
+    // 1. Initialize Supabase Admin Client
+    // This bypasses RLS policies, allowing public access to specific data requested by this API
+    const supabaseAdmin = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY! // Make sure this is in your .env.local
+    );
 
     const { id } = req.query;
 
+    if (!id || typeof id !== 'string') {
+        return res.status(400).send('Invalid Invoice ID');
+    }
+
     try {
-        // --- 1. Fetch all necessary data ---
-        const [invoiceQuery, profileQuery] = await Promise.all([
-            supabase.from('invoices').select('*, client:clients!client_id(*), invoice_line_items(*)').eq('id', id).single(),
-            supabase.from('profiles').select('*').eq('id', userId).single()
-        ]);
+        // --- 2. Fetch Invoice Data (Using Admin Client) ---
+        const { data: invoiceData, error: invoiceError } = await supabaseAdmin
+            .from('invoices')
+            .select('*, client:clients!client_id(*), invoice_line_items(*)')
+            .eq('id', id)
+            .single();
 
-        const { data: invoiceData, error: invoiceError } = invoiceQuery;
-        const { data: profileData, error: profileError } = profileQuery;
-
-        if (invoiceError || profileError || !invoiceData || !profileData) {
-            return res.status(404).send('Invoice or profile not found');
+        if (invoiceError || !invoiceData) {
+            console.error("Invoice Error:", invoiceError);
+            return res.status(404).send('Invoice not found');
         }
 
-        // --- 2. Get the Correct Template Settings ---
-        let templateSettings: TemplateSettings
-        const templateId = invoiceData.template_id; // e.g., 'zurich'
+        // --- 3. Fetch Profile Data based on the Invoice Owner ---
+        // We get the user_id FROM the invoice we just fetched, not from the request query.
+        const { data: profileData, error: profileError } = await supabaseAdmin
+            .from('profiles')
+            .select('*')
+            .eq('id', invoiceData.user_id) // Assuming your invoice table has a 'user_id' column
+            .single();
 
-        // For now, we only have pre-defined templates.
-        // In the future, you would add an 'else' block here to fetch custom templates from the database.
+        if (profileError || !profileData) {
+            console.error("Profile Error:", profileError);
+            return res.status(404).send('Profile data not found');
+        }
+
+        // --- 4. Get the Correct Template Settings ---
+        let templateSettings: TemplateSettings;
+        const templateId = invoiceData.template_id;
+
         const foundTemplate = AVAILABLE_TEMPLATES.find(t => t.id === templateId);
 
         if (foundTemplate) {
             templateSettings = foundTemplate.settings;
         } else {
-            // Default to the first pre-defined template if none is found
             templateSettings = AVAILABLE_TEMPLATES[0].settings;
         }
 
-        // --- 3. Combine all data for the template ---
+        // --- 5. Combine all data for the template ---
         const fullInvoiceData = {
             ...invoiceData,
-            profile: { ...profileData, },
+            profile: { ...profileData },
             client: invoiceData.client,
-            settings: templateSettings, // Pass the settings to the template
+            settings: templateSettings,
         };
 
-        // --- 4. Render React component to HTML ---
-        const html = renderToStaticMarkup(<CurrentTemplate templateId={templateId ?? undefined} data={fullInvoiceData as any} />);
+        // --- 6. Render React component to HTML ---
+        const html = renderToStaticMarkup(
+            <CurrentTemplate
+                templateId={templateId ?? undefined}
+                data={fullInvoiceData as any}
+            />
+        );
 
-        // --- 5. Generate PDF with Playwright ---
-        // const executablePath = await chromium.executablePath;
-        // const browser = await playwright.chromium.launch({
-        //     args: chromium.args,
-        //     executablePath: executablePath || undefined,
-        //     headless: chromium.headless,
-        // });
-
-        // const browser = await playwright.chromium.launch({
-        //     headless: true,
-        //     executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-        // });
-
-        // const page = await browser.newPage();
-        // await page.setContent(html, { waitUntil: 'networkidle' });
-        // const pdf = await page.pdf({ format: 'A4', printBackground: true });
-        // await browser.close();
-
+        // --- 7. Generate PDF with Playwright ---
         const browserConfig = await getBrowserConfig();
         const browser = await playwright.chromium.launch(browserConfig);
 
         const page = await browser.newPage();
+
+        // Optimize loading for PDF generation
         await page.setContent(html, { waitUntil: 'networkidle' });
         await page.evaluateHandle('document.fonts.ready');
+
         const pdf = await page.pdf({ format: 'A4', printBackground: true });
         await browser.close();
 
-        // --- 6. Send the PDF as a response ---
+        // --- 8. Send the PDF as a response ---
         res.setHeader('Content-Type', 'application/pdf');
+        // 'inline' lets the browser preview it, 'attachment' forces download. 
+        // Use 'inline' if you want it to open in a new tab first.
         res.setHeader('Content-Disposition', `attachment; filename=invoice-${invoiceData.invoice_number}.pdf`);
+
         return res.send(pdf);
 
     } catch (err: any) {
