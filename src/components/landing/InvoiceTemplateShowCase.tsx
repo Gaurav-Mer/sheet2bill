@@ -34,6 +34,7 @@ export default function InvoiceTemplatesShowCase() {
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     className="object-cover"
                                     quality={95}
+                                    loading="lazy"
                                 />
                             </div>
 

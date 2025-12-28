@@ -20,9 +20,9 @@ export function PremiumHeroSection() {
                 <div className="grid md:grid-cols-2 gap-16 items-center">
                     {/* Left: Text Content */}
                     <div className="text-center md:text-left space-y-8 mt-4">
-                        <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/20 border-2 border-black rounded-full">
+                        <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary  rounded-full">
                             <Sparkles className="h-4 w-4 text-primary" />
-                            <span className="text-sm font-medium text-black">The Future of Freelance Invoicing</span>
+                            <span className="text-sm font-medium text-white">The Future of Freelance Invoicing</span>
                         </div>
                         <h1 className='font-bold text-primary text-lg'>Invoice & Client Management for Freelancers</h1>
                         <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">

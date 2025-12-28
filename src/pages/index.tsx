@@ -51,36 +51,6 @@ export default function LandingPage() {
     ]
   };
 
-  useEffect(() => {
-    // Load external CSS
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://orufybookings.beta.orufy.in/external/widget.css";
-    document.head.appendChild(link);
-
-    // Load external JS
-    const script = document.createElement("script");
-    script.type = "module";
-    script.src = "https://orufybookings.beta.orufy.in/external/widget.js";
-
-    script.onload = () => {
-      if (window.orufyBookings) {
-        window?.orufyBookings?.PopupWidget?.({
-          AccessLink:
-            "/sheet2bill/demo-book?BrandColor=61ac0d&hideLHS=false&BackgroundColor=transparent",
-          ButtonBackground: "61ac0d",
-          ButtonText: "Book a demo",
-          ButtonTextColor: "FFFFFF",
-        });
-      }
-    };
-
-    document.body.appendChild(script);
-    return () => {
-      document.head.removeChild(link);
-      document.body.removeChild(script);
-    }
-  }, []);
 
 
   useEffect(() => {
