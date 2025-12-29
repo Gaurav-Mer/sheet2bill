@@ -146,7 +146,7 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
       </div>
 
       {/* Client Table */}
-      <div className="overflow-x-auto rounded-lg  ">
+      <div className="overflow-x-auto rounded-lg  mb-20 md:mb-0">
         <ClientTable
           clients={clients}
           onEdit={handleOpenEdit}

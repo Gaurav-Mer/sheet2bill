@@ -138,8 +138,8 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
             </div>
 
             {/* --- Items Table --- */}
-            <div className="border border-border rounded-lg">
-                <table className="min-w-full divide-y divide-border">
+            <div className="border border-border rounded-lg hidden md:block">
+                <table className="min-w-full divide-y divide-border ">
                     <thead className="bg-muted/50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Name</th>
@@ -174,6 +174,60 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
                     </tbody>
                 </table>
             </div>
+
+            {/* --- Mobile Card View --- */}
+            <div className="space-y-4 md:hidden">
+                {items.length > 0 ? (
+                    items.map((item) => (
+                        <div
+                            key={item.id}
+                            className="rounded-xl border border-border bg-card p-4 shadow-sm"
+                        >
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h3 className="font-semibold text-lg">{item.name}</h3>
+                                    {item.description && (
+                                        <p className="text-sm text-muted-foreground mt-1">
+                                            {item.description}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onSelect={() => handleOpenEdit(item)}>
+                                            Edit
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onSelect={() => handleOpenDelete(item)}
+                                            className="text-destructive"
+                                        >
+                                            Delete
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
+                            <div className="mt-4 flex justify-between items-center">
+                                <span className="text-sm text-muted-foreground">Default Price</span>
+                                <span className="font-semibold text-base">
+                                    ₹{item.default_price.toFixed(2)}
+                                </span>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center text-muted-foreground py-10">
+                        You haven&apos;t added any items yet.
+                    </div>
+                )}
+            </div>
+
 
             {/* --- Pagination --- */}
             {totalPages > 1 && (

@@ -24,12 +24,14 @@ export default function LoginPage() {
 
         const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-        setLoading(false);
+        // setLoading(false);
 
         if (!error) {
             router.push('/dashboard');
+            setLoading(false);
         } else {
             setErrorMsg(error.message);
+            setLoading(false);
         }
     }
 

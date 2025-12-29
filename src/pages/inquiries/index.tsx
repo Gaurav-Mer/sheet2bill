@@ -72,37 +72,67 @@ export default function InquiriesPage({ inquiries }: InquiriesPageProps) {
                         <p className="text-gray-500">Manage service requests from clients</p>
                     </div>
                     {pendingCount > 0 && (
-                        <div className="bg-secondary text-black px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm">
+                        <div className="bg-secondary shrink-0 text-black px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm">
                             {pendingCount} New
                         </div>
                     )}
                 </div>
 
                 {/* Filter Tabs */}
-                <div className="flex gap-2 border-b border-gray-200">
-                    {[
-                        { key: 'all', label: 'All', count: inquiries.length },
-                        { key: 'pending', label: 'Pending', count: pendingCount },
-                        { key: 'accepted', label: 'Accepted', count: inquiries.filter(i => i.status === 'accepted').length },
-                        { key: 'rejected', label: 'Rejected', count: inquiries.filter(i => i.status === 'rejected').length },
-                    ].map(tab => (
-                        <button
-                            key={tab.key}
-                            onClick={() => setFilter(tab.key as any)}
-                            className={`px-4 py-3 text-sm font-semibold transition-colors relative ${filter === tab.key
-                                ? 'text-primary'
-                                : 'text-gray-400 hover:text-primary'
-                                }`}
-                        >
-                            {tab.label} {tab.count > 0 && (
-                                <span className="ml-1.5 text-xs">({tab.count})</span>
-                            )}
-                            {filter === tab.key && (
-                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-                            )}
-                        </button>
-                    ))}
+                <div className="relative">
+                    {/* Scroll container */}
+                    <div className="flex gap-1 border-b border-gray-200 overflow-x-auto no-scrollbar scrollbar-hide px-1">
+                        {[
+                            { key: 'all', label: 'All', count: inquiries.length },
+                            { key: 'pending', label: 'Pending', count: pendingCount },
+                            { key: 'accepted', label: 'Accepted', count: inquiries.filter(i => i.status === 'accepted').length },
+                            { key: 'rejected', label: 'Rejected', count: inquiries.filter(i => i.status === 'rejected').length },
+                        ].map(tab => {
+                            const isActive = filter === tab.key
+
+                            return (
+                                <button
+                                    key={tab.key}
+                                    onClick={() => setFilter(tab.key as any)}
+                                    className={`
+            relative flex items-center gap-2 whitespace-nowrap
+            px-4 py-2.5 rounded-t-lg
+            text-sm font-semibold transition-all
+            ${isActive
+                                            ? 'text-primary bg-primary/5'
+                                            : 'text-gray-400 hover:text-primary hover:bg-gray-100'
+                                        }
+          `}
+                                >
+                                    <span>{tab.label}</span>
+
+                                    {tab.count > 0 && (
+                                        <span
+                                            className={`
+                text-xs px-2 py-0.5 rounded-full
+                ${isActive
+                                                    ? 'bg-primary text-white'
+                                                    : 'bg-gray-200 text-gray-600'
+                                                }
+              `}
+                                        >
+                                            {tab.count}
+                                        </span>
+                                    )}
+
+                                    {/* Active underline */}
+                                    {isActive && (
+                                        <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-primary rounded-full" />
+                                    )}
+                                </button>
+                            )
+                        })}
+                    </div>
+
+                    {/* Optional fade edges for mobile */}
+                    <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white" />
                 </div>
+
             </div>
 
             {/* Content Area */}
@@ -116,7 +146,7 @@ export default function InquiriesPage({ inquiries }: InquiriesPageProps) {
                         >
 
                             <div className="p-3 md:p-6 ">
-                                <div className="flex justify-between items-start gap-6">
+                                <div className="flex flex-col md:flex-row md:justify-between gap-4 md:gap-6">
                                     {/* Left: Client Info */}
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-3 mb-3">
@@ -159,7 +189,7 @@ export default function InquiriesPage({ inquiries }: InquiriesPageProps) {
                                     </div>
 
                                     {/* Right: Status & Action */}
-                                    <div className="flex flex-col items-end gap-4">
+                                    <div className="flex flex-row md:flex-col items-center md:items-end gap-3 md:gap-4">
                                         {/* Status Badge */}
                                         <div>
                                             {inquiry.status === 'pending' && (
@@ -189,8 +219,10 @@ export default function InquiriesPage({ inquiries }: InquiriesPageProps) {
                                         </p>
 
                                         {/* Action Button */}
-                                        <div className="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-gray-900 group-hover:text-white group-hover:scale-110 transition-all duration-200">
-                                            <ArrowRight size={18} />
+                                        <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gray-100 flex items-center justify-center
+    text-gray-600 group-hover:bg-gray-900 group-hover:text-white
+    active:scale-95 md:group-hover:scale-110 transition-all duration-200">
+                                            <ArrowRight size={16} />
                                         </div>
                                     </div>
                                 </div>
@@ -219,11 +251,14 @@ export default function InquiriesPage({ inquiries }: InquiriesPageProps) {
                                             </span>
                                         </div>
                                     }
-                                    <button onClick={(e) => {
-                                        e.stopPropagation()
-                                        setDeleteAlertOpen(inquiry?.id)
-                                    }} className='cursor-pointer shrink-0'>
-                                        <Trash2Icon className='text-destructive' />
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            setDeleteAlertOpen(inquiry.id)
+                                        }}
+                                        className="p-2 rounded-full hover:bg-red-50 active:bg-red-100 transition"
+                                    >
+                                        <Trash2Icon className="w-4 h-4 text-destructive" />
                                     </button>
                                 </div>
                             </div>

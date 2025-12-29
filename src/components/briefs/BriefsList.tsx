@@ -197,7 +197,7 @@ export function BriefsList({
             </div>
 
             {/* Mobile Card View */}
-            <div className="lg:hidden space-y-3">
+            <div className="lg:hidden space-y-3 mb-16">
                 {briefs.length > 0 ? (
                     briefs.map((brief) => {
                         const currencySymbol = normalizeCurrency(brief.currency)?.currency?.symbol ?? brief?.currency;
