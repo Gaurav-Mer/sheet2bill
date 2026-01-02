@@ -11,6 +11,7 @@ import { Users, FileText, WalletCards } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RevenueChart } from '@/components/dashboard/RevenueChart';
 import { RevenuePieChart } from '@/components/dashboard/RevenuePieChart';
+import Head from 'next/head';
 
 // Define the shape of our data, including the new activeCurrency prop
 type DashboardProps = {
@@ -64,6 +65,19 @@ export default function Dashboard({ user, stats, recentBriefs, activeCurrency = 
 
   return (
     <div className="container mx-auto max-w-7xl">
+      <Head>
+        <title>Dashboard | Sheet2Bill</title>
+        <meta name="description" content="Your freelance command center. Track revenue, manage invoices, and monitor client briefs." />
+
+        {/* 🔒 SECURITY: Prevent Google/Bots from indexing private user data */}
+        <meta name="robots" content="noindex, nofollow" />
+
+        {/* Open Graph (For when users save to bookmark tools like Notion/Pocket) */}
+        <meta property="og:title" content="My Dashboard - Sheet2Bill" />
+        <meta property="og:description" content="Manage your freelance business." />
+        <meta property="og:site_name" content="Sheet2Bill" />
+        <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
+      </Head>
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
         <div>

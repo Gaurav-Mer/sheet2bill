@@ -17,6 +17,7 @@ import qs from 'qs';
 import { Calendar, CheckCircle, Clock, Mail, XCircle } from 'lucide-react';
 import { normalizeCurrency } from '@/lib/normalizeCountry';
 import { format } from 'date-fns';
+import Head from 'next/head';
 
 // --- Type Definition ---
 type BriefDetails = {
@@ -125,6 +126,13 @@ const BriefContent = ({ brief }: { brief: BriefDetails }) => {
 
     return (
         <div className="min-h-screen bg-muted flex items-center justify-center p-3 md:p-4 lg:p-6">
+            <Head>
+                <title>{brief.brief_number} | Project Brief</title>
+                <meta
+                    name="description"
+                    content={`Project Brief #${brief.brief_number}. Total Value: ${brief.currency} ${brief.total}. Tap to review details.`}
+                />
+            </Head>
             <div className="w-full max-w-4xl bg-card rounded-lg shadow-lg p-4 md:p-8 lg:p-12">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 border-b pb-4 md:pb-6">

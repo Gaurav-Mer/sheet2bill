@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Client } from '@/types';
 import { TrendingUp, DollarSign, FileText, Calculator, Filter } from 'lucide-react';
+import Head from 'next/head';
 
 type ReportStats = {
     total_revenue: number;
@@ -94,6 +95,18 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
 
     return (
         <div className="min-h-dvh ">
+            <Head>
+                <title>Reports & Analytics | Sheet2Bill</title>
+                <meta name="description" content="Track your business performance with real-time insights. Monitor revenue, outstanding payments, and client growth." />
+
+                {/* 🔒 SECURITY: Critical. Prevents Google from indexing private business intelligence data. */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="Business Analytics - Sheet2Bill" />
+                <meta property="og:description" content="Track your business performance with real-time insights." />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
+
             <div className="container mx-auto max-w-7xl">
                 {/* Header Section */}
                 <div className="mb-8 lg:mb-12">

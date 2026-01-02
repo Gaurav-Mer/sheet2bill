@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { createClient } from '@supabase/supabase-js';
 import { HardDriveDownloadIcon, Share2 } from 'lucide-react';
 import { GetServerSidePropsContext } from 'next';
+import Head from 'next/head';
 import { ReactElement } from 'react';
 
 
 // This page's job is just to display the invoice.
 export default function PublicInvoicePage({ invoice }: { invoice: any }) {
+    console.log("Public Invoice Data:", invoice);
     if (!invoice) {
         // This is a fallback, but getServerSideProps should handle the "not found" case.
         return <div>Invoice not found or you do not have permission to view it.</div>;
@@ -18,7 +20,19 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
     // CORRECTED: We must pass mode="web" to prevent hydration errors.
     return (
         <>{/* Floating Action Buttons */}
+            <Head>
+                <title>{invoice.invoice_number} | Invoice</title>
+                <meta
+                    name="description"
+                    content={`Invoice #${invoice.invoice_number} from ${invoice.profile?.company_name || invoice.profile?.full_name || 'Sheet2Bill'}. Total Amount: ${invoice.currency} ${invoice.total}. Tap to view details.`}
+                />
+
+                {/* Bonus: Open Graph tags for better WhatsApp cards */}
+                <meta property="og:title" content={`Invoice #${invoice.invoice_number}`} />
+                <meta property="og:description" content={`From: ${invoice.profile?.company_name || invoice.profile?.full_name}. Total: ${invoice.currency} ${invoice.total}`} />
+            </Head>
             <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+
 
                 {/* Download PDF */}
                 {/* <Button

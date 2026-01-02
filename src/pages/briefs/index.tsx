@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BriefsList } from '@/components/briefs/BriefsList';
 import { Search } from 'lucide-react';
+import Head from 'next/head';
 
 type Brief = {
     id: number;
@@ -109,6 +110,17 @@ export default function BriefsListPage({ briefs, count, page, searchQuery }: Pag
 
     return (
         <div className="container mx-auto max-w-7xl">
+            <Head>
+                <title>Briefs | Sheet2Bill</title>
+                <meta name="description" content="Manage all your briefs and track their status." />
+
+                {/* 🔒 SECURITY: Prevent indexing of private project data */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="My Briefs - Sheet2Bill" />
+                <meta property="og:description" content="Manage all your briefs and track their status." />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
             {/* Header */}
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
                 <div>

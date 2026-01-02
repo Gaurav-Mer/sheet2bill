@@ -6,6 +6,7 @@ import { Profile } from '@/types';
 import { CheckCircle2, AlertCircle, CalendarClock, Zap, Receipt } from 'lucide-react';
 import Link from 'next/link';
 import { isAfter, differenceInDays, format } from 'date-fns';
+import Head from 'next/head';
 
 // Define the shape of a Payment record
 type Payment = {
@@ -35,6 +36,17 @@ export default function BillingPage({ profile, payments }: BillingPageProps) {
 
     return (
         <div className="container ">
+            <Head>
+                <title>Billing & Plan | Sheet2Bill</title>
+                <meta name="description" content="Manage your subscription and view billing status." />
+
+                {/* 🔒 SECURITY: Critical. Prevents Google from indexing private billing data. */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="Billing & Plan - Sheet2Bill" />
+                <meta property="og:description" content="Manage your subscription and view billing status." />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
             <div className="space-y-8">
                 <div>
                     <h1 className="text-3xl font-bold">Billing & Plan</h1>

@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { MoreHorizontal } from 'lucide-react';
 import { normalizeCurrency } from '@/lib/normalizeCountry';
 import SendInvoiceButton from '@/components/invoices/SendInvoiceButton';
+import Head from 'next/head';
 
 export type Invoice = {
     id: number;
@@ -90,6 +91,17 @@ export default function InvoicesListPage({ invoices, count, page, searchQuery }:
 
     return (
         <div className="container mx-auto max-w-7xl">
+            <Head>
+                <title>Invoices | Sheet2Bill</title>
+                <meta name="description" content="Manage all your final invoices." />
+
+                {/* 🔒 SECURITY: Critical. Prevents Google from indexing private financial data. */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="My Invoices - Sheet2Bill" />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
+
             <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-2 sm:gap-0">
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold">Invoices</h1>

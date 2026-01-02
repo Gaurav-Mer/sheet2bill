@@ -12,6 +12,7 @@ import { Pagination } from '@/components/clients/Pagination';
 import { ClientForm } from '@/components/clients/Clientform';
 import toast from 'react-hot-toast';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import Head from 'next/head';
 
 export type Client = {
   id: number;
@@ -110,6 +111,17 @@ export default function ClientsPage({ clients, count, page, searchQuery }: PageP
 
   return (
     <div className="mx-auto max-w-7xl ">
+      <Head>
+        <title>Clients | Sheet2Bill</title>
+        <meta name="description" content="Manage all your clients in one place" />
+
+        {/* 🔒 SECURITY: Critical for GDPR/Privacy. Prevents Google from indexing client PII. */}
+        <meta name="robots" content="noindex, nofollow" />
+
+        <meta property="og:title" content="Client Management - Sheet2Bill" />
+        <meta property="og:description" content="Manage all your clients in one place" />
+        <meta property="og:site_name" content="Sheet2Bill" />
+      </Head>
       <UpgradeModal
         isOpen={isUpgradeModalOpen}
         onClose={() => setUpgradeModalOpen(false)}

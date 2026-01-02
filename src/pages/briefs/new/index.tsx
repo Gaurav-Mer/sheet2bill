@@ -23,6 +23,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { useUpgradeModal } from '@/components/providers/UpgradeModalProvider';
+import Head from 'next/head';
 
 type Client = { id: number; name: string };
 type LineItem = { description: string; quantity: number; unit_price: number, item_id?: string | number };
@@ -171,6 +172,16 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
     }
     return (
         <div className="flex flex-col min-h-dvh">
+            <Head>
+                <title>Create New Brief | Sheet2Bill</title>
+                <meta name="description" content="Draft a new project brief or generate an invoice instantly." />
+
+                {/* 🔒 SECURITY: Prevent Google from indexing the creation form */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="New Project - Sheet2Bill" />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
             {/* Main Content */}
             <div className="flex-1 container mx-auto max-w-7xl pb-16 md:pb-8">
                 <form onSubmit={handleSubmit}>

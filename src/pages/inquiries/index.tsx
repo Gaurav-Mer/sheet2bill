@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router';
+import Head from 'next/head'
 
 // --- Types ---
 export interface Inquiry {
@@ -63,7 +64,17 @@ export default function InquiriesPage({ inquiries }: InquiriesPageProps) {
 
     return (
         <div className="container mx-auto max-w-7xl">
+            <Head>
+                <title>Inquiries | Sheet2Bill</title>
+                <meta name="description" content="Manage service requests and project inquiries from clients." />
 
+                {/* 🔒 SECURITY: Critical. Prevents Google from indexing private inquiry data. */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="Client Inquiries - Sheet2Bill" />
+                <meta property="og:description" content="Manage service requests from clients." />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
             {/* Page Header */}
             <div className="mb-8">
                 <div className="flex items-center justify-between mb-6">

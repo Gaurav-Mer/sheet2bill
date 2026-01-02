@@ -13,6 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { useUpgradeModal } from '@/components/providers/UpgradeModalProvider';
+import Head from 'next/head';
 
 type Item = {
     id: number;
@@ -116,6 +117,18 @@ export default function ItemsPage({ items, count, page, searchQuery }: PageProps
 
     return (
         <div className="container mx-auto max-w-6xl">
+            <Head>
+                <title>Items & Services | Sheet2Bill</title>
+                <meta name="description" content="Manage your reusable service items and product inventory for faster invoicing." />
+
+                {/* 🔒 SECURITY: Critical. Prevents Google from indexing private library data. */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="My Services Library - Sheet2Bill" />
+                <meta property="og:description" content="Manage services and products to speed up your workflow." />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
+
             {/* --- Header --- */}
             <div className="flex justify-between items-center mb-4">
                 <div>

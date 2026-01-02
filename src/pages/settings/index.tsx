@@ -21,6 +21,7 @@ import { FeatureGate } from '@/components/FeatureGate';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { countryList } from '@/lib/countryList';
 import NotificationToggle from '@/components/push_notification/NotificationToggle';
+import Head from 'next/head';
 
 type SettingsPageProps = {
     profile: Profile | null;
@@ -109,6 +110,18 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
                 src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
                 strategy="afterInteractive"
             />
+
+            <Head>
+                <title>Settings | Sheet2Bill</title>
+                <meta name="description" content="Manage your account and profile settings." />
+
+                {/* 🔒 SECURITY: Critical. Prevents Google from indexing private user settings. */}
+                <meta name="robots" content="noindex, nofollow" />
+
+                <meta property="og:title" content="Settings - Sheet2Bill" />
+                <meta property="og:description" content="Manage your account and profile settings." />
+                <meta property="og:site_name" content="Sheet2Bill" />
+            </Head>
             <div className="container mx-auto  max-w-4xl">
                 <form onSubmit={handleSubmit} className="space-y-8">
                     <div className="flex justify-between items-center">
