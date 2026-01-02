@@ -54,12 +54,12 @@ export function PremiumHeroSection() {
                         </div>
 
                         {/* Trust Indicators */}
-                        <div className="flex items-center justify-center md:justify-start space-x-8 pt-8 text-sm text-muted-foreground">
-                            <div className="flex items-center space-x-2">
+                        <div className="flex items-center justify-center mb-6 md:mb-0 md:justify-start space-x-8 pt-8 text-sm text-muted-foreground">
+                            <div className="flex items-center space-x-2 shrink-0">
                                 <Check className="h-5 w-5 text-green-500" />
                                 <span>No credit card required</span>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2 shrink-0">
                                 <Check className="h-5 w-5 text-green-500" />
                                 <span>Free forever plan</span>
                             </div>
