@@ -106,17 +106,22 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
 
       <Head>
-        <title>Dashboard | Sheet2Bill</title>
-        <meta name="description" content="Your freelance command center. Track revenue, manage invoices, and monitor client briefs." />
-
-        {/* 🔒 SECURITY: Prevent Google/Bots from indexing private user data */}
-        <meta name="robots" content="noindex, nofollow" />
-
-        {/* Open Graph (For when users save to bookmark tools like Notion/Pocket) */}
-        <meta property="og:title" content="My Dashboard - Sheet2Bill" />
-        <meta property="og:description" content="Manage your freelance business." />
-        <meta property="og:site_name" content="Sheet2Bill" />
-        <meta property="og:image" content="https://sheet2bill.com/og-dashboard.png" /> {/* Ideally a generic dashboard mockup */}
+        <title>Sheet2Bill | Invoice & Client Management for Freelancers</title>
+        <meta name="description" content="Effortless billing for freelancers with professional results. Manage clients, create professional briefs, get approvals, and track invoices—all in one place." />
+        <meta name="keywords" content="freelance billing,invoicing software for freelancers, freelance billing software, invoicing software, client management, online invoicing, freelance tools, effortless billing, professional invoicing,freelance invoice software,how to bill a client,client management and invoicing" />
+        <meta property="og:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
+        <meta property="og:description" content="Experience effortless billing with professional results. The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
+        <meta property="og:image" content="https://sheet2bill.com/landing.png" />
+        <meta property="og:url" content="https://sheet2bill.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
+        <meta name="twitter:description" content="Streamline your freelance business with effortless billing and professional results." />
+        <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
+        />
+        <link rel="shortcut icon" href="/favicon.ico?v=3" />
       </Head>
 
       {/* --- Header --- */}
