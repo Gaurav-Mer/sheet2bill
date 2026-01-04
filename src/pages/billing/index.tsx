@@ -3,10 +3,11 @@ import { GetServerSidePropsContext } from 'next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Profile } from '@/types';
-import { CheckCircle2, AlertCircle, CalendarClock, Zap, Receipt } from 'lucide-react';
+import { CheckCircle2, AlertCircle, CalendarClock, Zap, Receipt, Download } from 'lucide-react';
 import Link from 'next/link';
 import { isAfter, differenceInDays, format } from 'date-fns';
 import Head from 'next/head';
+import { useRouter } from 'next/navigation';
 
 // Define the shape of a Payment record
 type Payment = {
@@ -26,6 +27,7 @@ type BillingPageProps = {
 
 export default function BillingPage({ profile, payments }: BillingPageProps) {
 
+    const router = useRouter()
     // 1. Logic to check if plan is active (Date-based)
     const isActivePro = profile?.subscription_ends_at
         ? isAfter(new Date(profile.subscription_ends_at), new Date())
@@ -160,6 +162,7 @@ export default function BillingPage({ profile, payments }: BillingPageProps) {
                                             <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Description</th>
                                             <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Amount</th>
                                             <th className="h-12 px-4 align-middle font-medium text-muted-foreground text-right">Status</th>
+                                            <th className="h-12 px-4 align-middle font-medium text-muted-foreground text-right">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody className="[&_tr:last-child]:border-0">
@@ -188,6 +191,12 @@ export default function BillingPage({ profile, payments }: BillingPageProps) {
                                                         {payment.status}
                                                     </span>
                                                 </td>
+                                                <td className="p-4 align-middle text-right">
+                                                    <span onClick={() => router.push(`/billing/receipt/${payment.id}`)} className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize 
+                                                        `}>
+                                                        <Download size={18} className='text-primary' />
+                                                    </span>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -203,7 +212,7 @@ export default function BillingPage({ profile, payments }: BillingPageProps) {
                     </CardContent>
                 </Card>
             </div>
-        </div>
+        </div >
     );
 }
 

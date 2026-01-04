@@ -33,7 +33,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
     return (
         <aside className="flex flex-col w-64 bg-card border-r border-border h-full min-h-dvh">
             <div className="p-4 border-b border-border">
-                <Link href="/dashboard" className="font-bold text-xl text-black flex items-center gap-1">
+                <Link prefetch href="/dashboard" className="font-bold text-xl text-black flex items-center gap-1">
                     <Logo /> Sheet2Bill
                 </Link>
             </div>
@@ -44,6 +44,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
                         <Link
                             key={item.href}
                             href={item.href}
+                            prefetch
                             className={`flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive
                                 ? 'bg-primary text-primary-foreground'
                                 : 'text-muted-foreground hover:bg-muted hover:text-foreground'

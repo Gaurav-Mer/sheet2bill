@@ -98,7 +98,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
     };
 
     return (
-        <header className="sticky top-0 z-30 flex h-[3.8rem] items-center  gap-2 md:gap-4 border-b bg-background px-4 sm:px-6">
+        <header className="sticky top-0 z-30 flex h-[3.9rem] items-center  gap-2 md:gap-4 border-b bg-background px-4 sm:px-6">
             {/* --- Mobile Menu Button --- */}
             <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
                 <Menu className="h-6 w-6" />

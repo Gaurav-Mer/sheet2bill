@@ -76,6 +76,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (profileError) throw profileError
 
+        // Count total payments to determine the next number.
+        const { count } = await supabaseAdmin
+            .from('payments')
+            .select('*', { count: 'exact', head: true })
+
+        const nextNum = (count || 0) + 1
+        // Format: S2B-2025-00001
+        const invoiceNumber = `S2B-${new Date().getFullYear()}-${String(nextNum).padStart(5, '0')}`
+
+
         // 6. Insert Payment Record (Ledger)
         // Using GENERIC columns to support future providers (Stripe, etc.)
         const { error: paymentError } = await supabaseAdmin
@@ -93,6 +103,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 status: paymentDetails.status, // usually 'captured'
                 description: plan === 'yearly' ? 'Pro Plan (Yearly)' : 'Pro Plan (Monthly)',
                 method: paymentDetails.method, // 'card', 'upi', etc.
+                invoice_number: invoiceNumber // <--- Add this field
             })
 
         if (paymentError) {
