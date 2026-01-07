@@ -176,7 +176,7 @@ export default function InquiryModal({ isOpen, onClose, initialItem, allItems, f
 
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-            <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden rounded-2xl gap-0 flex flex-col max-h-[90vh]">
+            <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden rounded-2xl gap-0 flex flex-col max-h-[95vh]">
 
                 {success ? (
                     // --- SUCCESS VIEW ---

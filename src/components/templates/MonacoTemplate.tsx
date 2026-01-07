@@ -7,24 +7,24 @@ import { normalizeCurrency } from '@/lib/normalizeCountry';
 // Mock Logo component
 
 type TemplateData = any & {
-    client: any;
-    invoice_line_items: any[];
-    profile: any;
+  client: any;
+  invoice_line_items: any[];
+  profile: any;
 };
 
 type TemplateProps = {
-    data: TemplateData;
+  data: TemplateData;
 };
 
 export default function MonacoTemplate({ data }: TemplateProps) {
-    const accentColor = data?.profile?.brand_color || '#6366f1';
+  const accentColor = data?.profile?.brand_color || '#6366f1';
 
-    const isPro = data?.profile?.subscription_ends_at
-        ? new Date(data.profile.subscription_ends_at) > new Date()
-        : false;
-    const showWatermark = data?.enable_watermark ?? !isPro;
+  const isPro = data?.profile?.subscription_ends_at
+    ? new Date(data.profile.subscription_ends_at) > new Date()
+    : false;
+  const showWatermark = data?.enable_watermark ?? !isPro;
 
-    const css = `
+  const css = `
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap');
     
     * {
@@ -357,140 +357,140 @@ export default function MonacoTemplate({ data }: TemplateProps) {
     }
   `;
 
-    const formatDate = (dateString: string | null) => {
-        if (!dateString) return 'N/A';
-        return new Date(dateString).toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric'
-        });
-    };
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
 
-    const currencySymbol = normalizeCurrency(data?.currency || 'USD')?.currency?.symbol ?? '$';
+  const currencySymbol = normalizeCurrency(data?.currency || 'USD')?.currency?.symbol ?? '$';
 
-    // Mock data for demo
-    const mockData = data
+  // Mock data for demo
+  const mockData = data
 
-    const finalData = data || mockData;
+  const finalData = data || mockData;
 
-    return (
-        <html>
-            <head>
-                <meta charSet="utf-8" />
-                <style dangerouslySetInnerHTML={{ __html: css }} />
-            </head>
-            <body>
-                <div className="page">
-                    <div className="header-banner">
-                        <div className="header-content">
-                            <div className="logo-section">
-                                {finalData.profile.avatar_url ? (
-                                    <img src={finalData.profile.avatar_url} alt="Logo" className="logo" />
-                                ) : (
-                                    <h2 className="company-name-header">
-                                        {finalData.profile.company_name || finalData.profile.full_name}
-                                    </h2>
-                                )}
-                            </div>
-                            <div className="invoice-title">
-                                <h1>INVOICE</h1>
-                                <div className="invoice-meta">
-                                    <div className="invoice-meta-item">
-                                        <strong>Invoice #</strong>{finalData.invoice_number}
-                                    </div>
-                                    <div className="invoice-meta-item">
-                                        <strong>Issued</strong>{formatDate(finalData.issue_date)}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="content-section">
-                        <div className="info-cards">
-                            <div className="info-card">
-                                <h3>From</h3>
-                                <p className="name">{finalData.profile.company_name || finalData.profile.full_name}</p>
-                                <p>{finalData.profile.address_line_1}</p>
-                                <p>{finalData.profile.city}, {finalData.profile.country}</p>
-                                <p>{finalData.profile.email}</p>
-                            </div>
-
-                            <div className="info-card">
-                                <h3>Bill To</h3>
-                                <p className="name">{finalData.client.name}</p>
-                                <p>{finalData.client.address_line_1}</p>
-                                <p>{finalData.client.city}, {finalData.client.country}</p>
-                                <p>{finalData.client.email}</p>
-                            </div>
-
-                            {finalData.due_date && (
-                                <div className="info-card payment-due-highlight">
-                                    <h3>Payment Due</h3>
-                                    <p className="name">{formatDate(finalData.due_date)}</p>
-                                    <div className="due-amount">{currencySymbol}{finalData.total.toFixed(2)}</div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="line-items-wrapper">
-                            <table className="line-items-table">
-                                <thead>
-                                    <tr>
-                                        <th>Description</th>
-                                        <th className="text-center">Quantity</th>
-                                        <th className="text-right">Unit Price</th>
-                                        <th className="text-right">Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {finalData.invoice_line_items.map((item: any, index: number) => (
-                                        <tr key={index}>
-                                            <td className="description-cell">{item.description}</td>
-                                            <td className="text-center">{item.quantity}</td>
-                                            <td className="text-right">{currencySymbol}{item.unit_price.toFixed(2)}</td>
-                                            <td className="text-right">{currencySymbol}{(item.quantity * item.unit_price).toFixed(2)}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="totals-section">
-                            <div className="totals-card">
-                                <div className="totals-row">
-                                    <span className="totals-label">Subtotal</span>
-                                    <span className="totals-value">{currencySymbol}{finalData.subtotal.toFixed(2)}</span>
-                                </div>
-                                <div className="totals-row">
-                                    <span className="totals-label">Tax ({finalData.tax_rate}%)</span>
-                                    <span className="totals-value">{currencySymbol}{finalData.tax_amount.toFixed(2)}</span>
-                                </div>
-                                <div className="totals-row total-final">
-                                    <span className="totals-label">Total Amount</span>
-                                    <span className="totals-value">{currencySymbol}{finalData.total.toFixed(2)}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {finalData.profile.tax_id && (
-                            <div className="tax-id-section">
-                                <strong>Tax ID:</strong> {finalData.profile.tax_id}
-                            </div>
-                        )}
-
-                        <div className="footer">
-                            <p className="footer-note">{finalData.notes || 'Thank you for your business!'}</p>
-                            {showWatermark && (
-                                <a href="https://sheet2bill.com" className="watermark">
-                                    <Logo className="h-4 w-4" />
-                                    <span style={{ fontWeight: 600 }}>Sheet2Bill</span>
-                                </a>
-                            )}
-                        </div>
-                    </div>
+  return (
+    <html>
+      <head>
+        <meta charSet="utf-8" />
+        <style dangerouslySetInnerHTML={{ __html: css }} />
+      </head>
+      <body>
+        <div className="page">
+          <div className="header-banner">
+            <div className="header-content">
+              <div className="logo-section">
+                {finalData.profile.avatar_url ? (
+                  <img src={finalData.profile.avatar_url} alt="Logo" className="logo" />
+                ) : (
+                  <h2 className="company-name-header">
+                    {finalData.profile.company_name || finalData.profile.full_name}
+                  </h2>
+                )}
+              </div>
+              <div className="invoice-title">
+                <h1>INVOICE</h1>
+                <div className="invoice-meta">
+                  <div className="invoice-meta-item">
+                    <strong>Invoice #</strong>{finalData.invoice_number}
+                  </div>
+                  <div className="invoice-meta-item">
+                    <strong>Issued</strong>{formatDate(finalData.issue_date)}
+                  </div>
                 </div>
-            </body>
-        </html>
-    );
+              </div>
+            </div>
+          </div>
+
+          <div className="content-section">
+            <div className="info-cards">
+              <div className="info-card">
+                <h3>From</h3>
+                <p className="name">{finalData.profile.company_name || finalData.profile.full_name}</p>
+                <p>{finalData.profile.address_line_1}</p>
+                <p>{finalData.profile.city}, {finalData.profile.country}</p>
+                <p>{finalData.profile.email}</p>
+              </div>
+
+              <div className="info-card">
+                <h3>Bill To</h3>
+                <p className="name">{finalData.client.name}</p>
+                <p>{finalData.client.address_line_1}</p>
+                <p>{finalData.client.city}, {finalData.client.country}</p>
+                <p>{finalData.client.email}</p>
+              </div>
+
+              {finalData.due_date && (
+                <div className="info-card payment-due-highlight">
+                  <h3>Payment Due</h3>
+                  <p className="name">{formatDate(finalData.due_date)}</p>
+                  <div className="due-amount">{currencySymbol}{finalData.total.toFixed(2)}</div>
+                </div>
+              )}
+            </div>
+
+            <div className="line-items-wrapper">
+              <table className="line-items-table">
+                <thead>
+                  <tr>
+                    <th>Description</th>
+                    <th className="text-center">Quantity</th>
+                    <th className="text-right">Unit Price</th>
+                    <th className="text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {finalData.invoice_line_items.map((item: any, index: number) => (
+                    <tr key={index}>
+                      <td className="description-cell">{item.description}</td>
+                      <td className="text-center">{item.quantity}</td>
+                      <td className="text-right">{currencySymbol}{item.unit_price.toFixed(2)}</td>
+                      <td className="text-right">{currencySymbol}{(item.quantity * item.unit_price).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="totals-section">
+              <div className="totals-card">
+                <div className="totals-row">
+                  <span className="totals-label">Subtotal</span>
+                  <span className="totals-value">{currencySymbol}{finalData.subtotal.toFixed(2)}</span>
+                </div>
+                <div className="totals-row">
+                  <span className="totals-label">Tax ({finalData.tax_rate}%)</span>
+                  <span className="totals-value">{currencySymbol}{finalData.tax_amount.toFixed(2)}</span>
+                </div>
+                <div className="totals-row total-final">
+                  <span className="totals-label">Total Amount</span>
+                  <span className="totals-value">{currencySymbol}{finalData.total.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            {finalData.profile.tax_id && (
+              <div className="tax-id-section">
+                <strong>Tax ID:</strong> {finalData.profile.tax_id}
+              </div>
+            )}
+
+            <div className="footer">
+              <p className="footer-note">{finalData.notes || 'Thank you for your business!'}</p>
+              {showWatermark && (
+                <a href="https://sheet2bill.com" className="watermark">
+                  <Logo className="h-4 w-4" />
+                  <span style={{ fontWeight: 600 }}>Sheet2Bill</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  );
 }

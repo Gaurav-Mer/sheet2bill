@@ -31,11 +31,11 @@ export function FeatureGate({ children }: FeatureGateProps) {
     return (
         <div className="relative">
             {/* The disabled content underneath */}
-            <div className="opacity-50 blur-sm shadow-2xl">{children}</div>
+            <div className="opacity-100 shadow-2xl">{children}</div>
 
             {/* The overlay with the upgrade message */}
             <div
-                className="absolute inset-0 flex flex-col items-center justify-center bg-background/70 rounded-lg cursor-pointer"
+                className="absolute inset-0 flex flex-col items-center justify-center bg-background/70 rounded-2xl cursor-pointer"
                 onClick={() => setUpgradeModalOpen(true)}
             >
                 <div className="flex items-center gap-2 text-sm font-semibold bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">

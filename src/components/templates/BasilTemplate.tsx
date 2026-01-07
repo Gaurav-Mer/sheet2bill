@@ -330,11 +330,11 @@ export const BasilTemplate = ({ data }: TemplateProps) => {
                         </div>
                     </div>
 
-                    {data.profile.tax_id && (
+                    {/* {data.profile.tax_id && (
                         <section style={{ marginTop: '40px', fontSize: '12px', color: '#6b7280' }}>
                             <strong>Tax ID:</strong> {data.profile.tax_id}
                         </section>
-                    )}
+                    )} */}
 
                     <footer className="footer">
                         <p>{data.notes || 'Thank you for your business!'}</p>

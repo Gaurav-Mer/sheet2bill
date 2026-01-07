@@ -135,6 +135,12 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
                             <h1>INVOICE</h1>
                             <p><b>Invoice #:</b> {data.invoice_number}</p>
                             <p><b>Issued:</b> {formatDate(data.issue_date)}</p>
+                            {data.profile.tax_id && (
+                                <p>
+                                    <strong>Tax ID:</strong> {data.profile.tax_id}
+                                </p>
+                            )}
+
                         </div>
                     </header>
 
@@ -185,11 +191,6 @@ export const BerlinTemplate = ({ data }: TemplateProps) => {
                         </table>
                     </section>
 
-                    {data.profile.tax_id && (
-                        <section style={{ marginTop: '40px', fontSize: '12px', color: '#6b7280' }}>
-                            <strong>Tax ID:</strong> {data.profile.tax_id}
-                        </section>
-                    )}
 
                     <footer className="footer">
                         <p>{data.notes || 'Thank you for your business!'}</p>

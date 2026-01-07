@@ -97,10 +97,16 @@ export const ManhattanTemplate = ({ data }: TemplateProps) => {
                                 </h2>
                             )}
                         </div>
-                        <div className="header-right">
+                        <div className="">
                             <h1 style={{ color: primaryColor }}>INVOICE</h1>
                             <p><b>Invoice #:</b> {data.invoice_number}</p>
+                            {data?.profile?.tax_id && (
+                                <div className="header-right">
+                                    <strong>Tax ID:</strong> {data?.profile?.tax_id}
+                                </div>
+                            )}
                         </div>
+
                     </header>
 
                     <section className="parties">

@@ -31,6 +31,7 @@ interface Profile {
     instagram: string | null
     is_available: boolean
     default_currency?: string
+    subscription_ends_at?: string
 }
 
 interface PublicProfileProps {
@@ -72,7 +73,11 @@ const SocialIcon = ({ type, url }: { type: string, url?: string | null }) => {
 
 // --- Main Component ---
 export default function PublicProfile({ profile, items }: PublicProfileProps) {
+    console.log("profile", profile?.subscription_ends_at)
     const [selectedItem, setSelectedItem] = useState<Iitem | null>(null);
+    const isPro = profile?.subscription_ends_at
+        ? new Date(profile.subscription_ends_at) > new Date()
+        : false;
 
     return (
         <div className="min-h-dvh bg-white">
@@ -289,7 +294,7 @@ export default function PublicProfile({ profile, items }: PublicProfileProps) {
                 </div>
 
                 {/* --- FOOTER --- */}
-                <footer className="mt-8 sm:mt-12 text-center px-4">
+                {isPro ? null : <footer className="mt-8 sm:mt-12 text-center px-4">
                     <Link
                         href="https://sheet2bill.com?utm_source=public_profile&utm_medium=footer_link&utm_campaign=public_profile_footer"
                         className="inline-flex items-center gap-2.5 text-xs sm:text-sm text-gray-500 font-medium hover:text-gray-900 transition-colors group"
@@ -303,7 +308,7 @@ export default function PublicProfile({ profile, items }: PublicProfileProps) {
                             </div>
                         </div>
                     </Link>
-                </footer>
+                </footer>}
 
             </main>
         </div>

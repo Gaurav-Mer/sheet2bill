@@ -99,6 +99,11 @@ export const ZurichTemplate = ({ data }: TemplateProps) => {
                         <div className="header-right">
                             <h1>Invoice</h1>
                             <p>{data.invoice_number}</p>
+                            {data?.profile?.tax_id && (
+                                <div className="tax-section">
+                                    <strong>Tax ID:</strong> {data?.profile?.tax_id}
+                                </div>
+                            )}
                         </div>
                     </header>
 

@@ -129,7 +129,13 @@ export const KyotoTemplate = ({ data }: TemplateProps) => {
                                 </h2>
                             )}
                         </div>
-                        <div className="header-right"><h1>INVOICE</h1></div>
+                        <div className="header-right"><h1 style={{ color: "white" }}>INVOICE</h1>
+                            {data?.profile?.tax_id && (
+                                <div className="header-right">
+                                    <strong>Tax ID:</strong> {data?.profile?.tax_id}
+                                </div>
+                            )}
+                        </div>
                     </header>
 
                     <section className="parties">

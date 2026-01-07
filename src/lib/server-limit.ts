@@ -9,7 +9,7 @@ import { PRICING_CONFIG } from './pricing'
 export async function checkUserLimit(
     supabase: SupabaseClient,
     userId: string,
-    action: 'create_brief' | 'add_client' | 'add_item'
+    action: 'create_brief' | 'add_client' | 'add_item' | 'receive_inquiry'
 ) {
     // 1. Fetch User Profile to check Date
     const { data: profile } = await supabase
@@ -75,6 +75,26 @@ export async function checkUserLimit(
             return {
                 allowed: false,
                 message: `Library limit reached (${limits.items_in_library}). Upgrade to add more items.`
+            }
+        }
+    }
+
+    if (action === 'receive_inquiry') {
+        const monthStart = startOfMonth(new Date()).toISOString()
+
+        // Count inquiries received THIS MONTH
+        // Note: We query 'freelancer_id' because that's who receives it
+        const { count } = await supabase
+            .from('inquiries')
+            .select('*', { count: 'exact', head: true })
+            .eq('freelancer_id', userId)
+            .gte('created_at', monthStart)
+
+        if ((count || 0) >= limits.inquiries_per_month) {
+            return {
+                allowed: false,
+                // Message shown to the PUBLIC client trying to hire the freelancer
+                message: `This freelancer is currently unable to accept new inquiries via Sheet2Bill due to plan limits.`
             }
         }
     }

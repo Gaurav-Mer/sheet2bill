@@ -99,6 +99,7 @@ export const JaipurTemplate = ({ data }: TemplateProps) => {
                         )}
                         <h1>{data.profile.company_name || data.profile.full_name}</h1>
                         <p>Invoice #: {data.invoice_number}</p>
+                        {data?.profile?.tax_id && <p>Tax ID: {data?.profile?.tax_id}</p>}
                     </header>
 
                     <section className="parties">
