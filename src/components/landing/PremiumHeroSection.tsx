@@ -24,13 +24,12 @@ export function PremiumHeroSection() {
                             <Sparkles className="h-4 w-4 text-white" />
                             <span className="text-sm font-medium text-white">Manage Clients & Invoices Effortlessly</span>
                         </div>
-
                         <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-                            The Simple <span className='text-primary'>Invoicing & Estimate</span> Software for Freelancers.
+                            The Simple <span className='text-primary'>Invoicing & Quote</span> Software for Freelancers.
                         </h1>
 
                         <h2 className="text-xl text-gray-600 leading-relaxed">
-                            Stop using Excel. Create professional <strong>Quotes</strong>, convert them to <strong>Invoices</strong>, and handle <strong>Freelance Billing</strong> in one workflow.
+                            Stop using Excel. Create professional <strong>Quotes</strong>, convert them to <strong>Invoices</strong>, and handle <strong>Freelance Billing</strong> in one workflow. Pay only when you grow.
                             <br className="hidden sm:block" />
                             <span className="text-gray-900 font-medium">No monthly subscriptions required.</span>
                         </h2>

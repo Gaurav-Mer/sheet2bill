@@ -111,7 +111,7 @@ export function ProblemSolutionBanner() {
                                         <span className="text-white text-[10px] font-bold">1</span>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-bold text-slate-900">Create Estimate</p>
+                                        <p className="text-sm font-bold text-slate-900">Create Quote</p>
                                         <p className="text-xs text-slate-600 mt-0.5">Use templates & saved items</p>
                                     </div>
                                     <span className="text-[10px] font-bold text-primary bg-white px-2 py-1 rounded-md border border-primary/20">2 min</span>

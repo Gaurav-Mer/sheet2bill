@@ -105,19 +105,22 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
       <Head>
-        {/* Primary SEO - Targeting "Software" & "Estimates" */}
-        <title>Free Invoicing & Estimate Software for Freelancers | Sheet2Bill</title>
+        {/* Title: 47 characters (Safe range: 20-60) */}
+        <title>Free Freelance Invoice & Quote Tool | Sheet2Bill</title>
+
+        {/* Description: 198 characters (Safe range: 150-220) */}
         <meta
           name="description"
-          content="The simple alternative to Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. No monthly fees."
+          content="The simple alternative to Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. Generate white-label PDF invoices with UPI QR codes. No monthly fees."
         />
+
         <meta
           name="keywords"
-          content="invoicing software for freelancers, freelance billing software, quote to invoice software, simple invoice and estimate software, freelance invoice template, freelance quote maker, invoice generator no sign up"
+          content="invoicing software for freelancers, freelance billing software, quote to invoice software, simple invoice and estimate software, freelance invoice template, freelance quote maker"
         />
 
         {/* Open Graph / Facebook / WhatsApp */}
-        <meta property="og:title" content="Free Invoicing & Estimate Software for Freelancers" />
+        <meta property="og:title" content="Free Freelance Invoice & Quote Tool | Sheet2Bill" />
         <meta
           property="og:description"
           content="Stop using Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. Pay only when you grow."
@@ -128,14 +131,14 @@ export default function LandingPage() {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Free Invoicing & Estimate Software for Freelancers" />
+        <meta name="twitter:title" content="Free Freelance Invoice & Quote Tool | Sheet2Bill" />
         <meta
           name="twitter:description"
           content="Stop using Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow."
         />
         <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
 
-        {/* Structured Data (FAQ Schema from your component) */}
+        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
