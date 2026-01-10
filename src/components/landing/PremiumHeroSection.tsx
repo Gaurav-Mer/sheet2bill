@@ -20,24 +20,20 @@ export function PremiumHeroSection() {
                 <div className="grid md:grid-cols-2 gap-16 items-center">
                     {/* Left: Text Content */}
                     <div className="text-center md:text-left space-y-8 mt-4">
-                        <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary  rounded-full">
-                            <Sparkles className="h-4 w-4 text-primary" />
-                            <span className="text-sm font-medium text-white">The Future of Freelance Invoicing</span>
+                        <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary rounded-full shadow-lg shadow-primary/25">
+                            <Sparkles className="h-4 w-4 text-white" />
+                            <span className="text-sm font-medium text-white">Manage Clients & Invoices Effortlessly</span>
                         </div>
-                        <h1 className='font-bold text-primary text-lg'>Invoice & Client Management for Freelancers</h1>
-                        <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
-                            Effortless Billing,
-                            <br />
-                            <span className="relative inline-block mt-2">
-                                <span className="relative z-10 text-white px-4 py-1">Professional</span>
-                                <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 transform -rotate-1 rounded-lg" />
-                            </span>
-                            {' '}Results.
-                        </h2>
 
-                        <p className="text-xl text-muted-foreground max-w-xl mx-auto md:mx-0 leading-relaxed">
-                            Manage clients, create professional briefs, get approvals, and track invoices—all in one place. Experience effortless billing with professional results that impress your clients.
-                        </p>
+                        <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                            The Simple <span className='text-primary'>Invoicing & Estimate</span> Software for Freelancers.
+                        </h1>
+
+                        <h2 className="text-xl text-gray-600 leading-relaxed">
+                            Stop using Excel. Create professional <strong>Quotes</strong>, convert them to <strong>Invoices</strong>, and handle <strong>Freelance Billing</strong> in one workflow.
+                            <br className="hidden sm:block" />
+                            <span className="text-gray-900 font-medium">No monthly subscriptions required.</span>
+                        </h2>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                             <Link href="/signup" passHref>

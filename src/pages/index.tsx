@@ -104,26 +104,45 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
-
       <Head>
-        <title>Sheet2Bill | Invoice & Client Management for Freelancers</title>
-        <meta name="description" content="Effortless billing for freelancers with professional results. Manage clients, create professional briefs, get approvals, and track invoices—all in one place." />
-        <meta name="keywords" content="freelance billing,invoicing software for freelancers, freelance billing software, invoicing software, client management, online invoicing, freelance tools, effortless billing, professional invoicing,freelance invoice software,how to bill a client,client management and invoicing" />
-        <meta property="og:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
-        <meta property="og:description" content="Experience effortless billing with professional results. The ultimate tool for freelancers to manage clients, create professional briefs, and automate invoicing." />
+        {/* Primary SEO - Targeting "Software" & "Estimates" */}
+        <title>Free Invoicing & Estimate Software for Freelancers | Sheet2Bill</title>
+        <meta
+          name="description"
+          content="The simple alternative to Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. No monthly fees."
+        />
+        <meta
+          name="keywords"
+          content="invoicing software for freelancers, freelance billing software, quote to invoice software, simple invoice and estimate software, freelance invoice template, freelance quote maker, invoice generator no sign up"
+        />
+
+        {/* Open Graph / Facebook / WhatsApp */}
+        <meta property="og:title" content="Free Invoicing & Estimate Software for Freelancers" />
+        <meta
+          property="og:description"
+          content="Stop using Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. Pay only when you grow."
+        />
         <meta property="og:image" content="https://sheet2bill.com/landing.png" />
         <meta property="og:url" content="https://sheet2bill.com" />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sheet2Bill | Invoice & Client Management for Freelancers" />
-        <meta name="twitter:description" content="Streamline your freelance business with effortless billing and professional results." />
+        <meta name="twitter:title" content="Free Invoicing & Estimate Software for Freelancers" />
+        <meta
+          name="twitter:description"
+          content="Stop using Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow."
+        />
         <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
+
+        {/* Structured Data (FAQ Schema from your component) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
         />
+
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
       </Head>
-
       {/* --- Header --- */}
       <NonLoginNavbar />
 
@@ -172,16 +191,19 @@ export default function LandingPage() {
             </div>
           </div>
         </section> */}
-        <section className="relative py-12 bg-white overflow-hidden">
+        <section className="relative py-24 bg-white overflow-hidden">
           {/* Mathematical grid background */}
           <div className="absolute inset-0 opacity-[0.03]">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `
         linear-gradient(to right, rgb(148 163 184) 1px, transparent 1px),
         linear-gradient(to bottom, rgb(148 163 184) 1px, transparent 1px)
       `,
-              backgroundSize: '60px 60px'
-            }} />
+                backgroundSize: '60px 60px',
+              }}
+            />
           </div>
 
           {/* Geometric accent lines */}
@@ -228,7 +250,10 @@ export default function LandingPage() {
                   </div>
 
                   <p className="text-xl md:text-2xl font-light leading-relaxed">
-                    For many professionals, billing feels <span className="font-medium text-slate-900">chaotic</span> — client details scattered everywhere, project notes lost, and countless hours spent just trying to stay organized.
+                    For many professionals, billing feels{' '}
+                    <span className="font-medium text-slate-900">chaotic</span> —
+                    client details scattered everywhere, project notes lost, and
+                    countless hours spent just trying to stay organized.
                   </p>
 
                   {/* Mathematical equation-style divider */}
@@ -239,7 +264,16 @@ export default function LandingPage() {
                   </div>
 
                   <p className="text-xl md:text-2xl font-light leading-relaxed">
-                    Sheet2Bill was created to deliver <span className="font-medium text-slate-900">effortless billing</span>. One elegant platform to create structured briefs, streamline client approvals, and generate invoices—all designed to deliver <span className="font-medium text-slate-900">professional results</span> seamlessly.
+                    Sheet2Bill was created to deliver{' '}
+                    <span className="font-medium text-slate-900">
+                      effortless billing
+                    </span>
+                    . One elegant platform to create structured briefs, streamline
+                    client approvals, and generate invoices—all designed to deliver{' '}
+                    <span className="font-medium text-slate-900">
+                      professional results
+                    </span>{' '}
+                    seamlessly.
                   </p>
 
                   {/* Mathematical divider with multiple dots */}
@@ -254,7 +288,11 @@ export default function LandingPage() {
                   </div>
 
                   <p className="text-xl md:text-2xl font-light leading-relaxed">
-                    Designed to eliminate chaos and help you work <span className="font-medium text-slate-900">smarter, faster, and with complete confidence</span>.
+                    Designed to eliminate chaos and help you work{' '}
+                    <span className="font-medium text-slate-900">
+                      smarter, faster, and with complete confidence
+                    </span>
+                    .
                   </p>
 
                   {/* Function notation divider */}
@@ -267,7 +305,9 @@ export default function LandingPage() {
                   <div className="pt-8 mt-12 border-t border-slate-200/50">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-medium text-slate-900 text-lg">Sheet2Bill Team</div>
+                        <div className="font-medium text-slate-900 text-lg">
+                          Sheet2Bill Team
+                        </div>
                       </div>
                       <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
                         {/* Mathematical cross symbol */}
@@ -295,9 +335,7 @@ export default function LandingPage() {
         </section>
 
 
-        <section>
-          <FaqSection />
-        </section>
+        <FaqSection />
 
         {/* --- Final CTA --- */}
         <section className="relative py-32 overflow-hidden">
