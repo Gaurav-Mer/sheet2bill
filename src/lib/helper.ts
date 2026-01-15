@@ -82,3 +82,22 @@ export async function sendPushNotification(
         console.error('❌ Network Error sending push:', err);
     }
 }
+
+export const currencies = [
+    { code: 'USD', symbol: '$', name: 'US Dollar', rate: 1 },
+    { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.92 },
+    { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.79 },
+    { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', rate: 1.35 },
+    { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 1.52 },
+    { code: 'INR', symbol: '₹', name: 'Indian Rupee', rate: 83.12 },
+    { code: 'JPY', symbol: '¥', name: 'Japanese Yen', rate: 149.50 },
+    { code: 'CHF', symbol: 'CHF', name: 'Swiss Franc', rate: 0.88 },
+    { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', rate: 1.34 },
+    { code: 'NZD', symbol: 'NZ$', name: 'New Zealand Dollar', rate: 1.64 },
+    { code: 'SEK', symbol: 'kr', name: 'Swedish Krona', rate: 10.35 },
+    { code: 'NOK', symbol: 'kr', name: 'Norwegian Krone', rate: 10.58 },
+    { code: 'DKK', symbol: 'kr', name: 'Danish Krone', rate: 6.87 },
+    { code: 'ZAR', symbol: 'R', name: 'South African Rand', rate: 18.25 },
+    { code: 'BRL', symbol: 'R$', name: 'Brazilian Real', rate: 4.92 },
+    { code: 'MXN', symbol: 'Mex$', name: 'Mexican Peso', rate: 17.15 },
+];

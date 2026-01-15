@@ -71,6 +71,7 @@ export type Profile = {
     subscription_status?: string
     default_currency?: string
     onesignal_ids?: string[]
+    username?: string
 };
 
 

@@ -1,9 +1,15 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { FC } from 'react'
 import { Logo } from '../Logo'
 import { Button } from '../ui/button'
+import { useProfile } from '@/hooks/useProfile'
 
-const NonLoginNavbar = () => {
+interface IProps {
+    pageType?: string
+}
+const NonLoginNavbar: FC<IProps> = ({ pageType }) => {
+    const { profile, isLoading } = useProfile();
+    console.log("profile", profile)
     return (
         <header className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto h-16 flex items-center justify-between px-6 w-full ">
@@ -15,23 +21,34 @@ const NonLoginNavbar = () => {
                     <Link href="/blog" passHref>
                         <Button variant="ghost" className="hover:bg-primary/5">Blogs</Button>
                     </Link>
-                    <Link href="/login" passHref>
+
+                    <Link href="/tools/rate-calculator" passHref>
+                        <Button variant="ghost" className="hover:bg-primary/5">Tools</Button>
+                    </Link>
+                    {profile?.username ? null : <Link href="/login" passHref>
                         <Button variant="ghost" className="hover:bg-primary/5">Login</Button>
-                    </Link>
-                    <Link href="#pricing" passHref>
+                    </Link>}
+                    {profile?.username ? null : <Link href="#pricing" passHref>
                         <Button variant="ghost" className="hover:bg-primary/5">Pricing</Button>
-                    </Link>
-                    <Link href="/signup" passHref>
+                    </Link>}
+                    {profile?.username ? null : <Link href="/signup" passHref>
                         <Button size={"lg"} className="bg-gradient-to-r from-primary h-11 px-6 hidden md:block transform hover:scale-105 transition-transform text-base to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25">
                             Start Free
                         </Button>
-                    </Link>
+                    </Link>}
+                    {profile?.username ? null :
+                        <Link href="/signup" passHref>
+                            <Button size={"lg"} className="bg-gradient-to-r from-primary h-11 px-6 md:hidden transform hover:scale-105 transition-transform text-base to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25">
+                                Start
+                            </Button>
+                        </Link>}
 
-                    <Link href="/signup" passHref>
-                        <Button size={"lg"} className="bg-gradient-to-r from-primary h-11 px-6 md:hidden transform hover:scale-105 transition-transform text-base to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25">
-                            Start
+
+                    {profile?.username && <Link href="/dashboard" passHref>
+                        <Button size={"lg"} className="bg-gradient-to-r from-primary h-11 px-6  transform hover:scale-105 transition-transform text-base to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25">
+                            Dashboard
                         </Button>
-                    </Link>
+                    </Link>}
                 </nav>
             </div>
         </header>
