@@ -1,7 +1,7 @@
 import { Sparkles, ArrowRight, Check, } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function PremiumHeroSection() {
     return (
@@ -35,17 +35,17 @@ export function PremiumHeroSection() {
                         </h2>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
-                            <Link href="/signup" passHref>
+                            <Link href="/signup">
                                 <Button size="lg" className="h-14 px-8 text-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-xl shadow-primary/25 group">
                                     Get Started - It&lsquo;s Free
                                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                                 </Button>
                             </Link>
-                            <Link href="#features" passHref>
+                            <a href="#features">
                                 <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-2 hover:bg-primary/5 hover:border-primary/50">
                                     Discover Features
                                 </Button>
-                            </Link>
+                            </a>
                         </div>
 
                         {/* Trust Indicators */}
