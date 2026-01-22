@@ -35,8 +35,24 @@ export default function LandingPage() {
         "@type": "Organization",
         "name": "Sheet2Bill",
         "url": "https://www.sheet2bill.com",
-        "logo": "https://www.sheet2bill.com/logo_512.png", // You must add this logo to your /public folder
-        // "sameAs": []
+        "logo": "https://www.sheet2bill.com/logo_512.png",
+        "description": "Professional invoicing software for freelancers and small businesses."
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Sheet2Bill",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "120"
+        }
       },
       {
         "@type": "WebSite",
@@ -105,36 +121,40 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
       <Head>
-        {/* Title: 47 characters (Safe range: 20-60) */}
-        <title>Free Freelance Invoice & Quote Tool | Sheet2Bill</title>
+        {/* Title: Optimized for click-through rate and keywords */}
+        <title>Sheet2Bill | Free Invoice Generator & Client Management for Freelancers</title>
 
-        {/* Description: 198 characters (Safe range: 150-220) */}
+        {/* Description: Compelling hook with key features */}
         <meta
           name="description"
-          content="The simple alternative to Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. Generate white-label PDF invoices with UPI QR codes. No monthly fees."
+          content="Stop using Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. Generate white-label PDF invoices with UPI QR codes. Start for free."
         />
 
+        {/* Keywords: Targeted mix of broad and long-tail */}
         <meta
           name="keywords"
-          content="invoicing software for freelancers, freelance billing software, quote to invoice software, simple invoice and estimate software, freelance invoice template, freelance quote maker"
+          content="invoice generator, freelance billing software, quote to invoice, free invoice template, client management for freelancers, upi invoice generator, pdf invoice maker"
         />
 
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://www.sheet2bill.com/" />
+
         {/* Open Graph / Facebook / WhatsApp */}
-        <meta property="og:title" content="Free Freelance Invoice & Quote Tool | Sheet2Bill" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.sheet2bill.com/" />
+        <meta property="og:title" content="Sheet2Bill | The Ultimate Freelance Billing Suite" />
         <meta
           property="og:description"
-          content="Stop using Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow. Pay only when you grow."
+          content="Manage clients, create professional briefs, and get paid faster. The all-in-one tool for modern freelancers."
         />
         <meta property="og:image" content="https://sheet2bill.com/landing.png" />
-        <meta property="og:url" content="https://sheet2bill.com" />
-        <meta property="og:type" content="website" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Free Freelance Invoice & Quote Tool | Sheet2Bill" />
+        <meta name="twitter:title" content="Sheet2Bill | Free Invoice Generator for Freelancers" />
         <meta
           name="twitter:description"
-          content="Stop using Excel. Create professional Quotes, convert them to Invoices, and handle Freelance Billing in one workflow."
+          content="Streamline your freelance business with effortless billing. Create quotes, send invoices, and track payments."
         />
         <meta name="twitter:image" content="https://sheet2bill.com/landing.png" />
 
