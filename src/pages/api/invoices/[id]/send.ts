@@ -30,14 +30,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).json({ message: 'Invoice not found' });
     }
 
-    const clientEmail = (invoice.client as { name: string; email: string } | null)?.email;
-    const clientName = (invoice.client as { name: string; email: string } | null)?.name ?? 'there';
+    const clientEmail = (invoice?.client as { name: string; email: string } | any)?.email;
+    const clientName = (invoice?.client as { name: string; email: string } | any)?.name ?? 'there';
 
     if (!clientEmail) {
         return res.status(400).json({ message: 'Client has no email address.' });
     }
 
-    const profile = invoice.profile as { full_name: string; company_name: string } | null;
+    const profile = invoice.profile as { full_name: string; company_name: string } | any;
     const fromName = profile?.company_name || profile?.full_name || 'Your Freelancer';
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://${req.headers.host}`;
