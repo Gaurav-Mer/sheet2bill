@@ -439,9 +439,29 @@ export default function EnhancedContractGenerator() {
     return (
         <div className='min-h-screen flex flex-col bg-slate-50'>
             <Head>
-                <title>Free Freelance Contract Generator | Sheet2Bill</title>
-                <meta name="description" content="Generate a simple, professional freelance contract in seconds. Protect your work and get paid on time. No signup required." />
-                <meta name="keywords" content="freelance contract generator, simple freelance agreement, web design contract template, independent contractor agreement free" />
+                <title>Free Freelance Contract Generator — Sheet2Bill | Instant Professional Contracts</title>
+                <meta name="description" content="Generate a simple, professional freelance contract in seconds. Protect your work, define scope, and get paid on time. Free to use — no signup required." />
+                <meta name="keywords" content="freelance contract generator, free freelance agreement India, web design contract template, independent contractor agreement, freelance service contract" />
+                <link rel="canonical" href="https://www.sheet2bill.com/tools/contract-generator" />
+                <meta property="og:title" content="Free Freelance Contract Generator — Sheet2Bill" />
+                <meta property="og:description" content="Create a professional freelance service contract in seconds. Free, instant, no signup needed." />
+                <meta property="og:url" content="https://www.sheet2bill.com/tools/contract-generator" />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="https://www.sheet2bill.com/landing.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Free Freelance Contract Generator — Sheet2Bill" />
+                <meta name="twitter:description" content="Create a professional freelance service contract in seconds. Free, instant, no signup needed." />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareApplication",
+                    "name": "Freelance Contract Generator",
+                    "applicationCategory": "BusinessApplication",
+                    "operatingSystem": "Web",
+                    "url": "https://www.sheet2bill.com/tools/contract-generator",
+                    "description": "Generate a free professional freelance service contract instantly. Define scope, payment terms, and protect your work.",
+                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+                    "provider": { "@type": "Organization", "name": "Sheet2Bill", "url": "https://www.sheet2bill.com" }
+                })}} />
             </Head>
 
             <NonLoginNavbar pageType="TOOLS" />

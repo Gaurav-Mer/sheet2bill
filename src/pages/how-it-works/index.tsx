@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import Link from 'next/link';
 import { Layout } from '@/components/Layout'; // Assuming you have a main Layout component
+import Head from 'next/head';
 
 // Define the content in an array for clean and easy updates
 const sections = [
@@ -61,6 +62,20 @@ const sections = [
 export default function HowItWorksPage() {
     return (
         <main className="bg-background">
+            <Head>
+                <title>How It Works — Sheet2Bill | Brief → Approval → Invoice</title>
+                <meta name="description" content="See how Sheet2Bill works in 4 simple steps: add clients, create a brief, get client approval, then convert to a professional invoice. No spreadsheets needed." />
+                <meta name="keywords" content="how to use sheet2bill, freelance invoicing workflow, brief to invoice process, client approval invoicing, invoice generator tutorial" />
+                <link rel="canonical" href="https://www.sheet2bill.com/how-it-works" />
+                <meta property="og:title" content="How It Works — Sheet2Bill" />
+                <meta property="og:description" content="Create a brief, get client approval, convert to invoice. The smarter freelance billing workflow." />
+                <meta property="og:url" content="https://www.sheet2bill.com/how-it-works" />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="https://www.sheet2bill.com/landing.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="How It Works — Sheet2Bill" />
+                <meta name="twitter:description" content="Create a brief, get client approval, convert to invoice. The smarter freelance billing workflow." />
+            </Head>
             <div className="container mx-auto max-w-4xl py-4 px-6">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold tracking-tight">How It Works</h1>

@@ -3,6 +3,7 @@ import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 import { Footer } from '@/components/landing/Footer';
 import { useRouter } from 'next/navigation';
+import Head from 'next/head';
 
 const BlogListingPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('All');
@@ -49,6 +50,20 @@ const BlogListingPage = () => {
 
     return (
         <>
+            <Head>
+                <title>Blog — Sheet2Bill | Freelance Invoicing Tips & Business Advice</title>
+                <meta name="description" content="Practical guides for freelancers on invoicing, client management, billing strategies, and growing your freelance business. Tips from the Sheet2Bill team." />
+                <meta name="keywords" content="freelance invoicing tips, freelancer business advice, how to invoice clients, freelance billing, client management tips" />
+                <link rel="canonical" href="https://www.sheet2bill.com/blog" />
+                <meta property="og:title" content="Blog — Sheet2Bill | Freelance Invoicing Tips" />
+                <meta property="og:description" content="Practical guides for freelancers on invoicing, client management, and growing your business." />
+                <meta property="og:url" content="https://www.sheet2bill.com/blog" />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="https://www.sheet2bill.com/landing.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Blog — Sheet2Bill | Freelance Invoicing Tips" />
+                <meta name="twitter:description" content="Practical guides for freelancers on invoicing, client management, and growing your business." />
+            </Head>
             <div className="min-h-dvh  bg-white">
                 <NonLoginNavbar />
 

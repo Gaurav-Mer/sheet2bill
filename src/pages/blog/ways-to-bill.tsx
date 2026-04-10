@@ -6,6 +6,7 @@ import { Footer } from '@/components/landing/Footer';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const BlogPost = () => {
     const post = {
@@ -25,6 +26,32 @@ const BlogPost = () => {
 
     return (
         <>
+            <Head>
+                <title>{post.title} — Sheet2Bill Blog</title>
+                <meta name="description" content={post.metaDescription} />
+                <meta name="keywords" content={post.keywords.join(', ')} />
+                <meta name="author" content="Sheet2Bill" />
+                <link rel="canonical" href="https://www.sheet2bill.com/blog/ways-to-bill" />
+                <meta property="og:title" content={post.title} />
+                <meta property="og:description" content={post.metaDescription} />
+                <meta property="og:url" content="https://www.sheet2bill.com/blog/ways-to-bill" />
+                <meta property="og:type" content="article" />
+                <meta property="og:image" content="https://www.sheet2bill.com/landing.png" />
+                <meta property="article:published_time" content={post.publishedAt} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={post.title} />
+                <meta name="twitter:description" content={post.metaDescription} />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Article",
+                    "headline": post.title,
+                    "description": post.metaDescription,
+                    "datePublished": post.publishedAt,
+                    "author": { "@type": "Organization", "name": "Sheet2Bill" },
+                    "publisher": { "@type": "Organization", "name": "Sheet2Bill", "url": "https://www.sheet2bill.com" },
+                    "url": "https://www.sheet2bill.com/blog/ways-to-bill"
+                })}} />
+            </Head>
             <NonLoginNavbar />
             <div className="min-h-dvh bg-white">
                 {/* Header */}

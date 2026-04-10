@@ -7,15 +7,32 @@ const BASE_URL = 'https://www.sheet2bill.com';
 
 // This is a list of all your static, public pages that you want Google to index.
 // We are intentionally leaving out all the private app pages like /dashboard, /clients, etc.
-const STATIC_PAGES = [
-    '', // This represents the Homepage ('/')
-    'pricing',
-    'privacy-policy',
-    'terms-of-service',
-    'login',
-    'signup',
-    'forgot-password',
-    'blog'
+interface SitemapEntry {
+    path: string;
+    priority: string;
+    changefreq?: string;
+}
+
+const STATIC_PAGES: SitemapEntry[] = [
+    { path: '',                             priority: '1.0', changefreq: 'weekly'  },
+    { path: 'pricing',                      priority: '0.9', changefreq: 'monthly' },
+    { path: 'how-it-works',                 priority: '0.8', changefreq: 'monthly' },
+    { path: 'blog',                         priority: '0.8', changefreq: 'weekly'  },
+    { path: 'tools/rate-calculator',        priority: '0.8', changefreq: 'monthly' },
+    { path: 'tools/contract-generator',     priority: '0.8', changefreq: 'monthly' },
+    { path: 'contact-us',                   priority: '0.6', changefreq: 'yearly'  },
+    { path: 'privacy-policy',               priority: '0.4', changefreq: 'yearly'  },
+    { path: 'terms-of-service',             priority: '0.4', changefreq: 'yearly'  },
+    { path: 'refund-policy',                priority: '0.3', changefreq: 'yearly'  },
+    { path: 'login',                        priority: '0.5', changefreq: 'yearly'  },
+    { path: 'signup',                       priority: '0.6', changefreq: 'yearly'  },
+    { path: 'forgot-password',              priority: '0.3', changefreq: 'yearly'  },
+];
+
+const BLOG_POSTS: SitemapEntry[] = [
+    { path: 'blog/freelance-invoice-essentials', priority: '0.7', changefreq: 'yearly' },
+    { path: 'blog/stop-sending-invoice',         priority: '0.7', changefreq: 'yearly' },
+    { path: 'blog/ways-to-bill',                 priority: '0.7', changefreq: 'yearly' },
 ];
 
 // --- End of Configuration ---
@@ -23,34 +40,23 @@ const STATIC_PAGES = [
 /**
  * Generates the sitemap.xml content.
  */
-const generateSitemapXml = (staticPages: string[]) => {
+const generateSitemapXml = (pages: SitemapEntry[]) => {
+    const today = new Date().toISOString().split('T')[0];
+
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 `;
 
-    // 1. Add all your static pages (Homepage, Pricing, etc.)
-    staticPages.forEach(page => {
-        const url = `${BASE_URL}/${page}`;
-        xml += `
-  <url>
+    pages.forEach(({ path, priority, changefreq }) => {
+        const url = path ? `${BASE_URL}/${path}` : BASE_URL;
+        xml += `  <url>
     <loc>${url}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <priority>${page === '' ? '1.0' : '0.8'}</priority>
+    <lastmod>${today}</lastmod>
+    <changefreq>${changefreq ?? 'monthly'}</changefreq>
+    <priority>${priority}</priority>
   </url>
 `;
     });
-
-    // 2. (Future-Proof) Add dynamic pages, like blog posts
-    // When you add a blog, you will fetch your posts and loop through them here.
-    // blogPosts.forEach(post => {
-    //   xml += `
-    //   <url>
-    //     <loc>${BASE_URL}/blog/${post.slug}</loc>
-    //     <lastmod>${new Date(post.updated_at).toISOString()}</lastmod>
-    //     <priority>0.6</priority>
-    //   </url>
-    // `;
-    // });
 
     xml += `</urlset>`;
     return xml;
@@ -68,7 +74,7 @@ export const getServerSideProps = async ({ res }: GetServerSidePropsContext) => 
     // const allBlogPosts: any[] = []; // Placeholder
 
     // Generate the sitemap XML string
-    const sitemap = generateSitemapXml(STATIC_PAGES);
+    const sitemap = generateSitemapXml([...STATIC_PAGES, ...BLOG_POSTS]);
 
     // Set the response headers to tell the browser it's an XML file.
     res.setHeader('Content-Type', 'text/xml');

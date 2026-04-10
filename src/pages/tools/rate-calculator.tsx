@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, ReactElement } from 'react';
+import Head from 'next/head';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -93,6 +94,31 @@ export default function PremiumRateCalculator() {
 
     return (
         <div className='flex h-dvh  flex-col gap-4'>
+            <Head>
+                <title>Free Freelance Rate Calculator — Sheet2Bill | Know What to Charge</title>
+                <meta name="description" content="Calculate your freelance hourly or project rate in seconds. Enter your income goal, expenses, and experience level to find out exactly what to charge clients." />
+                <meta name="keywords" content="freelance rate calculator, how much to charge as a freelancer, hourly rate calculator India, freelancer pricing tool, what to charge clients" />
+                <link rel="canonical" href="https://www.sheet2bill.com/tools/rate-calculator" />
+                <meta property="og:title" content="Free Freelance Rate Calculator — Sheet2Bill" />
+                <meta property="og:description" content="Calculate your ideal freelance hourly or project rate. Based on your income goal, expenses, and experience." />
+                <meta property="og:url" content="https://www.sheet2bill.com/tools/rate-calculator" />
+                <meta property="og:type" content="website" />
+                <meta property="og:image" content="https://www.sheet2bill.com/landing.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Free Freelance Rate Calculator — Sheet2Bill" />
+                <meta name="twitter:description" content="Calculate your ideal freelance hourly or project rate in seconds." />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareApplication",
+                    "name": "Freelance Rate Calculator",
+                    "applicationCategory": "BusinessApplication",
+                    "operatingSystem": "Web",
+                    "url": "https://www.sheet2bill.com/tools/rate-calculator",
+                    "description": "Calculate your ideal freelance hourly or project rate based on income goal, expenses, and experience level.",
+                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+                    "provider": { "@type": "Organization", "name": "Sheet2Bill", "url": "https://www.sheet2bill.com" }
+                })}} />
+            </Head>
             <NonLoginNavbar pageType="TOOLS" />
             <div className="flex-1 mt-12 overflow-auto bg-gradient-to-br from-slate-50 via-primary/10 to-slate-100 py-12 px-4 sm:px-6">
                 <div className="max-w-7xl mx-auto">
