@@ -11,6 +11,7 @@ import { Users, FileText, WalletCards } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RevenueChart } from '@/components/dashboard/RevenueChart';
 import { RevenuePieChart } from '@/components/dashboard/RevenuePieChart';
+import GettingStartedCard from '@/components/dashboard/GettingStartedCard';
 import Head from 'next/head';
 
 // Define the shape of our data, including the new activeCurrency prop
@@ -100,6 +101,9 @@ export default function Dashboard({ user, stats, recentBriefs, activeCurrency = 
           <Link href="/briefs/new" passHref><Button>+ Create New Brief</Button></Link>
         </div>
       </div>
+
+      {/* Onboarding checklist — only visible to new users, dismissible */}
+      <GettingStartedCard clientCount={stats.client_count} briefCount={recentBriefs.length} />
 
       {/* --- PREMIUM Stats Cards with Financial Data --- */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
