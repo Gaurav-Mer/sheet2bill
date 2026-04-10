@@ -46,6 +46,13 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
     const [defaultCurrency, setDefaultCurrency] = useState(profile?.default_currency || 'USD'); // NEW STATE
 
 
+    // Payment Methods
+    const [upiId, setUpiId] = useState(profile?.upi_id || '');
+    const [paypalLink, setPaypalLink] = useState(profile?.paypal_link || '');
+    const [stripeLink, setStripeLink] = useState(profile?.stripe_link || '');
+    const [customPaymentLink, setCustomPaymentLink] = useState(profile?.custom_payment_link || '');
+    const [customPaymentLabel, setCustomPaymentLabel] = useState(profile?.custom_payment_label || '');
+
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [logoPreview, setLogoPreview] = useState<string | null>(profile?.avatar_url || null);
     const updateProfileMutation = useMutation({
@@ -98,9 +105,14 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
             city: city,
             country: country,
             tax_id: taxId,
-            brand_color: brandColor, // NEW
+            brand_color: brandColor,
             thank_u_note: footerMessage,
-            default_currency: defaultCurrency // NEW
+            default_currency: defaultCurrency,
+            upi_id: upiId,
+            paypal_link: paypalLink,
+            stripe_link: stripeLink,
+            custom_payment_link: customPaymentLink,
+            custom_payment_label: customPaymentLabel,
         });
     };
 
@@ -205,6 +217,97 @@ export default function SettingsPage({ profile, user }: SettingsPageProps) {
                                 </Select>
                             </div>
                             <div className="space-y-2"><Label htmlFor="taxId">Tax ID (e.g., GSTIN, VAT ID)</Label><Input id="taxId" value={taxId} onChange={(e) => setTaxId(e.target.value)} /></div>
+                        </CardContent>
+                    </Card>
+
+                    <Card id="payment-methods">
+                        <CardHeader>
+                            <CardTitle>Payment Methods</CardTitle>
+                            <CardDescription>
+                                Tell clients how to pay you. Money goes directly to you — Sheet2Bill never touches it.
+                                You mark the invoice as &quot;Paid&quot; once payment arrives.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            {/* UPI */}
+                            <div className="space-y-2">
+                                <Label htmlFor="upiId">UPI ID</Label>
+                                <Input
+                                    id="upiId"
+                                    value={upiId}
+                                    onChange={(e) => setUpiId(e.target.value)}
+                                    placeholder="yourname@upi or yourname@okaxis"
+                                    maxLength={100}
+                                />
+                                <p className="text-sm text-muted-foreground">
+                                    A QR code will be auto-generated on your invoices. Indian clients can scan and pay directly.
+                                </p>
+                            </div>
+
+                            {/* PayPal */}
+                            <div className="space-y-2">
+                                <Label htmlFor="paypalLink">PayPal.me Link</Label>
+                                <Input
+                                    id="paypalLink"
+                                    value={paypalLink}
+                                    onChange={(e) => setPaypalLink(e.target.value)}
+                                    placeholder="https://paypal.me/yourname"
+                                    maxLength={200}
+                                />
+                            </div>
+
+                            {/* Stripe */}
+                            <div className="space-y-2">
+                                <Label htmlFor="stripeLink">Stripe Payment Link</Label>
+                                <Input
+                                    id="stripeLink"
+                                    value={stripeLink}
+                                    onChange={(e) => setStripeLink(e.target.value)}
+                                    placeholder="https://buy.stripe.com/..."
+                                    maxLength={200}
+                                />
+                            </div>
+
+                            {/* Custom */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="customPaymentLink">Custom Payment Link</Label>
+                                    <Input
+                                        id="customPaymentLink"
+                                        value={customPaymentLink}
+                                        onChange={(e) => setCustomPaymentLink(e.target.value)}
+                                        placeholder="Wise, bank transfer link, etc."
+                                        maxLength={200}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="customPaymentLabel">Button Label</Label>
+                                    <Input
+                                        id="customPaymentLabel"
+                                        value={customPaymentLabel}
+                                        onChange={(e) => setCustomPaymentLabel(e.target.value)}
+                                        placeholder="Pay via Wise"
+                                        maxLength={50}
+                                    />
+                                </div>
+                            </div>
+
+                            {upiId && (
+                                <div className="flex items-start gap-4 p-4 bg-muted rounded-lg">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(`upi://pay?pa=${upiId}`)}&size=96x96&margin=4`}
+                                        alt="UPI QR Code Preview"
+                                        width={96}
+                                        height={96}
+                                        className="rounded border bg-white"
+                                    />
+                                    <div>
+                                        <p className="text-sm font-medium">QR Code Preview</p>
+                                        <p className="text-sm text-muted-foreground mt-1">This QR code will appear on your invoices for <strong>{upiId}</strong>. Clients scan it and pay directly into your account.</p>
+                                    </div>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
 

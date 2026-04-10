@@ -89,12 +89,61 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         };
 
         // --- 6. Render React component to HTML ---
-        const html = renderToStaticMarkup(
+        const templateHtml = renderToStaticMarkup(
             <CurrentTemplate
                 templateId={templateId ?? undefined}
                 data={fullInvoiceData as any}
             />
         );
+
+        // --- 6b. Inject payment block if freelancer has configured payment methods ---
+        const { upi_id, paypal_link, stripe_link, custom_payment_link, custom_payment_label } = profileData;
+        const hasPaymentMethods = upi_id || paypal_link || stripe_link || custom_payment_link;
+
+        let paymentBlockHtml = '';
+        if (hasPaymentMethods) {
+            const upiSection = upi_id ? `
+                <div style="display:flex;align-items:center;gap:16px;padding:16px;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;margin-bottom:12px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(`upi://pay?pa=${upi_id}`)}&size=100x100&margin=4" width="100" height="100" style="border-radius:6px;border:1px solid #fdba74;background:#fff;flex-shrink:0;" alt="UPI QR" />
+                    <div>
+                        <p style="margin:0;font-weight:600;color:#111827;">Pay via UPI</p>
+                        <p style="margin:4px 0 0 0;font-size:13px;color:#6b7280;">Scan QR with PhonePe, GPay, Paytm, or any UPI app</p>
+                        <p style="margin:6px 0 0 0;font-family:monospace;font-size:13px;color:#c2410c;">${upi_id}</p>
+                    </div>
+                </div>` : '';
+
+            const paypalSection = paypal_link ? `
+                <div style="padding:14px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <p style="margin:0;font-weight:600;color:#111827;">Pay via PayPal</p>
+                        <p style="margin:2px 0 0 0;font-size:12px;color:#6b7280;">${paypal_link}</p>
+                    </div>
+                </div>` : '';
+
+            const stripeSection = stripe_link ? `
+                <div style="padding:14px 16px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <p style="margin:0;font-weight:600;color:#111827;">Pay via Card / Stripe</p>
+                        <p style="margin:2px 0 0 0;font-size:12px;color:#6b7280;">${stripe_link}</p>
+                    </div>
+                </div>` : '';
+
+            const customSection = custom_payment_link ? `
+                <div style="padding:14px 16px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <p style="margin:0;font-weight:600;color:#111827;">${custom_payment_label || 'Pay via Custom Link'}</p>
+                        <p style="margin:2px 0 0 0;font-size:12px;color:#6b7280;">${custom_payment_link}</p>
+                    </div>
+                </div>` : '';
+
+            paymentBlockHtml = `
+                <div style="max-width:800px;margin:0 auto;padding:24px 50px 40px 50px;font-family:Arial,sans-serif;">
+                    <h3 style="font-size:14px;text-transform:uppercase;letter-spacing:1px;color:#6b7280;margin:0 0 16px 0;border-bottom:1px solid #e5e7eb;padding-bottom:8px;">How to Pay</h3>
+                    ${upiSection}${paypalSection}${stripeSection}${customSection}
+                </div>`;
+        }
+
+        const html = templateHtml.replace('</body>', `${paymentBlockHtml}</body>`);
 
         // --- 7. Generate PDF with Playwright ---
         const browserConfig = await getBrowserConfig();

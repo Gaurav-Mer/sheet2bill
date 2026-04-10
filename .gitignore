@@ -40,3 +40,5 @@ npm_output.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/test.md

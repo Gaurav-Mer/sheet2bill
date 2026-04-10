@@ -37,7 +37,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         linkedin,
         twitter,
         github,
-        instagram
+        instagram,
+
+        // --- Payment Methods (money goes directly to freelancer) ---
+        upi_id,
+        paypal_link,
+        stripe_link,
+        custom_payment_link,
+        custom_payment_label,
     } = req.body;
 
     // --- NEW Helper: Ensure 'skills' is formatted as an Array for Postgres ---
@@ -106,14 +113,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             username,
             job_title,
             bio,
-            skills: skills, // Use the formatted array
+            skills: skills,
             is_public,
             is_available,
             website,
             linkedin,
             twitter,
             github,
-            instagram
+            instagram,
+
+            // Payment Methods
+            upi_id: upi_id || null,
+            paypal_link: paypal_link || null,
+            stripe_link: stripe_link || null,
+            custom_payment_link: custom_payment_link || null,
+            custom_payment_label: custom_payment_label || null,
         })
         .select()
         .single();

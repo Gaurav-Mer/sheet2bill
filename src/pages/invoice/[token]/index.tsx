@@ -7,6 +7,7 @@ import { HardDriveDownloadIcon, Share2 } from 'lucide-react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { ReactElement } from 'react';
+import PaymentBlock from '@/components/invoices/PaymentBlock';
 
 
 // This page's job is just to display the invoice.
@@ -86,6 +87,9 @@ export default function PublicInvoicePage({ invoice }: { invoice: any }) {
             </div >
 
             <CurrentTemplate templateId={invoice?.template_id ?? undefined} data={invoice as any} />
+
+            {/* Payment block — shown only if freelancer has configured payment methods */}
+            <PaymentBlock profile={invoice.profiles} invoiceStatus={invoice.status} />
         </>
     )
 }

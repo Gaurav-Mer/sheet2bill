@@ -72,6 +72,12 @@ export type Profile = {
     default_currency?: string
     onesignal_ids?: string[]
     username?: string
+    // Payment methods (freelancer configures these, money goes directly to them)
+    upi_id?: string | null
+    paypal_link?: string | null
+    stripe_link?: string | null
+    custom_payment_link?: string | null
+    custom_payment_label?: string | null
 };
 
 
