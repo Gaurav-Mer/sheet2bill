@@ -12,6 +12,16 @@ const BlogListingPage = () => {
 
     const blogPosts = [
         {
+            id: 4, // Assuming this is your next post
+            title: 'Proforma Invoice vs. Commercial Invoice: Key Differences & When to Use Each',
+            excerpt: 'Confused about proforma vs. commercial invoices? Learn how to use briefs for client approvals before finalizing your billing.',
+            category: 'Billing Strategy',
+            date: '2026-04-21',
+            readTime: '8 min read',
+            featured: false,
+            link: "proforma-invoice-vs-commercial-invoice"
+        },
+        {
             id: 1,
             title: 'The 5 Essentials for a Professional Freelance Invoice',
             excerpt: 'Learn the 5 essential components that ensure you look professional and get paid faster.',
