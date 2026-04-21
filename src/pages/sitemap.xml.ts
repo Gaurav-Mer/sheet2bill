@@ -14,25 +14,26 @@ interface SitemapEntry {
 }
 
 const STATIC_PAGES: SitemapEntry[] = [
-    { path: '',                             priority: '1.0', changefreq: 'weekly'  },
-    { path: 'pricing',                      priority: '0.9', changefreq: 'monthly' },
-    { path: 'how-it-works',                 priority: '0.8', changefreq: 'monthly' },
-    { path: 'blog',                         priority: '0.8', changefreq: 'weekly'  },
-    { path: 'tools/rate-calculator',        priority: '0.8', changefreq: 'monthly' },
-    { path: 'tools/contract-generator',     priority: '0.8', changefreq: 'monthly' },
-    { path: 'contact-us',                   priority: '0.6', changefreq: 'yearly'  },
-    { path: 'privacy-policy',               priority: '0.4', changefreq: 'yearly'  },
-    { path: 'terms-of-service',             priority: '0.4', changefreq: 'yearly'  },
-    { path: 'refund-policy',                priority: '0.3', changefreq: 'yearly'  },
-    { path: 'login',                        priority: '0.5', changefreq: 'yearly'  },
-    { path: 'signup',                       priority: '0.6', changefreq: 'yearly'  },
-    { path: 'forgot-password',              priority: '0.3', changefreq: 'yearly'  },
+    { path: '', priority: '1.0', changefreq: 'weekly' },
+    { path: 'pricing', priority: '0.9', changefreq: 'monthly' },
+    { path: 'how-it-works', priority: '0.8', changefreq: 'monthly' },
+    { path: 'blog', priority: '0.8', changefreq: 'weekly' },
+    { path: 'tools/rate-calculator', priority: '0.8', changefreq: 'monthly' },
+    { path: 'tools/contract-generator', priority: '0.8', changefreq: 'monthly' },
+    { path: 'contact-us', priority: '0.6', changefreq: 'yearly' },
+    { path: 'privacy-policy', priority: '0.4', changefreq: 'yearly' },
+    { path: 'terms-of-service', priority: '0.4', changefreq: 'yearly' },
+    { path: 'refund-policy', priority: '0.3', changefreq: 'yearly' },
+    { path: 'login', priority: '0.5', changefreq: 'yearly' },
+    { path: 'signup', priority: '0.6', changefreq: 'yearly' },
+    { path: 'forgot-password', priority: '0.3', changefreq: 'yearly' },
 ];
 
 const BLOG_POSTS: SitemapEntry[] = [
     { path: 'blog/freelance-invoice-essentials', priority: '0.7', changefreq: 'yearly' },
-    { path: 'blog/stop-sending-invoice',         priority: '0.7', changefreq: 'yearly' },
-    { path: 'blog/ways-to-bill',                 priority: '0.7', changefreq: 'yearly' },
+    { path: 'blog/stop-sending-invoice', priority: '0.7', changefreq: 'yearly' },
+    { path: 'blog/ways-to-bill', priority: '0.7', changefreq: 'yearly' },
+    { path: 'blog/proforma-invoice-vs-commercial-invoice', priority: '0.7', changefreq: 'yearly' },
 ];
 
 // --- End of Configuration ---

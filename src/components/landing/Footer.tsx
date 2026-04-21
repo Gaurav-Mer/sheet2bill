@@ -2,7 +2,7 @@ import { Logo } from "@/components/Logo";
 import Link from "next/link";
 
 const productLinks = [
-    { href: "#features", label: "Features" },
+    { href: "/#features", label: "Features" },
     { href: "/pricing", label: "Pricing" },
     { href: "/login", label: "Login" },
     { href: "/blog", label: "Blogs" },
