@@ -25,7 +25,7 @@ export function PremiumHeroSection() {
                             <span className="text-sm font-medium text-white">Manage Clients & Invoices Effortlessly</span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-                            The Simple <span className='text-primary'>Invoicing & Quote</span> Software for Freelancers.
+                            Free <span className='text-primary'>Invoice Generator &amp; Client Management</span> Generator for Freelancers.
                         </h1>
 
                         <h2 className="text-xl text-gray-600 leading-relaxed">
