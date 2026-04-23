@@ -6,17 +6,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ReactElement, useEffect, useRef, useCallback } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { HowItWorks } from '@/components/landing/HowItWorks';
-import { FaqSection } from '@/components/landing/FaqSection';
-import { Footer } from '@/components/landing/Footer';
 import Head from 'next/head';
-import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
-import { ProblemSolutionBanner } from '@/components/landing/ProblemSolutionBanner';
-import FeatureList from '@/components/landing/FeatureList';
-import { WhyChooseUs } from '@/components/landing/WhyChooseUs';
-import { PremiumHeroSection } from '@/components/landing/PremiumHeroSection';
-import InvoiceTemplatesShowCase from '@/components/landing/InvoiceTemplateShowCase';
-import PricingSection from '@/components/landing/PricingSection';
+import dynamic from 'next/dynamic';
+const ProblemSolutionBanner = dynamic(() => import('@/components/landing/ProblemSolutionBanner').then(mod => mod.ProblemSolutionBanner));
+const FeatureList = dynamic(() => import('@/components/landing/FeatureList'));
+const WhyChooseUs = dynamic(() => import('@/components/landing/WhyChooseUs').then(mod => mod.WhyChooseUs));
+const HowItWorks = dynamic(() => import('@/components/landing/HowItWorks').then(mod => mod.HowItWorks));
+
+const PricingSection = dynamic(() => import('@/components/landing/PricingSection'));
+const InvoiceTemplatesShowCase = dynamic(() => import('@/components/landing/InvoiceTemplateShowCase'));
+const FaqSection = dynamic(() => import('@/components/landing/FaqSection').then(mod => mod.FaqSection));
+const Footer = dynamic(() => import('@/components/landing/Footer').then(mod => mod.Footer));
+const NonLoginNavbar = dynamic(() => import("@/components/landing/NonLoginNavbar").then(mod => mod.default));
+const PremiumHeroSection = dynamic(() => import("@/components/landing/PremiumHeroSection").then(mod => mod.PremiumHeroSection))
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
