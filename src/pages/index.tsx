@@ -439,7 +439,7 @@ export default function LandingPage() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${SITE_URL}/`} />
         <meta property="og:site_name" content="Sheet2Bill" />
-        <meta property="og:title" content="Sheet2Bill | Free Invoice Generator for Freelancers" />
+        <meta property="og:title" content="Sheet2Bill | Free Invoice Generator" />
         <meta
           property="og:description"
           content="Manage clients, create professional briefs, get approvals, and get paid faster. The all-in-one billing tool for modern freelancers."
@@ -454,7 +454,7 @@ export default function LandingPage() {
         {/* ── Twitter / X ── */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@sheet2bill" />
-        <meta name="twitter:title" content="Sheet2Bill | Free Invoice Generator for Freelancers" />
+        <meta name="twitter:title" content="Sheet2Bill | Free Invoice Generator" />
         <meta
           name="twitter:description"
           content="Streamline your freelance business with effortless billing. Create quotes, send invoices, and track payments — all for free."
