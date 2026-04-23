@@ -37,8 +37,8 @@ const ldJson = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}/#organization`,
+      '@type': 'SoftwareApplication',
+      '@id': `${SITE_URL}/#software`,
       name: 'Sheet2Bill',
       url: SITE_URL,
       logo: {
@@ -110,7 +110,7 @@ const ldJson = {
       description:
         'Effortless billing for freelancers. Manage clients, create professional briefs, get approvals, and track invoices — all in one place.',
       publisher: {
-        '@id': `${SITE_URL}/#organization`,
+        '@id': `${SITE_URL}/#software`,
       },
       potentialAction: {
         '@type': 'SearchAction',
@@ -125,7 +125,7 @@ const ldJson = {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/#webpage`,
       url: SITE_URL,
-      name: 'Sheet2Bill | Free Invoice Generator & Client Management for Freelancers',
+      name: 'Sheet2Bill: Professional Freelance Invoicing Made Simple',
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': `${SITE_URL}/#software` },
       description:
@@ -424,7 +424,7 @@ export default function LandingPage() {
         <title>Sheet2Bill | Free Invoice Generator &amp; Client Management for Freelancers</title>
         <meta
           name="description"
-          content="Stop using Excel. Create professional quotes, convert them to invoices, and handle freelance billing in one workflow. Generate white-label PDF invoices with UPI QR codes. Start for free — no credit card required."
+          content="Stop using Excel. Create professional quotes, convert them to invoices, and handle freelance billing in one workflow. Start for free — no credit card required."
         />
         <meta
           name="keywords"
