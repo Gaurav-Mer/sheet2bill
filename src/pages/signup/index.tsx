@@ -35,7 +35,10 @@ export default function SignUpPage() {
             setErrorMsg(error.message); // This will correctly say "User already exists" if they are confirmed
             return;
         }
-        if (data.user) {
+
+        if (data.session) {
+            router.push('/dashboard');
+        } else if (data.user) {
             setSuccessMsg('Confirmation email sent! Please check your inbox (and spam folder) to activate your account.');
         }
     }
