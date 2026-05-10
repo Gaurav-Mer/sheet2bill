@@ -16,14 +16,16 @@ type FeatureGateProps = {
 export function FeatureGate({ children }: FeatureGateProps) {
     const { profile, isLoading } = useProfile();
     const [isUpgradeModalOpen, setUpgradeModalOpen] = useState(false);
-
+    const isPro = profile?.subscription_ends_at
+        ? new Date(profile.subscription_ends_at) > new Date()
+        : false;
     // While loading, show a skeleton or nothing
     if (isLoading) {
         return <div className="h-24 w-full rounded-md bg-muted animate-pulse" />;
     }
 
     // If the user has a paid plan, show the feature
-    if (isPaidUser(profile?.subscription_status)) {
+    if (isPaidUser(profile?.subscription_status) || isPro) {
         return <>{children}</>;
     }
 
