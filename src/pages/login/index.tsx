@@ -1,4 +1,4 @@
-// pages/login.tsx
+/* eslint-disable react/no-unescaped-entities */
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,12 +7,68 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, ReactElement, useState } from 'react';
+import { FileText, Users, CreditCard, Eye, EyeOff, ArrowRight } from 'lucide-react';
+
+const features = [
+    {
+        icon: FileText,
+        title: 'Instant PDF Invoices',
+        desc: 'Generate clean, professional invoices in seconds.',
+    },
+    {
+        icon: Users,
+        title: 'Client Management',
+        desc: 'Keep all your clients, briefs, and contracts organized.',
+    },
+    {
+        icon: CreditCard,
+        title: 'Seamless Payments',
+        desc: 'Collect customer payments easily with integrated billing links.',
+    },
+];
+
+function humanizeError(message: string): string {
+    if (message.includes('Invalid login credentials') || message.includes('invalid_credentials')) return 'Incorrect email or password. Please try again.';
+    if (message.includes('Email not confirmed')) return 'Please confirm your email before signing in. Check your inbox.';
+    if (message.includes('Too many requests') || message.includes('rate limit')) return 'Too many attempts. Please wait a moment and try again.';
+    if (message.includes('User not found')) return 'No account found with this email. Create one below.';
+    if (message.includes('network') || message.includes('fetch')) return 'Network error. Please check your connection and try again.';
+    return message;
+}
+
+function GoogleIcon() {
+    return (
+        <svg width="16" height="16" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" className="mr-2.5">
+            <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4" />
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853" />
+            <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05" />
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335" />
+        </svg>
+    );
+}
 
 export default function LoginPage() {
     const supabaseClient = useSupabaseClient();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+
+    async function handleGoogleSignIn() {
+        setErrorMsg('');
+        setGoogleLoading(true);
+        const { error } = await supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/dashboard`,
+            },
+        });
+        if (error) {
+            setErrorMsg('Could not sign in with Google. Please try again.');
+            setGoogleLoading(false);
+        }
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -24,88 +80,194 @@ export default function LoginPage() {
 
         const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-        // setLoading(false);
-
         if (!error) {
             router.push('/dashboard');
             setLoading(false);
         } else {
-            setErrorMsg(error.message);
+            setErrorMsg(humanizeError(error.message));
             setLoading(false);
         }
     }
 
     return (
-        <div className="min-h-dvh flex items-center justify-center p-4 bg-gradient-to-b from-primary/10 to-secondary ">
+        <div className="min-h-screen flex bg-zinc-50/50 font-sans antialiased text-zinc-900 selection:bg-zinc-900 selection:text-white">
             <Head>
-                <title>Login - Sheet2Bill</title>
+                <title>Login — Sheet2Bill</title>
                 <meta name="description" content="Log in to your Sheet2Bill account to manage your clients and invoices." />
             </Head>
-            <div className="w-full max-w-md rounded-2xl shadow-md border border-white/20 p-8 pt-0 px-0 bg-white">
-                <div className='mx-auto flex flex-col items-center justify-center bg-primary rounded-t-xl rounded-b-[45%] w-full'>
-                    <div onClick={() => router.push("/")} className='mt-2 cursor-pointer'>
-                        <Logo className="h-10 w-10 mb-0 " />
-                    </div>
-                    <p className='font-semibold text-white mb-2'>Sheet2Bill</p>
+
+            {/* ── LEFT PANEL (Premium Editorial Layout) ── */}
+            <div className="hidden lg:flex lg:w-[45%] flex-col justify-between p-12 relative overflow-hidden bg-white border-r border-zinc-200/80">
+                {/* Subtle Geometric Premium Grid Mesh Overlay */}
+                <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] opacity-[0.35]" />
+
+                {/* Branding Brandmark Anchor */}
+                <div className="relative z-10 flex items-center gap-2.5 cursor-pointer self-start group transition-opacity hover:opacity-80" onClick={() => router.push('/')}>
+                    <Logo className="h-6 w-6 text-zinc-900" />
+                    <span className="text-zinc-900 font-semibold text-base tracking-tight">Sheet2Bill</span>
                 </div>
-                <div className="text-center my-6">
-                    <h1 className="text-3xl font-bold ">Welcome Back 👋</h1>
-                    <p className=" mt-2">Log in to access your dashboard</p>
+
+                {/* Main Value Prop Stack */}
+                <div className="relative z-10 my-auto max-w-md space-y-12">
+                    <div className="space-y-4">
+                        <h2 className="text-4xl font-normal text-zinc-900 tracking-tight leading-[1.15]">
+                            Invoicing and billing built to match your <span className="font-serif italic text-primary">speed</span>.
+                        </h2>
+                        <p className="text-zinc-500 text-base leading-relaxed">
+                            The clean, straightforward financial dashboard designed entirely for independent professionals.
+                        </p>
+                    </div>
+
+                    {/* Clean Key Feature Indicators */}
+                    <div className="space-y-6">
+                        {features.map(({ icon: Icon, title, desc }) => (
+                            <div key={title} className="flex items-start gap-4">
+                                <div className="w-10 h-10 rounded-lg bg-zinc-50 border border-zinc-200 flex items-center justify-center flex-shrink-0">
+                                    <Icon className="w-5 h-5 text-zinc-600" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-zinc-900 font-semibold text-sm md:text-base">{title}</p>
+                                    <p className="text-zinc-500 text-xs md:text-sm leading-relaxed">{desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5 p-6 pb-0">
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium mb-1">
-                            Email
-                        </label>
-                        <Input
-                            type="email"
-                            id="email"
-                            name="email"
-                            required
-                            placeholder="you@example.com"
-                        />
+                {/* Monospace Editorial System Timestamp Footer */}
+                <p className="text-zinc-400 font-mono text-xs uppercase tracking-wider relative z-10">
+                    © {new Date().getFullYear()} Sheet2Bill // System Platform Core
+                </p>
+            </div>
+
+            {/* ── RIGHT PANEL (Minimalist Studio Form Canvas) ── */}
+            <div className="flex-1 flex items-center justify-center px-6 py-12 bg-white lg:bg-transparent">
+                <div className="w-full max-w-[380px] space-y-8">
+
+                    {/* Mobile Dynamic Header Bar Wrapper */}
+                    <div className="lg:hidden flex items-center gap-2 mb-8 cursor-pointer justify-center" onClick={() => router.push('/')}>
+                        <Logo className="h-6 w-6 text-zinc-900" />
+                        <span className="font-semibold text-base text-zinc-900 tracking-tight">Sheet2Bill</span>
                     </div>
 
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium mb-1">
-                            Password
-                        </label>
-                        <Input
-                            type="password"
-                            id="password"
-                            name="password"
-                            required
-                            placeholder="••••••••"
-                        />
+                    {/* Headline Info Block */}
+                    <div className="space-y-2 text-left">
+                        <h1 className="text-3xl font-normal text-zinc-900 tracking-tight">Welcome back</h1>
+                        <p className="text-zinc-500 text-sm md:text-base">Enter your details to open your account dashboard.</p>
                     </div>
 
-                    {errorMsg && (
-                        <p className="text-red-400 text-sm text-center">{errorMsg}</p>
-                    )}
+                    {/* Interactive Stack Canvas */}
+                    <div className="space-y-6">
+                        {/* Native OAuth Federated Integration Interface Trigger */}
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleGoogleSignIn}
+                            disabled={googleLoading || loading}
+                            className="w-full h-11 font-medium rounded-lg text-sm border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 text-zinc-700 shadow-sm transition-all flex items-center justify-center tracking-normal bg-white"
+                        >
+                            <GoogleIcon />
+                            {googleLoading ? 'Redirecting...' : 'Continue with Google'}
+                        </Button>
 
-                    <Button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full h-11 font-semibold py-3 rounded-xl transition-all disabled:opacity-50"
-                    >
-                        {loading ? 'Logging in...' : 'Log In'}
-                    </Button>
-                </form>
+                        {/* Minimal Pure Separator Breakpoint */}
+                        <div className="relative flex py-2 items-center">
+                            <div className="flex-grow border-t border-zinc-200/60"></div>
+                            <span className="flex-shrink mx-4 text-xs font-mono text-zinc-400 uppercase tracking-widest">or sign in with email</span>
+                            <div className="flex-grow border-t border-zinc-200/60"></div>
+                        </div>
 
-                <p className="text-center  text-sm mt-6">
-                    Don’t have an account?{' '}
-                    <Link href="/signup" className=" font-semibold hover:underline">
-                        Sign up
-                    </Link>
-                </p>
+                        {/* Secure Credentials Data Entry Pipeline Form */}
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="space-y-2">
+                                <label htmlFor="email" className="text-xs md:text-sm font-medium text-zinc-600 tracking-normal">
+                                    Email address
+                                </label>
+                                <Input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    placeholder="name@domain.com"
+                                    className="h-11 rounded-lg bg-zinc-50/50 border-zinc-200/80 font-normal text-base text-zinc-900 focus:bg-white focus:border-zinc-900 focus:ring-0 transition-all placeholder:text-zinc-400"
+                                />
+                            </div>
 
-                <p className="text-center  text-sm mt-6">
-                    Forgot password?{' '}
-                    <Link href="/forgot-password" className=" font-semibold hover:underline">
-                        forgot password
-                    </Link>
-                </p>
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <label htmlFor="password" className="text-xs md:text-sm font-medium text-zinc-600 tracking-normal">
+                                        Password
+                                    </label>
+                                    <Link
+                                        href="/forgot-password"
+                                        className="text-xs md:text-sm text-zinc-500 hover:text-zinc-900 transition-colors"
+                                    >
+                                        Forgot password?
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Input
+                                        type={showPassword ? 'text' : 'password'}
+                                        id="password"
+                                        name="password"
+                                        required
+                                        placeholder="••••••••"
+                                        className="h-11 rounded-lg bg-zinc-50/50 border-zinc-200/80 font-normal text-base text-zinc-900 focus:bg-white focus:border-zinc-900 focus:ring-0 transition-all pr-12 placeholder:text-zinc-400"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(v => !v)}
+                                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 transition-colors"
+                                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Session Continuity Toggle Layout Checkbox */}
+                            <div className="flex items-center space-x-2.5 py-1">
+                                <input
+                                    type="checkbox"
+                                    id="keep-signed-in"
+                                    defaultChecked
+                                    className="w-4 h-4 rounded border-zinc-300 text-zinc-900 accent-zinc-900 focus:ring-0 cursor-pointer"
+                                />
+                                <label htmlFor="keep-signed-in" className="text-sm text-zinc-500 font-normal cursor-pointer select-none">
+                                    Keep me signed in
+                                </label>
+                            </div>
+
+                            {/* Humanized Error Feedback Wrapper */}
+                            {errorMsg && (
+                                <div className="text-sm font-normal text-zinc-800 bg-zinc-50 border border-zinc-200 rounded-lg px-4 py-3 leading-relaxed">
+                                    {errorMsg}
+                                </div>
+                            )}
+
+                            {/* Primary Pipeline Authentication Submit Call-to-action */}
+                            <Button
+                                type="submit"
+                                disabled={loading || googleLoading}
+                                className="w-full h-11 font-semibold rounded-lg text-sm bg-primary hover:bg-primary/95 text-white transition-all flex items-center justify-center gap-2 shadow-sm mt-2"
+                            >
+                                {loading ? 'Signing in...' : 'Sign In'}
+                                <ArrowRight className="w-4 h-4 opacity-80 group-hover:translate-x-0.5 transition-transform" />
+                            </Button>
+                        </form>
+                    </div>
+
+                    {/* Secondary Account Directional Anchor Footer Context */}
+                    <div className="text-center pt-2">
+                        <p className="text-sm text-zinc-500">
+                            New to our platform?{' '}
+                            <Link href="/signup" className="font-medium text-zinc-900 hover:underline underline-offset-4">
+                                Create an account
+                            </Link>
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </div>
     );

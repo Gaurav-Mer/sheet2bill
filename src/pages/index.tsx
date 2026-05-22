@@ -4,10 +4,11 @@ import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ReactElement, useEffect, useRef, useCallback } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ReactElement, useEffect, useRef, useCallback, useState } from 'react';
+import { ArrowRight, Clock, RefreshCw, CreditCard } from 'lucide-react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
+import FinalCTASection from '@/components/landing/FinalCTASection';
 const ProblemSolutionBanner = dynamic(() => import('@/components/landing/ProblemSolutionBanner').then(mod => mod.ProblemSolutionBanner));
 const FeatureList = dynamic(() => import('@/components/landing/FeatureList'));
 const WhyChooseUs = dynamic(() => import('@/components/landing/WhyChooseUs').then(mod => mod.WhyChooseUs));
@@ -42,6 +43,10 @@ const ldJson = {
       '@type': 'SoftwareApplication',
       '@id': `${SITE_URL}/#software`,
       name: 'Sheet2Bill',
+      alternateName: 'Sheet2Bill Billing Suite',
+      applicationCategory: 'BusinessApplication',
+      applicationSubCategory: 'InvoicingApplication',
+      operatingSystem: 'Web, iOS, Android',
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
@@ -50,33 +55,18 @@ const ldJson = {
         height: 512,
       },
       description:
-        'Professional invoicing and client management software for freelancers and small businesses.',
-      sameAs: [
-        // Add your social profiles here:
-        // 'https://twitter.com/sheet2bill',
-        // 'https://www.linkedin.com/company/sheet2bill',
-      ],
-    },
-    {
-      '@type': 'SoftwareApplication',
-      '@id': `${SITE_URL}/#software`,
-      name: 'Sheet2Bill',
-      alternateName: 'Sheet2Bill Billing Suite',
-      applicationCategory: 'BusinessApplication',
-      applicationSubCategory: 'InvoicingApplication',
-      operatingSystem: 'Web, iOS, Android',
-      url: SITE_URL,
-      description:
-        'Create professional quotes, convert them to invoices, and manage freelance billing in one workflow. Free invoice generator with UPI QR codes and white-label PDF export.',
+        'Free GST invoice generator and billing software for Indian freelancers and consultants. Create professional quotes, get online client approvals, and send PDF invoices with UPI QR codes — all in one workflow.',
       featureList: [
-        'Invoice Generator',
+        'Free GST Invoice Generator',
         'Quote to Invoice Conversion',
+        'Online Client Approval Workflow',
+        'Branded PDF Invoice Export',
+        'UPI QR Code Payment Integration',
         'Client Management CRM',
-        'PDF Export with Branding',
-        'UPI QR Code Payments',
-        'Pre-Invoice Approval Workflow',
-        'Revenue Dashboard',
         'Auto-Sequential Invoice Numbering',
+        'Revenue & Payment Dashboard',
+        'Razorpay Payment Collection',
+        'White-label Invoice Branding',
       ],
       screenshot: `${SITE_URL}/landing.png`,
       offers: [
@@ -85,7 +75,8 @@ const ldJson = {
           name: 'Starter Plan',
           price: '0',
           priceCurrency: 'INR',
-          description: 'Free forever — 3 briefs & invoices per month, 2 saved clients.',
+          availability: 'https://schema.org/InStock',
+          description: 'Free forever — 3 invoices per month, 2 saved clients, PDF export.',
         },
         {
           '@type': 'Offer',
@@ -93,16 +84,10 @@ const ldJson = {
           price: '299',
           priceCurrency: 'INR',
           billingIncrement: '30',
-          description: '200 briefs/month, 50 clients, premium templates, no watermark.',
+          availability: 'https://schema.org/InStock',
+          description: '200 invoices/month, 50 clients, premium templates, no watermark, custom branding.',
         },
       ],
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.8',
-        ratingCount: '120',
-        bestRating: '5',
-        worstRating: '1',
-      },
     },
     {
       '@type': 'WebSite',
@@ -110,10 +95,8 @@ const ldJson = {
       name: 'Sheet2Bill',
       url: SITE_URL,
       description:
-        'Effortless billing for freelancers. Manage clients, create professional briefs, get approvals, and track invoices — all in one place.',
-      publisher: {
-        '@id': `${SITE_URL}/#software`,
-      },
+        'Free invoice generator and billing software for Indian freelancers. Manage clients, create GST-ready quotes, collect approvals, and get paid faster with UPI and Razorpay.',
+      publisher: { '@id': `${SITE_URL}/#software` },
       potentialAction: {
         '@type': 'SearchAction',
         target: {
@@ -127,22 +110,61 @@ const ldJson = {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/#webpage`,
       url: SITE_URL,
-      name: 'Sheet2Bill: Professional Freelance Invoicing Made Simple',
+      name: 'Sheet2Bill — Free Invoice Generator & Billing Software for Indian Freelancers',
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': `${SITE_URL}/#software` },
       description:
-        'Stop using Excel. Create professional quotes, convert them to invoices, and handle freelance billing in one workflow.',
+        'Create GST-ready invoices, convert quotes to invoices in one click, and accept UPI payments. The free billing tool built for Indian freelancers and consultants.',
       breadcrumb: {
         '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: SITE_URL,
-          },
-        ],
+        itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL }],
       },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${SITE_URL}/#faq`,
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is Sheet2Bill free to use?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes, Sheet2Bill has a free forever Starter plan that includes 3 invoices per month, 2 saved clients, and PDF export. No credit card required.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I create GST invoices on Sheet2Bill?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Sheet2Bill supports GST-ready invoice templates. Add your GSTIN and generate professional GST-compliant invoices as downloadable PDFs.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does Sheet2Bill support UPI payments?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Sheet2Bill automatically embeds a UPI QR code on your invoices so clients can pay instantly via GPay, PhonePe, Paytm, or any UPI app.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do I convert a quote to an invoice?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Once a client approves your brief or quote, you can convert it to a final invoice in a single click — no re-entering data.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Sheet2Bill suitable for Indian freelancers and consultants?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Absolutely. Sheet2Bill is built specifically for the Indian market with INR pricing, GST invoice support, UPI QR codes, and Razorpay payment collection.',
+          },
+        },
+      ],
     },
   ],
 };
@@ -159,7 +181,7 @@ function useScrollDepthTracking() {
     if (tickingRef.current) return;
 
     tickingRef.current = true;
-    window.requestAnimationFrame(() => {
+    globalThis.requestAnimationFrame(() => {
       const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
       const totalScrollable = scrollHeight - clientHeight;
 
@@ -169,9 +191,9 @@ function useScrollDepthTracking() {
         for (const threshold of SCROLL_THRESHOLDS) {
           if (scrolledPercent >= threshold && !firedRef.current.has(threshold)) {
             firedRef.current.add(threshold);
-            window.gtag?.('event', 'scroll_depth', {
+            (globalThis as any).gtag?.('event', 'scroll_depth', {
               value: threshold,
-              page_path: window.location.pathname,
+              page_path: globalThis.location.pathname,
             });
           }
         }
@@ -182,237 +204,101 @@ function useScrollDepthTracking() {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    globalThis.addEventListener('scroll', handleScroll, { passive: true });
+    return () => globalThis.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 }
 
-// ─── Story Section ────────────────────────────────────────────────────────────
-// Extracted into its own component for readability and potential code-splitting.
+// ─── Product Promises Section ─────────────────────────────────────────────────
 
-function StorySection() {
+const PRODUCT_PROMISES = [
+  {
+    icon: Clock,
+    title: 'Under 5 minutes',
+    body: 'Create a professional quote or invoice from scratch — with line items, GST, and your branding.',
+  },
+  {
+    icon: RefreshCw,
+    title: 'Zero re-entry',
+    body: 'Client approves your quote and it converts to a final invoice in one click. No copy-paste.',
+  },
+  {
+    icon: CreditCard,
+    title: 'Free forever plan',
+    body: 'Start with no credit card. Upgrade to Pro only when your billing volume demands it.',
+  },
+];
+
+
+
+function ProductPromisesSection() {
   return (
     <section
-      aria-labelledby="story-heading"
-      className="relative py-24 bg-white overflow-hidden"
+      aria-label="Product promises"
+      className="relative overflow-hidden bg-zinc-50/50 py-12 border-t border-zinc-200/60"
     >
-      {/* Subtle grid background */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgb(148 163 184) 1px, transparent 1px),
-            linear-gradient(to bottom, rgb(148 163 184) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-        }}
-      />
+      {/* Structural Editorial Grid Lines */}
+      <div className="absolute top-0 left-1/4 bottom-0 w-px bg-zinc-200/40 hidden lg:block pointer-events-none" />
+      <div className="absolute top-0 left-3/4 bottom-0 w-px bg-zinc-200/40 hidden lg:block pointer-events-none" />
 
-      {/* Accent lines */}
-      <div
-        aria-hidden="true"
-        className="absolute top-10 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute bottom-10 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
-      />
+      <div className="mx-auto max-w-7xl px-6 lg:px-12">
+        <div className="grid gap-16 lg:grid-cols-12 lg:items-start">
 
-      <div className="container mx-auto px-6 max-w-4xl relative">
-        {/* Header */}
-        <div className="text-center mb-20">
-          <div className="flex items-center justify-center gap-4 mb-8" aria-hidden="true">
-            <div className="w-8 h-px bg-gradient-to-r from-transparent to-primary/30" />
-            <div className="w-8 h-px bg-gradient-to-l from-transparent to-primary/30" />
+          {/* Left Column: Premium Minimalist Section Identity */}
+          <div className="lg:col-span-5 lg:sticky lg:top-36 space-y-5">
+            {/* Minimal Pure Border Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 py-1">
+              <span className="text-[10px] font-mono tracking-wider text-zinc-500 uppercase">
+                Guarantees
+              </span>
+            </div>
+
+            <h2 className="text-3xl font-medium tracking-tight text-primary sm:text-5xl leading-[1.15]">
+              Built for absolute <span className="font-serif italic text-zinc-500">peace of mind</span>.
+            </h2>
+
+            <p className="max-w-sm text-md leading-relaxed text-zinc-500">
+              We stand behind the explicit engineering of our platform. No compromises on core architecture security, network speed, or direct independent utility.
+            </p>
           </div>
 
-          <h2
-            id="story-heading"
-            className="text-4xl md:text-5xl font-light text-slate-900 tracking-tight"
-          >
-            The Story Behind <span className="font-semibold">Sheet2Bill</span>
-          </h2>
-          <p className="text-slate-500 text-lg font-light max-w-2xl mx-auto mt-6">
-            Bringing clarity and structure to professional billing
-          </p>
-        </div>
+          {/* Right Column: High-End Minimal Card Layout Stack */}
+          <div className="lg:col-span-7 space-y-4">
+            {PRODUCT_PROMISES.map(({ icon: Icon, title, body }, index) => (
+              <div
+                key={title}
+                className="group relative flex flex-col sm:flex-row items-start gap-5 p-6 rounded-2xl border border-zinc-200/80 bg-white/90 backdrop-blur-md transition-all duration-300 hover:border-primary hover:shadow-[0_15px_35px_rgba(0,0,0,0.03)]"
+              >
+                {/* Monospace Visual Index Counter Accent */}
+                <span className="absolute top-6 right-6 font-mono text-sm tracking-widest text-zinc-400 transition-colors duration-300 group-hover:text-primary">
+                  // 0{index + 1}
+                </span>
 
-        {/* Card */}
-        <div className="relative">
-          {/* Corner brackets — decorative */}
-          {(
-            [
-              '-top-4 -left-4 border-t-2 border-l-2 rounded-tl-lg',
-              '-top-4 -right-4 border-t-2 border-r-2 rounded-tr-lg',
-              '-bottom-4 -left-4 border-b-2 border-l-2 rounded-bl-lg',
-              '-bottom-4 -right-4 border-b-2 border-r-2 rounded-br-lg',
-            ] as const
-          ).map((cls, i) => (
-            <div
-              key={i}
-              aria-hidden="true"
-              className={`absolute w-12 h-12 border-primary/20 ${cls}`}
-            />
-          ))}
+                {/* Refined Geometric Icon Capsule */}
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-50 border border-zinc-200 transition-all duration-300 group-hover:bg-primary group-hover:border-primary">
+                  <Icon className="h-4 w-4 text-zinc-600 transition-colors duration-300 group-hover:text-white" aria-hidden="true" />
+                </div>
 
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl blur-2xl"
-          />
-
-          <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-xl shadow-slate-200/50 p-10 md:p-14">
-            <Divider side="left" />
-
-            <div className="space-y-8 text-slate-700">
-              <p className="text-xl md:text-2xl font-light leading-relaxed">
-                For many professionals, billing feels{' '}
-                <strong className="font-medium text-slate-900">chaotic</strong> — client details
-                scattered everywhere, project notes lost, and countless hours spent just trying to
-                stay organized.
-              </p>
-
-              <MathDivider />
-
-              <p className="text-xl md:text-2xl font-light leading-relaxed">
-                Sheet2Bill was created to deliver{' '}
-                <strong className="font-medium text-slate-900">effortless billing</strong>. One
-                elegant platform to create structured briefs, streamline client approvals, and
-                generate invoices — all designed to deliver{' '}
-                <strong className="font-medium text-slate-900">professional results</strong>{' '}
-                seamlessly.
-              </p>
-
-              <DotDivider />
-
-              <p className="text-xl md:text-2xl font-light leading-relaxed">
-                Designed to eliminate chaos and help you work{' '}
-                <strong className="font-medium text-slate-900">
-                  smarter, faster, and with complete confidence
-                </strong>
-                .
-              </p>
-
-              <Divider side="right" />
-
-              {/* Signature */}
-              <div className="pt-8 mt-12 border-t border-slate-200/50">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-slate-900 text-lg">Sheet2Bill Team</p>
-                  <TeamIcon />
+                {/* Typography Copy Canvas */}
+                <div className="space-y-1 pt-1.5 max-w-xl">
+                  <h3 className="text-lg font-medium ">
+                    {title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-zinc-500 transition-colors duration-300 group-hover:text-zinc-600">
+                    {body}
+                  </p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
+
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Story Section Sub-components ────────────────────────────────────────────
 
-function Divider({ side }: { side: 'left' | 'right' }) {
-  return (
-    <div
-      aria-hidden="true"
-      className={`flex items-center gap-3 ${side === 'right' ? 'flex-row-reverse mt-8' : 'mb-8'}`}
-    >
-      <div className="w-2 h-2 rounded-full bg-primary/40" />
-      <div className="flex-1 h-px bg-gradient-to-r from-primary/20 to-transparent" />
-    </div>
-  );
-}
-
-function MathDivider() {
-  return (
-    <div aria-hidden="true" className="flex items-center justify-center gap-4 py-4">
-      <div className="w-16 h-px bg-gradient-to-r from-transparent to-primary/30" />
-      <span className="text-primary/30 font-mono text-sm" aria-hidden="true">≈</span>
-      <div className="w-16 h-px bg-gradient-to-l from-transparent to-primary/30" />
-    </div>
-  );
-}
-
-function DotDivider() {
-  return (
-    <div aria-hidden="true" className="flex items-center justify-center gap-4 py-4">
-      <div className="w-16 h-px bg-gradient-to-r from-transparent to-primary/30" />
-      <div className="flex gap-2">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-        ))}
-      </div>
-      <div className="w-16 h-px bg-gradient-to-l from-transparent to-primary/30" />
-    </div>
-  );
-}
-
-function TeamIcon() {
-  return (
-    <div
-      aria-hidden="true"
-      className="relative w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center"
-    >
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-6 h-px bg-primary/20" />
-      </div>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-px h-6 bg-primary/20" />
-      </div>
-      <div className="w-6 h-6 rounded-full bg-primary/20" />
-    </div>
-  );
-}
-
-// ─── Final CTA Section ────────────────────────────────────────────────────────
-
-function FinalCTASection() {
-  return (
-    <section
-      aria-labelledby="cta-heading"
-      className="relative py-32 overflow-hidden"
-    >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-primary/5"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.02)_1px,transparent_1px)] bg-[size:72px_72px]"
-      />
-
-      <div className="container mx-auto px-6 text-center relative z-10">
-        <div className="max-w-3xl mx-auto space-y-8">
-          <h2
-            id="cta-heading"
-            className="text-4xl md:text-5xl font-bold leading-tight"
-          >
-            Ready to transform your billing?
-          </h2>
-          <p className="text-xl text-muted-foreground">
-            Join thousands of freelancers experiencing effortless billing with professional results.
-          </p>
-          <div className="pt-4">
-            <Link href="/signup" passHref>
-              <Button
-                size="lg"
-                className="h-16 px-12 md:text-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-2xl shadow-primary/25 group"
-                aria-label="Sign up free and create your first brief"
-              >
-                Sign Up Free &amp; Create Your First Brief
-                <ArrowRight
-                  className="md:ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform"
-                  aria-hidden="true"
-                />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -423,14 +309,14 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-dvh bg-background text-foreground">
       <Head>
         {/* ── Primary SEO ── */}
-        <title>Sheet2Bill | Free Invoice Generator &amp; Client Management for Freelancers</title>
+        <title>Sheet2Bill — Free Invoice Generator for Indian Freelancers | GST Invoice, UPI & PDF</title>
         <meta
           name="description"
-          content="Stop using Excel. Create professional quotes, convert them to invoices, and handle freelance billing in one workflow. Start for free — no credit card required."
+          content="Free invoice generator for Indian freelancers & consultants. Create GST-ready quotes, collect client approvals, and send PDF invoices with UPI QR codes. No Excel. No credit card needed."
         />
         <meta
           name="keywords"
-          content="invoice generator, freelance billing software, free invoice generator India, quote to invoice, client management for freelancers, UPI invoice generator, PDF invoice maker, online billing software"
+          content="free invoice generator India, GST invoice maker, freelance billing software India, quote to invoice, UPI invoice generator, PDF invoice maker, online billing software for freelancers, invoice generator for consultants, freelance invoice app India, billing software India"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -441,10 +327,10 @@ export default function LandingPage() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${SITE_URL}/`} />
         <meta property="og:site_name" content="Sheet2Bill" />
-        <meta property="og:title" content="Sheet2Bill | Free Invoice Generator" />
+        <meta property="og:title" content="Sheet2Bill — Free Invoice Generator for Indian Freelancers" />
         <meta
           property="og:description"
-          content="Manage clients, create professional briefs, get approvals, and get paid faster. The all-in-one billing tool for modern freelancers."
+          content="Create GST-ready invoices, convert quotes to invoices in one click, and accept UPI payments. The free billing tool built for Indian freelancers and consultants."
         />
         <meta property="og:image" content={`${SITE_URL}/landing.png`} />
         <meta property="og:image:width" content="1200" />
@@ -456,10 +342,10 @@ export default function LandingPage() {
         {/* ── Twitter / X ── */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@sheet2bill" />
-        <meta name="twitter:title" content="Sheet2Bill | Free Invoice Generator" />
+        <meta name="twitter:title" content="Sheet2Bill — Free Invoice Generator for Indian Freelancers" />
         <meta
           name="twitter:description"
-          content="Streamline your freelance business with effortless billing. Create quotes, send invoices, and track payments — all for free."
+          content="Create GST-ready invoices, collect client approvals, and accept UPI payments — all in one free tool built for Indian freelancers and consultants."
         />
         <meta name="twitter:image" content={`${SITE_URL}/landing.png`} />
         <meta name="twitter:image:alt" content="Sheet2Bill dashboard preview" />
@@ -488,22 +374,20 @@ export default function LandingPage() {
 
       <main id="main-content" className="flex-1 pt-16">
         <PremiumHeroSection />
+
+        <ProductPromisesSection />
+
         <ProblemSolutionBanner />
-        <FeatureList />
 
         <section aria-label="How Sheet2Bill works">
           <HowItWorks />
         </section>
 
+        <FeatureList />
+
         <WhyChooseUs />
 
-        <StorySection />
-
         <PricingSection />
-
-        <section aria-label="Invoice templates showcase">
-          <InvoiceTemplatesShowCase />
-        </section>
 
         <FaqSection />
 

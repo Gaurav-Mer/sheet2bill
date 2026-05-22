@@ -1,193 +1,188 @@
-import { Zap, CheckCircle, FileText, Clock, } from "lucide-react";
+import { Zap, CheckCircle, FileText, Clock } from "lucide-react";
 
 const steps = [
     {
         icon: Zap,
         title: "Create Your Brief",
         description:
-            "Build a detailed project brief with line items, deliverables, and pricing. Share a secure approval link with your client.",
+            "Build a comprehensive project brief with structured line items, milestones, and strategic pricing. Distribute a protected portal link directly to your client.",
         time: "2 minutes",
-        bgColor: "bg-blue-100",
-        cardBg: "bg-white",
-        mockupType: "brief"
+        mockupType: "brief",
     },
     {
         icon: CheckCircle,
         title: "Get Client Approval",
         description:
-            "Client reviews and approves with one click—no login required. Track approval status and handle revisions in real-time.",
+            "Clients verify parameters and sign off with a single click—no authentication wall required. Track absolute status logs and adjustments in real-time.",
         time: "30 seconds",
-        bgColor: "bg-cyan-100",
-        cardBg: "bg-white",
-        mockupType: "approval"
+        mockupType: "approval",
     },
     {
         icon: FileText,
         title: "Generate Invoice",
         description:
-            "Convert the approved brief into a professional, branded PDF invoice instantly. Download or send directly to get paid faster.",
+            "Convert executing briefs directly into beautifully formatted, professional invoices instantly. Export or schedule payments directly to clear your balances.",
         time: "1 click",
-        bgColor: "bg-emerald-100",
-        cardBg: "bg-white",
-        mockupType: "invoice"
+        mockupType: "invoice",
     },
 ];
 
 export function HowItWorks() {
     return (
-        <section className="relative py-12 overflow-hidden bg-gradient-to-b from-slate-50 to-white">
+        <section id="how-it-works" className="relative py-12 overflow-hidden bg-white border-t border-zinc-200/60">
+
+            {/* Minimal High-End Geometric Line Layout Grid */}
+            <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-[0.3]" />
+
             <div className="container mx-auto px-6 relative z-10">
-                {/* Header */}
-                <div className="text-center max-w-4xl mx-auto mb-20">
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-white border-2 border-black mb-6">
-                        <span className="text-sm font-semibold text-black uppercase tracking-wide">
+
+                {/* Section Informational Copy Engine Heading */}
+                <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28 space-y-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 bg-zinc-50">
+                        <span className="text-sm font-mono tracking-wider text-zinc-500 uppercase">
                             Simple Process
                         </span>
                     </div>
-                    <h2 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 text-slate-900">
-                        From Brief to Payment in 3 Steps
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-zinc-900 leading-[1.15]">
+                        From agreement to asset settlement <br className="hidden sm:inline" /> in three <span className="font-serif italic text-primary">elegant actions</span>.
                     </h2>
-                    <p className="text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto">
-                        Choose the workflow that fits your style: create briefs, get approvals, and generate invoices—all in one seamless platform
+                    <p className="max-w-2xl mx-auto text-base md:text-lg lg:text-xl leading-relaxed text-zinc-500 font-normal">
+                        Unify agreements, authentication pathways, and invoicing templates directly within a single operational pipeline.
                     </p>
                 </div>
 
-                {/* Steps Grid */}
-                <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-8 mb-20">
+                {/* Steps Cards Pipeline Layout Matrix */}
+                <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
                     {steps.map((step) => (
-                        <div key={step.title} className="group">
-                            <div className={`relative h-full ${step.bgColor} rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl`}>
-                                {/* Card Content */}
-                                <div className="p-8 pb-0">
-                                    <div className="text-center mb-8">
-                                        <h3 className="text-3xl font-bold text-slate-900 mb-3">
-                                            {step.title}
-                                        </h3>
-                                        <p className="text-slate-700 leading-relaxed mb-4">
-                                            {step.description}
-                                        </p>
-                                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200/50">
-                                            <Clock className="h-4 w-4 text-slate-600" />
-                                            <span className="font-semibold text-slate-700 text-sm">{step.time}</span>
-                                        </div>
+                        <div key={step.title} className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200/80 bg-zinc-50/40 p-8 transition-all duration-300 hover:bg-white hover:border-primary/40 hover:shadow-[0_24px_60px_rgba(0,0,0,0.03)]">
+
+                            <div>
+                                {/* Step Meta Layout Row */}
+                                <div className="flex items-center justify-between mb-8">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-white shadow-sm shadow-primary/10 transition-transform duration-300 group-hover:scale-105">
+                                        <step.icon className="w-5 h-5 stroke-[2]" aria-hidden="true" />
                                     </div>
-
-                                    {/* Mockup Preview */}
-                                    <div className="relative mt-8">
-                                        <div className={`${step.cardBg} rounded-t-2xl shadow-xl border border-slate-200 overflow-hidden `}>
-                                            {step.mockupType === "brief" && (
-                                                <div className="p-6">
-                                                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                                                                <Zap className="w-5 h-5 text-white" />
-                                                            </div>
-                                                            <span className="font-bold text-slate-900">Project Brief</span>
-                                                        </div>
-                                                        <span className="text-xs font-semibold px-3 py-1 bg-blue-100 text-blue-700 rounded-full">Draft</span>
-                                                    </div>
-                                                    <div className="space-y-3">
-                                                        <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                                                            <span className="text-sm text-slate-700">Homepage Design</span>
-                                                            <span className="font-bold text-slate-900">$5,000</span>
-                                                        </div>
-                                                        <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                                                            <span className="text-sm text-slate-700">Backend API</span>
-                                                            <span className="font-bold text-slate-900">$8,500</span>
-                                                        </div>
-                                                        <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                                                            <span className="text-sm text-slate-700">Testing & QA</span>
-                                                            <span className="font-bold text-slate-900">$2,000</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {step.mockupType === "approval" && (
-                                                <div className="p-6">
-                                                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center">
-                                                                <CheckCircle className="w-5 h-5 text-white" />
-                                                            </div>
-                                                            <span className="font-bold text-slate-900">Client Review</span>
-                                                        </div>
-                                                        <span className="text-xs font-semibold px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full">Pending</span>
-                                                    </div>
-                                                    <div className="bg-slate-50 rounded-lg p-4 mb-4">
-                                                        <p className="text-sm text-slate-700 mb-3">Review project scope and approve to proceed:</p>
-                                                        <div className="text-2xl font-bold text-slate-900 mb-2">Total: $15,500</div>
-                                                        <p className="text-xs text-slate-600">3 deliverables • Est. 4 weeks</p>
-                                                    </div>
-                                                    <button className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
-                                                        Approve Project
-                                                    </button>
-                                                </div>
-                                            )}
-
-                                            {step.mockupType === "invoice" && (
-                                                <div className="p-6">
-                                                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                                                                <FileText className="w-5 h-5 text-white" />
-                                                            </div>
-                                                            <span className="font-bold text-slate-900">Invoice #001</span>
-                                                        </div>
-                                                        <span className="text-xs font-semibold px-3 py-1 bg-green-100 text-green-700 rounded-full">✓ Paid</span>
-                                                    </div>
-                                                    <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-lg p-4 mb-3">
-                                                        <div className="flex justify-between items-center mb-2">
-                                                            <span className="text-sm text-slate-600">Amount Due</span>
-                                                            <span className="text-3xl font-black text-emerald-600">$15,500</span>
-                                                        </div>
-                                                        <p className="text-xs text-slate-600">Due: Dec 25, 2024</p>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button className="flex-1 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-lg text-sm hover:bg-slate-200 transition-colors">
-                                                            Download PDF
-                                                        </button>
-                                                        <button className="flex-1 py-2.5 bg-emerald-500 text-white font-semibold rounded-lg text-sm hover:bg-emerald-600 transition-colors">
-                                                            Send Invoice
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white border border-zinc-200 shadow-none">
+                                        <Clock className="h-4 w-4 text-zinc-400" aria-hidden="true" />
+                                        <span className="text-sm font-semibold text-zinc-700 font-mono">{step.time}</span>
                                     </div>
                                 </div>
+
+                                {/* Typography Content Blocks */}
+                                <h3 className="text-xl font-semibold tracking-tight text-zinc-900 mb-3">{step.title}</h3>
+                                <p className="text-sm md:text-base text-zinc-500 leading-relaxed font-normal mb-8">{step.description}</p>
+                            </div>
+
+                            {/* Live Application Canvas Viewports */}
+                            <div className="relative mt-auto pt-5 overflow-hidden rounded-t-xl border border-zinc-200 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.01)] transition-all duration-300 group-hover:border-zinc-300 group-hover:shadow-sm">
+
+                                {step.mockupType === "brief" && (
+                                    <div className="p-5 select-none">
+                                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-100">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-6 h-6 bg-primary/10 rounded flex items-center justify-center">
+                                                    <Zap className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                                                </div>
+                                                <span className="font-semibold text-zinc-900 text-sm tracking-tight">Project Proposal</span>
+                                            </div>
+                                            <span className="text-xs font-medium tracking-wide uppercase px-2.5 py-0.5 bg-zinc-50 border border-zinc-200 text-zinc-500 rounded">Draft</span>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {[
+                                                ['Strategy & Discovery', '$2,400'],
+                                                ['Prototype Design', '$4,800'],
+                                                ['API Infrastructure', '$6,500'],
+                                            ].map(([label, amount]) => (
+                                                <div key={label} className="flex justify-between items-center p-3 bg-zinc-50/50 border border-zinc-200/60 rounded-lg">
+                                                    <span className="text-sm text-zinc-500 font-normal">{label}</span>
+                                                    <span className="text-sm font-semibold text-zinc-900 font-mono">{amount}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {step.mockupType === "approval" && (
+                                    <div className="p-5 select-none">
+                                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-100">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-6 h-6 bg-zinc-900 rounded flex items-center justify-center">
+                                                    <CheckCircle className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+                                                </div>
+                                                <span className="font-semibold text-zinc-900 text-sm tracking-tight">Client Review</span>
+                                            </div>
+                                            <span className="text-xs font-semibold tracking-wide uppercase px-2.5 py-0.5 bg-amber-50 text-amber-700 border border-amber-200/50 rounded">Pending</span>
+                                        </div>
+                                        <div className="bg-zinc-50/50 rounded-lg p-4 mb-4 border border-zinc-200/60">
+                                            <p className="text-xs text-zinc-400 font-normal mb-1">Verify summary value to authorize:</p>
+                                            <div className="text-2xl font-semibold text-zinc-900 tracking-tight">$13,700</div>
+                                            <p className="text-xs text-zinc-400 mt-1 font-mono">3 MILESTONES · TERM 4 WEEKS</p>
+                                        </div>
+                                        <div className="w-full py-2.5 bg-primary text-white text-sm font-semibold rounded-lg text-center shadow-sm">
+                                            Execute Sign-off
+                                        </div>
+                                    </div>
+                                )}
+
+                                {step.mockupType === "invoice" && (
+                                    <div className="p-5 select-none">
+                                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-100">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-6 h-6 bg-emerald-50 border border-emerald-200 rounded flex items-center justify-center">
+                                                    <FileText className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                                                </div>
+                                                <span className="font-semibold text-zinc-900 text-sm tracking-tight">Invoice #INV-001</span>
+                                            </div>
+                                            <span className="text-xs font-semibold tracking-wide uppercase px-2.5 py-0.5 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded">Paid</span>
+                                        </div>
+                                        <div className="bg-zinc-50/50 border border-zinc-200/60 rounded-lg p-4 mb-4">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-sm text-zinc-500 font-normal">Funds Disbursed</span>
+                                                <span className="text-xl font-semibold text-primary tracking-tight font-mono">$13,700</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <div className="flex-1 py-2 bg-zinc-50 text-zinc-600 border border-zinc-200 font-medium rounded-lg text-xs text-center">
+                                                Receipt
+                                            </div>
+                                            <div className="flex-1 py-2 bg-primary text-white font-medium rounded-lg text-xs text-center shadow-sm">
+                                                Stripe Log
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* Stats */}
-                <div className="max-w-5xl mx-auto mb-20">
-                    <div className="bg-white rounded-3xl border border-l-8 border-r-8  border-black relative p-10">
-                        <div className="grid md:grid-cols-3 gap-10 divide-x divide-slate-200">
-                            <div className="text-center md:px-6">
-                                <div className="text-5xl font-black text-slate-900 mb-2">
-                                    &lt;5 min
+                {/* Performance Analytics Metric Panel Rows */}
+                <div className="max-w-4xl mx-auto">
+                    <div className="group relative bg-white border border-zinc-200/80 rounded-2xl p-8 transition-all duration-300 hover:border-primary/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
+                        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-zinc-200/60">
+                            {[
+                                { val: '< 5 min', label: 'Average full lifecycle pipeline compilation layout.' },
+                                { val: '1 Click', label: 'Instant asset conversion from proposal parameters straight to ledger.' },
+                                { val: '0 Sec', label: 'Manual data extraction processing or transfer workflow errors.' },
+                            ].map(({ val, label }, i) => (
+                                <div
+                                    key={i}
+                                    className={`text-center flex flex-col items-center justify-center ${i > 0 ? 'pt-6 md:pt-0 md:px-8' : 'md:px-8'
+                                        }`}
+                                >
+                                    <div className="text-3xl font-semibold tracking-tight text-primary font-mono">
+                                        {val}
+                                    </div>
+                                    <p className="mt-3 text-sm leading-relaxed text-zinc-500 max-w-[24px] min-w-[220px]">
+                                        {label}
+                                    </p>
                                 </div>
-                                <p className="text-slate-600">Total time per invoice</p>
-                            </div>
-                            <div className="text-center md:px-6">
-                                <div className="text-5xl font-black text-slate-900 mb-2">
-                                    90%
-                                </div>
-                                <p className="text-slate-600">Faster than manual methods</p>
-                            </div>
-                            <div className="text-center md:px-6">
-                                <div className="text-5xl font-black text-slate-900 mb-2">
-                                    Zero
-                                </div>
-                                <p className="text-slate-600">Invoice errors or disputes</p>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
 
-                {/* CTA */}
             </div>
         </section>
     );

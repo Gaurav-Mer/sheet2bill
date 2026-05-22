@@ -1,153 +1,138 @@
-'use client'
+'use client';
 
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCheck, FileText, Sheet, Users, X, TrendingUp } from "lucide-react";
 
 export function ProblemSolutionBanner() {
     return (
-        <section className="relative py-20 overflow-hidden bg-[#f9efe4] text-black">
-            {/* Soft background accent */}
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.06),transparent_70%)]" />
+        <section className="relative py-12 overflow-hidden bg-white border-t border-zinc-200/60">
 
-            <div className="container mx-auto px-6">
-                {/* Heading Section */}
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 bg-white border-2 border-black shadow-sm">
-                        <span className="text-sm font-bold text-black">The Workflow Problem</span>
+            {/* Minimal High-End Geometric Line Layout Grid */}
+            <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-[0.3]" />
+
+            <div className="container mx-auto px-6 relative z-10">
+
+                {/* Section Informational Copy Engine Heading */}
+                <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28 space-y-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 bg-zinc-50">
+                        <span className="text-xs font-mono tracking-wider text-zinc-500 uppercase">
+                            Operational Friction Matrix
+                        </span>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-black mb-6 leading-tight">
-                        Stop Juggling Apps for <span className="text-primary">Quotes & Invoices</span>.
+
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-zinc-900 leading-[1.15]">
+                        Stop juggling chaotic tools for{" "}
+                        <br className="hidden sm:inline" />
+                        <span className="font-serif italic text-primary">quotes &amp; invoices</span>.
                     </h2>
-                    <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto">
-                        Freelancers lose hours manually copying data from **Estimates** to **Invoices**.
-                        Sheet2Bill unifies your workflow so you can focus on billable work.
+
+                    <p className="max-w-2xl mx-auto text-base md:text-lg lg:text-xl leading-relaxed text-zinc-500 font-normal">
+                        Independent professionals burn valuable billable hours transferring data manually between separate project estimates and accounting ledgers. Sheet2Bill unifies the pipeline completely.
                     </p>
                 </div>
 
-                {/* Visual Comparison */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                {/* Comparison Layout Balance Blocks */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
 
-                    {/* BEFORE: The Chaos */}
-                    <Card className="bg-[#d7e0cc]  border-2 border-transparent  shadow-sm rounded-3xl overflow-hidden transition-all duration-300">
-                        <CardContent className="p-8">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="h-12 w-12 rounded-2xl bg-red-100 flex items-center justify-center border border-red-200">
-                                    <X className="h-6 w-6 text-red-600" strokeWidth={3} />
+                    {/* THE LEGACY WAY — Flat, Muted, Inefficient State */}
+                    <Card className="bg-zinc-50/50 border border-zinc-200/80 shadow-none rounded-2xl overflow-hidden flex flex-col justify-between">
+                        <CardContent className="p-8 md:p-10 flex-1 flex flex-col justify-between gap-12">
+
+                            <div className="space-y-8">
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 border border-zinc-200 shrink-0">
+                                        <X className="h-5 w-5 text-zinc-500" strokeWidth={2} aria-hidden="true" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg md:text-xl font-semibold text-zinc-900 tracking-tight">The Fragmented Workflow</h3>
+                                        <p className="text-xs md:text-sm text-zinc-400 font-mono uppercase tracking-wider mt-0.5">Manual Execution</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="text-xl font-bold text-slate-900">The Old Way</h3>
-                                    <p className="text-sm text-slate-500 font-medium">Manual & Disconnected</p>
+
+                                <div className="space-y-4 relative">
+                                    <div className="absolute left-[23px] top-6 bottom-6 w-px bg-zinc-200 border-l border-dashed border-zinc-300" aria-hidden="true" />
+                                    {[
+                                        { icon: FileText, title: 'Draft Quote in Word', sub: 'Manually alignment checking cell layout matrices.' },
+                                        { icon: Users, title: 'Email & Wait Loops', sub: 'Chasing clients through manual email follow-up channels.' },
+                                        { icon: Sheet, title: 'Re-type into Invoices', sub: 'Copy-pasting lines manually into traditional account frameworks.' },
+                                    ].map(({ icon: Icon, title, sub }) => (
+                                        <div key={title} className="flex items-start gap-4 p-5 rounded-xl bg-white border border-zinc-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.01)]">
+                                            <div className="h-6 w-6 rounded-full bg-zinc-50 border border-zinc-200 flex items-center justify-center shrink-0 mt-0.5">
+                                                <Icon className="h-3.5 w-3.5 text-zinc-400" aria-hidden="true" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <p className="text-base font-semibold text-zinc-800">{title}</p>
+                                                <p className="text-sm text-zinc-500 leading-relaxed font-normal">{sub}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
-                            <div className="space-y-4 relative">
-                                {/* Dotted line connector */}
-                                <div className="absolute left-[22px] top-4 bottom-4 w-0.5 bg-slate-300 border-l-2 border-dotted border-slate-300 -z-10" />
-
-                                <div className="flex items-start gap-4 p-4 rounded-xl bg-white/60 border border-slate-200">
-                                    <div className="h-6 w-6 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5 border border-slate-300">
-                                        <FileText className="h-3 w-3 text-slate-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-900">Draft Quote in Word</p>
-                                        <p className="text-xs text-slate-500 mt-0.5">Manually formatting tables</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 p-4 rounded-xl bg-white/60 border border-slate-200">
-                                    <div className="h-6 w-6 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5 border border-slate-300">
-                                        <Users className="h-3 w-3 text-slate-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-900">Email & Wait</p>
-                                        <p className="text-xs text-slate-500 mt-0.5">Endless follow-up threads</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 p-4 rounded-xl bg-white/60 border border-slate-200">
-                                    <div className="h-6 w-6 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 mt-0.5 border border-slate-300">
-                                        <Sheet className="h-3 w-3 text-slate-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-900">Re-type into Invoice</p>
-                                        <p className="text-xs text-slate-500 mt-0.5">Copy-pasting data again</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-8 pt-6 border-t border-slate-200/50">
-                                <p className="text-sm font-semibold text-red-700 flex items-center gap-2">
-                                    <span className="inline-block h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                                    Result: 45+ mins wasted per project
+                            <div className="pt-6 border-t border-zinc-200/60">
+                                <p className="text-sm md:text-base font-normal text-zinc-600 flex items-center gap-2.5">
+                                    <span className="inline-block h-2.5 w-2.5 rounded-full bg-zinc-400 animate-pulse" aria-hidden="true" />
+                                    Loss Indicator: ~45+ billable minutes drained per project sprint
                                 </p>
                             </div>
+
                         </CardContent>
                     </Card>
 
-                    {/* AFTER: The Solution */}
-                    <Card className="bg-white border-2 border-primary shadow-xl rounded-3xl overflow-hidden relative transform lg:-translate-y-4">
-                        {/* Badge */}
-                        <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl">
-                            OPTIMIZED
+                    {/* THE OPTIMIZED SYSTEM WAY — Clean Studio Canvas using Brand Primary Color Accent */}
+                    <Card className="bg-white border-2 border-primary shadow-[0_20px_50px_rgba(0,0,0,0.04)] rounded-2xl overflow-hidden relative flex flex-col justify-between group">
+
+                        {/* Premium Structural Design Ribbon */}
+                        <div className="absolute top-0 right-0 bg-primary text-white text-xs font-mono font-medium px-4 py-1.5 rounded-bl-lg tracking-wider uppercase">
+                            Optimized Engine
                         </div>
 
-                        <CardContent className="p-8">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                                    <CheckCheck className="h-6 w-6 text-primary" strokeWidth={3} />
-                                </div>
-                                <div>
-                                    <h3 className="text-xl font-bold text-slate-900">The Sheet2Bill Way</h3>
-                                    <p className="text-sm text-primary font-medium">Automated & Integrated</p>
-                                </div>
-                            </div>
+                        <CardContent className="p-8 md:p-10 flex-1 flex flex-col justify-between gap-12">
 
-                            <div className="space-y-4 relative">
-                                {/* Solid line connector */}
-                                <div className="absolute left-[28px] top-4 bottom-4 w-0.5 bg-primary/20 -z-10" />
-
-                                <div className="flex items-start gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10 shadow-sm">
-                                    <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md shadow-primary/30">
-                                        <span className="text-white text-[10px] font-bold">1</span>
+                            <div className="space-y-8">
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-white shadow-sm shadow-primary/10 shrink-0">
+                                        <CheckCheck className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-bold text-slate-900">Create Quote</p>
-                                        <p className="text-xs text-slate-600 mt-0.5">Use templates & saved items</p>
+                                    <div>
+                                        <h3 className="text-lg md:text-xl font-semibold text-zinc-900 tracking-tight">The Unified Pipeline</h3>
+                                        <p className="text-xs md:text-sm text-primary font-mono uppercase tracking-wider mt-0.5">Automated Architecture</p>
                                     </div>
-                                    <span className="text-[10px] font-bold text-primary bg-white px-2 py-1 rounded-md border border-primary/20">2 min</span>
                                 </div>
 
-                                <div className="flex items-start gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10 shadow-sm">
-                                    <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md shadow-primary/30">
-                                        <span className="text-white text-[10px] font-bold">2</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-bold text-slate-900">Client Approves</p>
-                                        <p className="text-xs text-slate-600 mt-0.5">One click online approval</p>
-                                    </div>
-                                    <span className="text-[10px] font-bold text-primary bg-white px-2 py-1 rounded-md border border-primary/20">Instant</span>
-                                </div>
-
-                                <div className="flex items-start gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10 shadow-sm">
-                                    <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md shadow-primary/30">
-                                        <span className="text-white text-[10px] font-bold">3</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-bold text-slate-900">Convert to Invoice</p>
-                                        <p className="text-xs text-slate-600 mt-0.5">Zero data re-entry</p>
-                                    </div>
-                                    <span className="text-[10px] font-bold text-primary bg-white px-2 py-1 rounded-md border border-primary/20">Automated</span>
+                                <div className="space-y-4 relative">
+                                    <div className="absolute left-[23px] top-6 bottom-6 w-px bg-primary/20" aria-hidden="true" />
+                                    {[
+                                        { step: '1', title: 'Compile Smart Quotes', sub: 'Deploy modular dynamic rows and templates with zero friction.', badge: '2 min' },
+                                        { step: '2', title: 'Instant Client Sign-off', sub: 'Secure client-side parameters validation via a singular link layer.', badge: 'Realtime' },
+                                        { step: '3', title: 'Automated Billing Generation', sub: 'Platform auto-converts signed variables into active global invoices.', badge: 'Instant' },
+                                    ].map(({ step, title, sub, badge }) => (
+                                        <div key={step} className="flex items-start gap-4 p-5 rounded-xl bg-zinc-50/50 border border-zinc-200/80 transition-all duration-300 hover:border-primary/40 hover:bg-white">
+                                            <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-primary/20">
+                                                <span className="text-white text-xs font-mono font-bold">{step}</span>
+                                            </div>
+                                            <div className="flex-1 min-w-0 space-y-1">
+                                                <p className="text-base font-semibold text-zinc-900">{title}</p>
+                                                <p className="text-sm text-zinc-500 leading-relaxed font-normal">{sub}</p>
+                                            </div>
+                                            <span className="text-xs font-mono font-medium text-primary bg-white px-2.5 py-1 rounded border border-primary/20 shadow-none shrink-0 uppercase tracking-tight">
+                                                {badge}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
-                            <div className="mt-8 pt-6 border-t border-dashed border-primary/20">
-                                <p className="text-sm font-semibold text-green-700 flex items-center gap-2">
-                                    <TrendingUp className="h-4 w-4" />
-                                    Result: 90% Faster Billing Cycle
+                            <div className="pt-6 border-t border-dashed border-primary/30">
+                                <p className="text-sm md:text-base font-medium text-primary flex items-center gap-2.5">
+                                    <TrendingUp className="h-4 w-4 stroke-[2]" aria-hidden="true" />
+                                    Velocity metrics: under 5 minutes total from compilation to pipeline layout settlement
                                 </p>
                             </div>
+
                         </CardContent>
                     </Card>
+
                 </div>
             </div>
         </section>

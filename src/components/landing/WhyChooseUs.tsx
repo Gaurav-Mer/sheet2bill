@@ -3,159 +3,112 @@ import { Clock, Shield, Zap, Award, TrendingUp, HeartHandshake } from 'lucide-re
 const benefits = [
     {
         icon: Clock,
-        title: 'Save 5+ Hours Weekly',
-        description: 'Stop juggling multiple tools and spreadsheets. Sheet2Bill automates your entire billing workflow, giving you back precious time to focus on actual client work.',
-        stat: '90%',
-        statLabel: 'Time saved',
-        color: 'from-blue-500 to-cyan-500'
+        title: 'Save Hours Every Week',
+        description: 'Stop juggling multiple tools and spreadsheets. Sheet2Bill unifies your entire workflow, giving you back valuable time to focus on your billable work.',
+        stat: 'Faster',
+        statLabel: 'Invoice cycles',
     },
     {
         icon: Shield,
         title: 'Eliminate Billing Disputes',
-        description: 'Pre-approval workflow means clients sign off before you bill. No more awkward conversations about scope creep or "I didn\'t agree to this" emails.',
+        description: 'Our integrated approval step means clients sign off on scope and pricing before you bill. Permanent protection against scope creep and awkward emails.',
         stat: 'Zero',
-        statLabel: 'Invoice disputes',
-        color: 'from-green-500 to-emerald-500'
+        statLabel: 'Client disputes',
     },
     {
         icon: Zap,
         title: 'Get Paid Faster',
-        description: 'Prevent disputes with our pre-invoice approval workflow, ensuring every invoice is correct and delivers professional results.',
-        stat: '2x',
-        statLabel: 'Faster payment',
-        color: 'from-purple-500 to-pink-500'
+        description: 'Embed clean, instant payment routing options directly inside your invoices. Clients pay effortlessly with a single click without payment barriers.',
+        stat: 'Instant',
+        statLabel: 'Clearing tracks',
     },
     {
         icon: Award,
         title: 'Look More Professional',
-        description: 'Branded PDFs, consistent numbering, and polished approval workflows make you look like an established agency—even as a solo freelancer.',
-        stat: '100%',
-        statLabel: 'Client trust',
-        color: 'from-yellow-500 to-orange-500'
+        description: 'Branded documents, sequential bookkeeping number outputs, and beautiful approval portals make you look like an established agency from day one.',
+        stat: 'Branded',
+        statLabel: 'PDF exports',
     },
     {
         icon: TrendingUp,
         title: 'Scale Without Chaos',
-        description: 'Whether you have 5 clients or 50, Sheet2Bill keeps everything organized. No more digging through emails or losing track of what\'s been paid.',
-        stat: '∞',
-        statLabel: 'Client capacity',
-        color: 'from-red-500 to-rose-500'
+        description: 'Whether managing 5 active projects or 50, everything stays perfectly sorted. Stop digging through messy email logs or tracking tables to find records.',
+        stat: 'Uncapped',
+        statLabel: 'Client pipelines',
     },
     {
         icon: HeartHandshake,
         title: 'Built for Freelancers',
-        description: 'We understand the freelance struggle. Every feature is designed to solve real problems you face daily—no bloat, no complexity, just what works.',
-        stat: '★★★★★',
-        statLabel: 'Easy to understand',
-        color: 'from-indigo-500 to-purple-500'
-    }
+        description: 'We understand the independent business grind. Every aspect of our platform is refined to solve real, daily administrative headaches. No fluff, just utility.',
+        stat: '100%',
+        statLabel: 'Tailored for you',
+    },
 ];
 
 export function WhyChooseUs() {
     return (
-        <section className="py-12 bg-[#f9efe4] relative overflow-hidden">
-            {/* Decorative background */}
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.06),transparent_70%)]" />
+        <section className="relative py-12 overflow-hidden bg-white border-t border-zinc-200/60">
 
-            <div className="container mx-auto px-6">
-                {/* Header */}
-                <div className="text-center mb-20 max-w-3xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full  mb-6 bg-white border-black border-2">
-                        <span className="text-md font-bold text-black">Why Sheet2Bill</span>
+            {/* Minimal High-End Geometric Line Layout Grid */}
+            <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-[0.3]" />
+
+            <div className="container mx-auto px-6 relative z-10">
+
+                {/* Section Header Copy Stack */}
+                <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28 space-y-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 bg-zinc-50">
+                        <span className="text-sm  tracking-wider text-zinc-500 uppercase">Why Sheet2Bill</span>
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6">
-                        Built for Freelancers Who Value Their Time
+
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-zinc-900 leading-[1.15]">
+                        Built for freelancers who <br className="hidden sm:inline" />
+                        value their <span className="font-serif italic text-primary">productive time</span>.
                     </h2>
-                    <p className="text-lg text-slate-600 leading-relaxed">
-                        Every feature is designed to solve real freelance billing headaches. No fluff, no complexity—just tools that actually make your life easier.
+
+                    <p className="max-w-2xl mx-auto text-base md:text-lg lg:text-xl leading-relaxed text-zinc-500 font-normal">
+                        Every feature solves a real operational headache. No unnecessary clutter—just straightforward tools that make your invoice management faster.
                     </p>
                 </div>
 
-                {/* Benefits Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                {/* Clean, Premium Grid Layout Matrix */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {benefits.map((item, index) => (
                         <div
                             key={index}
-                            className="group relative bg-white border-l-2 border-b-2 border-black rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 transition-all duration-500 hover:-translate-y-2"
+                            className="group relative flex flex-col justify-between p-8 rounded-2xl border border-zinc-200/80 bg-zinc-50/40 transition-all duration-300 hover:bg-white hover:border-primary/40 hover:shadow-[0_24px_60px_rgba(0,0,0,0.03)]"
                         >
-                            {/* Gradient overlay on hover */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative z-10 flex flex-col h-full justify-between space-y-8">
 
-                            <div className="relative p-8">
-                                {/* Icon and stat */}
-                                <div className="flex items-start justify-between mb-6">
-                                    <div className={`inline-flex p-4 bg-gradient-to-br ${item.color} rounded-xl shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
-                                        <item.icon className="h-7 w-7 text-white" />
+                                {/* Icon + Quick Stat Data Row Header */}
+                                <div className="flex items-start justify-between">
+                                    <div className="inline-flex p-3 bg-white border border-zinc-200 rounded-lg shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-primary group-hover:border-primary">
+                                        <item.icon className="h-5 w-5 text-zinc-700 transition-colors duration-300 group-hover:text-white" aria-hidden="true" />
                                     </div>
-
-                                    {/* Stat badge */}
-                                    <div className="text-right">
-                                        <div className="text-2xl font-bold text-primary">{item.stat}</div>
-                                        <div className="text-xs text-slate-500 font-medium">{item.statLabel}</div>
+                                    <div className="text-right space-y-0.5">
+                                        <div className="text-lg md:text-xl mt-1 font-semibold  text-primary leading-none tracking-tight">
+                                            {item.stat}
+                                        </div>
+                                        <div className="text-xs  font-medium text-zinc-400 uppercase tracking-tight">
+                                            {item.statLabel}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Content */}
-                                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors">
-                                    {item.title}
-                                </h3>
-                                <p className="text-sm text-slate-600 leading-relaxed">
-                                    {item.description}
-                                </p>
+                                {/* Feature Descriptive Information Content Block */}
+                                <div className="space-y-2">
+                                    <h3 className="text-lg md:text-xl font-semibold tracking-tight text-zinc-900 group-hover:text-primary transition-colors duration-200">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-sm md:text-base text-zinc-500 leading-relaxed font-normal">
+                                        {item.description}
+                                    </p>
+                                </div>
 
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* Social Proof Section */}
-                {/* <div className="mt-20 max-w-5xl mx-auto">
-                    <div className="bg-gradient-to-br from-primary/5 via-white to-primary/5 border-2 border-primary/20 rounded-2xl p-8 md:p-12">
-                        <div className="text-center mb-8">
-                            <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                                Join Hundreds of Happy Freelancers
-                            </h3>
-                            <p className="text-slate-600">
-                                Already saving time and getting paid faster
-                            </p>
-                        </div>
-
-                        <div className="grid md:grid-cols-4 gap-8 text-center">
-                            <div>
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                                    500+
-                                </div>
-                                <p className="text-sm text-slate-600">
-                                    Active users
-                                </p>
-                            </div>
-                            <div>
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                                    10k+
-                                </div>
-                                <p className="text-sm text-slate-600">
-                                    Invoices generated
-                                </p>
-                            </div>
-                            <div>
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                                    $2M+
-                                </div>
-                                <p className="text-sm text-slate-600">
-                                    Total processed
-                                </p>
-                            </div>
-                            <div>
-                                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
-                                    4.9★
-                                </div>
-                                <p className="text-sm text-slate-600">
-                                    Average rating
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </section>
     );

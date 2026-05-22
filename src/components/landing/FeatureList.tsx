@@ -1,149 +1,137 @@
 import React from 'react'
 import { BarChart, CheckCheck, Clock, FileDown, FilePlus, Settings, Users, Zap, Sparkles, Shield } from 'lucide-react';
 
-const FeatureList = () => {
-    return (
-        <section id="features" className="py-12 bg-[#f9efe4] relative overflow-hidden">
-            {/* Decorative background */}
-            <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(56,189,248,0.08),transparent_50%)]" />
+const features = [
+    {
+        icon: Users,
+        title: "Smart Client Records",
+        desc: "Complete, responsive registry with deep search, advanced filtering, and instant record mutations. Archive contract details, ledger paths, and project metadata in one workspace.",
+        benefit: "Save 30 min/wk",
+    },
+    {
+        icon: CheckCheck,
+        title: "Pre-Billing Authorizations",
+        desc: "Distribute encrypted, public approval URLs to clients before rendering final documentation. Secure digital signatures on project scopes to eliminate friction or payment delays.",
+        benefit: "Zero disputes",
+    },
+    {
+        icon: FilePlus,
+        title: "Unified Invoice Compilation",
+        desc: "Convert executed proposals into legally sequential, tracked invoices with a single gesture. The system dynamically maps client indices and line items—minimizing re-entry loops.",
+        benefit: "90% Faster",
+    },
+    {
+        icon: Zap,
+        title: "Real-Time Tracking Logs",
+        desc: "Observe transmission pathways from basic draft states directly to payment validation hooks. Stay informed on outstanding obligations via live webhook state indicators.",
+        benefit: "Absolute control",
+    },
+    {
+        icon: FileDown,
+        title: "Vector PDF Exporters",
+        desc: "Compile beautifully structured document deliverables optimized for localized printing. Specialized rendering pipelines prevent visual layout shifts across external clients.",
+        benefit: "Branded output",
+    },
+    {
+        icon: BarChart,
+        title: "Performance Dashboards",
+        desc: "Isolate total operating revenue metrics, uncleared sums, and long-term retention balances instantly. Extract high-fidelity parameters to optimize capital allocations.",
+        benefit: "Live metrics",
+    },
+    {
+        icon: Settings,
+        title: "Identity Configuration",
+        desc: "Deploy core layout assets, custom typographic setups, and corporate tracking addresses easily. Every outbound communication inherits your true pixel-perfect brand identity.",
+        benefit: "Tailored canvas",
+    },
+    {
+        icon: Clock,
+        title: "Sequential Numeration",
+        desc: "Protect financial compliance paths without manual counting sheets. The system securely calculates, matches, and appends unique regulatory numbers dynamically.",
+        benefit: "Auto-sync",
+    },
+    {
+        icon: Shield,
+        title: "Protected Client Portals",
+        desc: "Enable external partners to process parameters, request adjustments, and trigger settlement actions directly without entering complex authentication workflows.",
+        benefit: "Secure links",
+    }
+];
 
-            <div className="container mx-auto px-6">
-                <div className="text-center mb-20">
-                    <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white border-black border-2 rounded-full mb-6">
+export function FeatureList() {
+    return (
+        <section id="features" className="relative py-12 overflow-hidden bg-white border-t border-zinc-200/60">
+
+            {/* Minimal High-End Geometric Line Layout Grid */}
+            <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-[0.3]" />
+
+            <div className="container mx-auto px-6 relative z-10">
+
+                {/* Section Header Copy Stack */}
+                <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28 space-y-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 bg-zinc-50">
                         <Sparkles className="h-4 w-4 text-primary" />
-                        <span className="text-md font-bold text-black">Powerful Features</span>
+                        <span className="text-xs font-mono tracking-wider text-zinc-500 uppercase">Powerful Features</span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                        Everything You Need to Bill Like a Pro
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-zinc-900 leading-[1.15]">
+                        Everything you need to bill <br className="hidden sm:inline" />
+                        like a <span className="font-serif italic text-primary">global operation</span>.
                     </h2>
-                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                        From client management to invoice generation, we&apos;ve built every feature you need to run your freelance billing operations smoothly and professionally.
+                    <p className="max-w-2xl mx-auto text-base md:text-lg lg:text-xl leading-relaxed text-zinc-500 font-normal">
+                        From modern secure portal channels to automated ledger numbering, run your independent financial pipeline flawlessly.
                     </p>
                 </div>
 
-                {/* Feature Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-                    {[
-                        {
-                            icon: Users,
-                            title: "Smart Client Management",
-                            desc: "Complete CRM with search, filtering, and full CRUD operations. Store contact details, billing history, and project notes all in one place.",
-                            benefit: "Save 30 min/week",
-                            color: "from-blue-500 to-cyan-500",
-                            gradient: "bg-gradient-to-br from-blue-50 to-cyan-50"
-                        },
-                        {
-                            icon: CheckCheck,
-                            title: "Pre-Invoice Approval",
-                            desc: "Share a secure approval link with clients before invoicing. Get sign-off on scope and pricing to eliminate disputes later.",
-                            benefit: "Zero disputes",
-                            color: "from-green-500 to-emerald-500",
-                            gradient: "bg-gradient-to-br from-green-50 to-emerald-50"
-                        },
-                        {
-                            icon: FilePlus,
-                            title: "1-Click Invoice Creation",
-                            desc: "Convert approved briefs to sequentially-numbered invoices instantly. All client data and line items auto-populate—no manual entry.",
-                            benefit: "90% faster",
-                            color: "from-purple-500 to-pink-500",
-                            gradient: "bg-gradient-to-br from-purple-50 to-pink-50"
-                        },
-                        {
-                            icon: Zap,
-                            title: "Real-Time Status Tracking",
-                            desc: "Monitor every invoice from draft to paid. Get instant visibility into what's pending, overdue, or completed with smart status labels.",
-                            benefit: "Always in control",
-                            color: "from-yellow-500 to-orange-500",
-                            gradient: "bg-gradient-to-br from-yellow-50 to-orange-50"
-                        },
-                        {
-                            icon: FileDown,
-                            title: "Professional PDF Export",
-                            desc: "Generate pixel-perfect, branded invoices with your logo and colors. Server-side rendering ensures consistent quality every time.",
-                            benefit: "Look professional",
-                            color: "from-red-500 to-rose-500",
-                            gradient: "bg-gradient-to-br from-red-50 to-rose-50"
-                        },
-                        {
-                            icon: BarChart,
-                            title: "Revenue Dashboard",
-                            desc: "See total revenue, outstanding payments, and client trends at a glance. Make informed business decisions with real-time financial insights.",
-                            benefit: "Know your numbers",
-                            color: "from-indigo-500 to-blue-500",
-                            gradient: "bg-gradient-to-br from-indigo-50 to-blue-50"
-                        },
-                        {
-                            icon: Settings,
-                            title: "Brand Customization",
-                            desc: "Upload your logo, set your brand colors, and add your business address. Every invoice reflects your professional identity.",
-                            benefit: "Your brand, your way",
-                            color: "from-teal-500 to-cyan-500",
-                            gradient: "bg-gradient-to-br from-teal-50 to-cyan-50"
-                        },
-                        {
-                            icon: Clock,
-                            title: "Auto-Sequential Numbering",
-                            desc: "Never worry about invoice numbers again. The system automatically assigns the next number in sequence for perfect bookkeeping.",
-                            benefit: "Stay organized",
-                            color: "from-violet-500 to-purple-500",
-                            gradient: "bg-gradient-to-br from-violet-50 to-purple-50"
-                        },
-                        {
-                            icon: Shield,
-                            title: "Secure Client Portal",
-                            desc: "Clients can view and approve briefs without logging in. Secure, time-stamped approval links keep everyone on the same page.",
-                            benefit: "Build trust",
-                            color: "from-pink-500 to-rose-500",
-                            gradient: "bg-gradient-to-br from-pink-50 to-rose-50"
-                        }
-                    ].map((feature, index) => (
+                {/* Feature Bento Grid Block */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    {features.map((feature, index) => (
                         <div
                             key={index}
-                            className="group relative bg-white border-b-2 border-r-2 b border-black rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/40 transition-all duration-500 hover:-translate-y-1"
+                            className="group relative flex flex-col justify-between p-8 rounded-2xl border border-zinc-200/80 bg-zinc-50/40 transition-all duration-300 hover:bg-white hover:border-primary/40 hover:shadow-[0_24px_60px_rgba(0,0,0,0.03)]"
                         >
-                            {/* Gradient overlay on hover */}
+                            {/* Inner ambient illumination element on card hover */}
+                            <div aria-hidden="true" className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_0%_0%,rgba(0,0,0,0.01),transparent_50%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-                            <div className="relative p-6">
-                                {/* Icon with gradient background */}
-                                <div className="flex items-start justify-between mb-4">
-                                    <div className={`inline-flex p-3 bg-gradient-to-br ${feature.color} rounded-xl shadow-md group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}>
-                                        <feature.icon className="h-6 w-6 text-white" />
+                            <div className="relative z-10 flex flex-col h-full justify-between space-y-8">
+
+                                {/* Feature Icon + Tagline row header */}
+                                <div className="flex items-center justify-between">
+                                    <div className="inline-flex p-3 bg-white border border-zinc-200 rounded-lg shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:bg-primary group-hover:border-primary">
+                                        <feature.icon className="h-5 w-5 text-zinc-700 transition-colors duration-300 group-hover:text-white" />
                                     </div>
 
-                                    {/* Benefit badge */}
-                                    <div className={`px-3 py-1 rounded-full bg-secondary  `}>
-                                        <span className="text-xs font-semibold text-black">{feature.benefit}</span>
+                                    <div className="px-3 py-1 rounded-md bg-zinc-100/80 border border-zinc-200/60 shadow-none">
+                                        <span className="text-xs font-mono font-medium text-zinc-600 uppercase tracking-tight">{feature.benefit}</span>
                                     </div>
                                 </div>
 
-                                {/* Content */}
-                                <h3 className="text-lg font-bold mb-2 text-slate-900 group-hover:text-primary transition-colors">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-sm text-slate-600 leading-relaxed">
-                                    {feature.desc}
-                                </p>
-
-                                {/* Bottom accent line */}
-                                {/* <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} /> */}
+                                {/* Typography Information Fields */}
+                                <div className="space-y-2">
+                                    <h3 className="text-lg md:text-xl font-semibold tracking-tight text-zinc-900">
+                                        {feature.title}
+                                    </h3>
+                                    <p className="text-sm md:text-base text-zinc-500 leading-relaxed font-normal transition-colors duration-300 group-hover:text-zinc-600">
+                                        {feature.desc}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* Bottom CTA Section */}
-                {/* <div className="mt-16 text-center">
-                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-full">
-                        <Sparkles className="h-4 w-4 text-primary" />
-                        <p className="text-sm font-medium text-slate-700">
-                            All features included in every plan • No hidden upgrades • Cancel anytime
+                {/* Clean Global Feature Guarantee Footprint */}
+                <div className="mt-24 text-center relative z-10">
+                    <div className="inline-flex items-center gap-2.5 px-6 py-3 bg-zinc-50 border border-zinc-200/80 rounded-full shadow-sm">
+                        <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+                        <p className="text-sm md:text-base font-normal text-zinc-600 tracking-normal">
+                            All core modules deployment ready across every account layer. <span className="font-semibold text-zinc-900">No auxiliary charges.</span>
                         </p>
                     </div>
-                </div> */}
+                </div>
+
             </div>
         </section>
-
     )
 }
 
-export default FeatureList
+export default FeatureList;
