@@ -258,19 +258,18 @@ export default function SignUpPage() {
                         </a>.
                     </p>
 
-                    <div className="relative flex py-2 items-center">
+                    <div className="relative flex py-0 items-center">
                         <div className="flex-grow border-t border-zinc-200/60"></div>
                         <span className="flex-shrink mx-4 text-xs  text-zinc-400 uppercase tracking-widest">Account check</span>
                         <div className="flex-grow border-t border-zinc-200/60"></div>
                     </div>
 
                     <Link href="/login">
-                        <Button
-                            variant="outline"
-                            className="w-full h-11 font-semibold rounded-lg text-sm border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 hover:text-zinc-900 transition-colors bg-white"
+                        <button
+                            className="w-full underline cursor-pointer  font-semibold rounded-lg text-sm border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 hover:text-zinc-900 transition-colors bg-white"
                         >
                             Sign in instead
-                        </Button>
+                        </button>
                     </Link>
                 </div>
             </div>
