@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-head-element, @next/next/no-img-element */
 // components/invoices/InvoiceTemplate.tsx
 
 import { normalizeCountry, normalizeCurrency } from "@/lib/normalizeCountry";

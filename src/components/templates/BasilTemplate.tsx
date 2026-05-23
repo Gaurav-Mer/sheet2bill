@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-head-element, @next/next/no-img-element */
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { hexToLight } from '@/lib/utils';
 import { Client, Profile } from '@/types';

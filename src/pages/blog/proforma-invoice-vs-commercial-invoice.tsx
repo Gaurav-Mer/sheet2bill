@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { ReactElement } from 'react';
-import { Calendar, Clock, ArrowRight, CheckCircle2, FileText, Info, HelpCircle, UserPlus, Send, FileCheck, Scale, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, HelpCircle, FileCheck, Scale, AlertCircle } from 'lucide-react';
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 import { Footer } from '@/components/landing/Footer';
 import { Button } from '@/components/ui/button';

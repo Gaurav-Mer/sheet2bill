@@ -8,7 +8,7 @@ interface IProps {
     pageType?: string
 }
 
-const NonLoginNavbar: FC<IProps> = ({ pageType: _pageType }) => {
+const NonLoginNavbar: FC<IProps> = () => {
     const { profile } = useProfile();
 
     return (

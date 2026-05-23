@@ -1,4 +1,4 @@
-import { Menu, UserCircle, ChevronRight, Star } from 'lucide-react';
+import { Menu, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 import {
     DropdownMenu,
@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { NotificationBell } from './NotificationBell';
 import { useProfile } from '@/hooks/useProfile';
 import { Logo } from './Logo';
-import { MaleProfileSvg, StartSvg } from './SVG/Laptop';
+import { StartSvg } from './SVG/Laptop';
 import { differenceInDays } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 

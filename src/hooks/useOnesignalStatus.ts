@@ -18,7 +18,6 @@ export function useOnesignalStatus(savedIds: string[]) {
 
                 const permission = OneSignal.Notifications.permission;
                 const id = OneSignal.User?.PushSubscription?.id || null;
-                const optedIn = OneSignal.User?.PushSubscription?.optedIn;
 
                 setCurrentId(id);
 

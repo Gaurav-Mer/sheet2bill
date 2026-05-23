@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-head-element, @next/next/no-img-element */
 // components/invoices/templates/ManhattanTemplate.tsx
 import { normalizeCountry, normalizeCurrency } from '@/lib/normalizeCountry';
 import { Client, Profile } from '@/types';

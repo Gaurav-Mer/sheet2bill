@@ -6,16 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Copy, Printer, ShieldCheck, Download, Check, AlertCircle, FileText, Zap, Maximize2, Edit3, RotateCcw, X, Expand } from 'lucide-react';
+import { Copy, Printer, ShieldCheck, Download, Check, AlertCircle, FileText, Zap, Maximize2, Edit3, RotateCcw } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
     Dialog,
     DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-    DialogClose
 } from "@/components/ui/dialog";
 import NonLoginNavbar from '@/components/landing/NonLoginNavbar';
 import Head from 'next/head';
@@ -198,7 +193,7 @@ interface ContractEditorState {
     onReset: () => void;
 }
 
-const ContractToolbar = ({ actions, editorState, onFullscreen, className }: { actions: ContractActions, editorState: ContractEditorState, onFullscreen?: () => void, className?: string }) => (
+const ContractToolbar = ({ editorState, onFullscreen, className }: { editorState: ContractEditorState, onFullscreen?: () => void, className?: string }) => (
     <div className={twMerge("flex items-center justify-between p-4 border-b bg-primary/5", className)}>
         <div className="flex items-center gap-2">
             <CardTitle className="text-lg">Contract Preview</CardTitle>
@@ -287,7 +282,7 @@ const ContractPreviewDialog = ({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="w-[80dvw] sm:max-w-[90dvw] h-[95dvh] flex flex-col p-0 gap-0 sm:rounded-xl">
-                <ContractToolbar actions={actions} editorState={editorState} className='pe-24' />
+                <ContractToolbar editorState={editorState} className='pe-24' />
                 <ContractPaper
                     text={editorState.text}
                     isEditing={editorState.isEditing}
@@ -344,7 +339,7 @@ export default function EnhancedContractGenerator() {
     // Auto-generate text based on state
     const generateAutoText = () => {
         const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        const { freelancerName, clientName, role, rate, startDate, deliverables, paymentSchedule, depositPercentage, latePaymentFee, revisionLimit, includeKillFee, killFeePercentage, includeExpenses, includeNDA } = data;
+        const { freelancerName, clientName, rate, startDate, deliverables, paymentSchedule, depositPercentage, latePaymentFee, revisionLimit, includeKillFee, killFeePercentage, includeExpenses, includeNDA } = data;
 
         let contract = `INDEPENDENT CONTRACTOR AGREEMENT\n\nDate: ${today}\n\nBETWEEN:\n"${freelancerName || '[Contractor Name]'}" (Contractor)\nAND\n"${clientName || '[Client Name]'}" (Client)\n\n1. SERVICES PROVIDED\nThe Contractor agrees to provide the following services ("Services") to the Client:\n${deliverables}\n\n2. COMPENSATION & PAYMENT TERMS\nThe Client agrees to pay the Contractor at the rate of: ${rate}.\n`;
 
@@ -383,6 +378,7 @@ export default function EnhancedContractGenerator() {
         if (!isManualEdit) {
             setContractText(generateAutoText());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, isManualEdit]);
 
     const handleManualEdit = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -451,17 +447,19 @@ export default function EnhancedContractGenerator() {
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Free Freelance Contract Generator — Sheet2Bill" />
                 <meta name="twitter:description" content="Create a professional freelance service contract in seconds. Free, instant, no signup needed." />
-                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-                    "@context": "https://schema.org",
-                    "@type": "SoftwareApplication",
-                    "name": "Freelance Contract Generator",
-                    "applicationCategory": "BusinessApplication",
-                    "operatingSystem": "Web",
-                    "url": "https://www.sheet2bill.com/tools/contract-generator",
-                    "description": "Generate a free professional freelance service contract instantly. Define scope, payment terms, and protect your work.",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-                    "provider": { "@type": "Organization", "name": "Sheet2Bill", "url": "https://www.sheet2bill.com" }
-                })}} />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "Freelance Contract Generator",
+                        "applicationCategory": "BusinessApplication",
+                        "operatingSystem": "Web",
+                        "url": "https://www.sheet2bill.com/tools/contract-generator",
+                        "description": "Generate a free professional freelance service contract instantly. Define scope, payment terms, and protect your work.",
+                        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+                        "provider": { "@type": "Organization", "name": "Sheet2Bill", "url": "https://www.sheet2bill.com" }
+                    })
+                }} />
             </Head>
 
             <NonLoginNavbar pageType="TOOLS" />
@@ -612,7 +610,6 @@ export default function EnhancedContractGenerator() {
                             <Card className="shadow-xl border-slate-200 transition-all duration-300 flex flex-col p-4 rounded-2xl">
                                 <CardHeader className="border-b bg-primary/10 flex flex-row items-center justify-between p-4  w-full rounded-2xl">
                                     <ContractToolbar
-                                        actions={actions}
                                         editorState={editorState}
                                         onFullscreen={() => setIsPreviewDialogOpen(true)}
                                         className='w-full'

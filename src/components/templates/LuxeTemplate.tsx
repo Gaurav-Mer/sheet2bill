@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-head-element, @next/next/no-img-element */
 import { normalizeCurrency } from '@/lib/normalizeCountry';
 import React from 'react';
 import { Logo } from '../Logo';

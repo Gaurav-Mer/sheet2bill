@@ -22,8 +22,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        {/* The title tag here is a fallback; it's better to set titles per-page */}
-        <title>Sheet2Bill</title>
         {/* This is the correct and only place for the favicon link */}
         <link rel="icon" href={faviconDataUri} />
         {/* --- Google Analytics Scripts --- */}

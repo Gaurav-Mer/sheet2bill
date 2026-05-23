@@ -90,6 +90,7 @@ export default function PremiumRateCalculator() {
         if (baseRate < 50) setMarketComparison('below');
         else if (baseRate >= 50 && baseRate < 100) setMarketComparison('average');
         else setMarketComparison('above');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goal, expenses, hours, weeksOff, taxRate, healthInsurance, retirement, experienceLevel, industry, profitMargin]);
 
     return (
@@ -107,17 +108,19 @@ export default function PremiumRateCalculator() {
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Free Freelance Rate Calculator — Sheet2Bill" />
                 <meta name="twitter:description" content="Calculate your ideal freelance hourly or project rate in seconds." />
-                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-                    "@context": "https://schema.org",
-                    "@type": "SoftwareApplication",
-                    "name": "Freelance Rate Calculator",
-                    "applicationCategory": "BusinessApplication",
-                    "operatingSystem": "Web",
-                    "url": "https://www.sheet2bill.com/tools/rate-calculator",
-                    "description": "Calculate your ideal freelance hourly or project rate based on income goal, expenses, and experience level.",
-                    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-                    "provider": { "@type": "Organization", "name": "Sheet2Bill", "url": "https://www.sheet2bill.com" }
-                })}} />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "Freelance Rate Calculator",
+                        "applicationCategory": "BusinessApplication",
+                        "operatingSystem": "Web",
+                        "url": "https://www.sheet2bill.com/tools/rate-calculator",
+                        "description": "Calculate your ideal freelance hourly or project rate based on income goal, expenses, and experience level.",
+                        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+                        "provider": { "@type": "Organization", "name": "Sheet2Bill", "url": "https://www.sheet2bill.com" }
+                    })
+                }} />
             </Head>
             <NonLoginNavbar pageType="TOOLS" />
             <div className="flex-1 mt-12 overflow-auto bg-gradient-to-br from-slate-50 via-primary/10 to-slate-100 py-12 px-4 sm:px-6">

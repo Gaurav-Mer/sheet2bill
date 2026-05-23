@@ -2,10 +2,8 @@
 // pages/index.tsx
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { ReactElement, useEffect, useRef, useCallback, useState } from 'react';
-import { ArrowRight, Clock, RefreshCw, CreditCard } from 'lucide-react';
+import { ReactElement, useEffect, useRef, useCallback } from 'react';
+import { Clock, RefreshCw, CreditCard } from 'lucide-react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import FinalCTASection from '@/components/landing/FinalCTASection';
@@ -15,7 +13,6 @@ const WhyChooseUs = dynamic(() => import('@/components/landing/WhyChooseUs').the
 const HowItWorks = dynamic(() => import('@/components/landing/HowItWorks').then(mod => mod.HowItWorks));
 
 const PricingSection = dynamic(() => import('@/components/landing/PricingSection'));
-const InvoiceTemplatesShowCase = dynamic(() => import('@/components/landing/InvoiceTemplateShowCase'));
 const FaqSection = dynamic(() => import('@/components/landing/FaqSection').then(mod => mod.FaqSection));
 const Footer = dynamic(() => import('@/components/landing/Footer').then(mod => mod.Footer));
 const NonLoginNavbar = dynamic(() => import("@/components/landing/NonLoginNavbar").then(mod => mod.default));
@@ -271,7 +268,7 @@ function ProductPromisesSection() {
               >
                 {/* Monospace Visual Index Counter Accent */}
                 <span className="absolute top-6 right-6 font-mono text-sm tracking-widest text-zinc-400 transition-colors duration-300 group-hover:text-primary">
-                  // 0{index + 1}
+                  {`// 0${index + 1}`}
                 </span>
 
                 {/* Refined Geometric Icon Capsule */}

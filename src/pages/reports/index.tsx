@@ -45,6 +45,7 @@ export default function ReportsPage({ stats, clients, filters }: PageProps) {
     const router = useRouter();
 
     const handleFilterChange = (key: string, value: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _, ...rest } = router.query;
         const query = { ...rest, [key]: value };
         router.push({ pathname: '/reports', query });

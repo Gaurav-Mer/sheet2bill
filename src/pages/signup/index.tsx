@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import OneSignal from "react-onesignal";
 import toast from "react-hot-toast";
 
-export default function NotificationButton({ savedIds }: { savedIds: string[] }) {
+export default function NotificationButton() {
     const [ready, setReady] = useState(false);
     const [currentId, setCurrentId] = useState<string | null>(null);
 
