@@ -62,13 +62,13 @@ export default function FinalCTASection() {
 
                     {/* Premium Call to Actions Row using Primary brand hooks */}
                     <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center pt-4 transition-all duration-1000 delay-300 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-                        <Link href="/signup" passHref legacyBehavior>
+                        <Link href="/try" passHref legacyBehavior>
                             <Button
                                 size="lg"
                                 className="w-full sm:w-auto h-11 bg-primary hover:bg-primary/95 text-white text-sm font-medium rounded-lg shadow-sm transition-all duration-300 group hover:-translate-y-0.5 tracking-normal px-6"
-                                aria-label="Create your free account"
+                                aria-label="Create your first free invoice"
                             >
-                                Get Started Free
+                                Create Free Invoice
                                 <ArrowRight
                                     className="ml-2 h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
                                     aria-hidden="true"

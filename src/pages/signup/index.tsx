@@ -50,7 +50,7 @@ export default function SignUpPage() {
         const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/dashboard`,
+                redirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard`,
             },
         });
         if (error) {
@@ -213,7 +213,7 @@ export default function SignUpPage() {
 
                             {/* Error / Success Feedback Wrappers */}
                             {errorMsg && (
-                                <div className="text-sm font-normal text-zinc-800 bg-zinc-50 border border-zinc-200 rounded-lg px-4 py-3 leading-relaxed">
+                                <div className="text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3 leading-relaxed">
                                     {errorMsg}
                                 </div>
                             )}

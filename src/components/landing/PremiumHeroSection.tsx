@@ -155,12 +155,12 @@ export function PremiumHeroSection() {
 
                         {/* Interactive UI Trigger Anchors */}
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-center pt-2">
-                            <Link href="/signup">
+                            <Link href="/try">
                                 <Button
                                     size="lg"
                                     className="h-10 rounded-lg bg-primary px-6 text-xs font-medium text-white hover:bg-zinc-800 transition-all shadow-sm flex items-center gap-1.5"
                                 >
-                                    Start for Free
+                                    Create Free Invoice
                                     <ArrowRight className="h-3.5 w-3.5 opacity-80" />
                                 </Button>
                             </Link>

@@ -3,7 +3,7 @@
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from '@tanstack/react-query';
 
@@ -31,7 +31,7 @@ type LineItem = { description: string; quantity: number; unit_price: number, ite
 // Utility: Format date
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
-export default function NewBriefPage({ clients, items, user }: { clients: Client[], items: any[], user: any }) {
+export default function NewBriefPage({ clients, items, user, hasDraft }: { clients: Client[], items: any[], user: any, hasDraft?: boolean }) {
     const router = useRouter();
     // Form state
     const [title, setTitle] = useState('');
@@ -51,6 +51,31 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
         to: null
     });
     const [isInvoiceMode, setIsInvoiceMode] = useState(false);
+    const [draftClientName, setDraftClientName] = useState('');
+
+    // Pre-populate form from localStorage draft when arriving via /try flow
+    useEffect(() => {
+        if (!hasDraft) return;
+        try {
+            const raw = localStorage.getItem('sheet2bill_draft');
+            if (!raw) return;
+            const draft = JSON.parse(raw);
+            if (draft.title) setTitle(draft.title);
+            if (draft.currency) setCurrency(draft.currency);
+            if (draft.notes) setNotes(draft.notes);
+            if (draft.clientName) setDraftClientName(draft.clientName);
+            if (Array.isArray(draft.lineItems) && draft.lineItems.length > 0) {
+                setLineItems(
+                    draft.lineItems.map((item: { description: string; quantity: number; unit_price: number }) => ({
+                        description: item.description || '',
+                        quantity: item.quantity || 1,
+                        unit_price: item.unit_price || 0,
+                    }))
+                );
+            }
+        } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // --- NEW STATE FOR ITEM MODAL ---
     const [isItemModalOpen, setItemModalOpen] = useState<null | number>(null);
@@ -75,6 +100,7 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
         },
         onSuccess: () => {
             toast.success('Brief saved successfully!');
+            try { localStorage.removeItem('sheet2bill_draft'); } catch {}
             router.push('/briefs');
         },
         onError: (error: any) => {
@@ -215,6 +241,17 @@ export default function NewBriefPage({ clients, items, user }: { clients: Client
                             </Button>
                         </div>
                     </div>
+
+                    {/* Draft pre-fill banner — shown when arriving from /try */}
+                    {hasDraft && draftClientName && (
+                        <div className="mb-4 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                            <span className="mt-0.5 h-2 w-2 flex-shrink-0 rounded-full bg-emerald-500" />
+                            <span>
+                                Draft pre-loaded for <strong>{draftClientName}</strong>.
+                                Select or add this client in the &quot;Brief Details&quot; panel to finish saving.
+                            </span>
+                        </div>
+                    )}
 
                     {/* Main Layout */}
                     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
@@ -727,8 +764,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     return {
         props: {
             clients: clients || [],
-            items: items || [], // Pass items to the page
-            user: profile
+            items: items || [],
+            user: profile,
+            hasDraft: ctx.query.from === 'draft',
         }
     };
 };
